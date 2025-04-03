@@ -90,7 +90,7 @@ other: $(BUILD_PATH) $(OBJS)
 	@echo "[$(_SUCCESS) compiling $(MAG)Minishell!$(D) $(YEL)🖔$(D)]"
 
 $(BUILD_PATH)/%.o: $(SRC_PATH)/%.c
-	@(MKDIR_P) $(@D)
+	$(MKDIR_P) $(@D)
 	@echo -n "$(MAG)█$(D)"
 	$(CC) $(CFLAGS) $(DFLAGS) -c $< -o $@
 
