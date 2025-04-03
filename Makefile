@@ -107,7 +107,7 @@ $(NAME): $(BUILD_PATH) $(LIBFT_ARC) $(OBJS)
 	@echo "[$(_SUCCESS) compiling $(MAG)Minishell!$(D) $(YEL)🖔$(D)]"
 
 $(LIBFT_ARC):
-	$(MAKE) $(LIBFT_PATH) extra
+	$(MAKE) $(LIBFT_PATH)
 
 deps: 			## Download/Update libft
 	@if test ! -d "$(LIBFT_PATH)"; then make get_libft; \
