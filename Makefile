@@ -15,11 +15,13 @@ CC			:= cc
 CFLAGS		:= -Wall -Werror -Wextra -g
 
 # Directories
-SRC_DIR		:= src
-PARSER_DIR	:= $(SRC_DIR)/300_parser
-TOKEN_DIR	:= $(SRC_DIR)/400_tokenizer
+SRC_DIR			:= src
+INIT_DIR		:= $(SRC_DIR)/200_inits
+PARSER_DIR		:= $(SRC_DIR)/300_parser
+TOKEN_DIR		:= $(SRC_DIR)/400_tokenizer
 BUILTINS_DIR	:= $(SRC_DIR)/610_builtins
-OBJ_DIR		:= obj
+ERROR_DIR		:= $(SRC_DIR)/800_error
+OBJ_DIR			:= obj
 
 # Libft
 LIBFT_REPO	:= https://github.com/alteixeira20/42_libft.git
@@ -28,11 +30,13 @@ LIBFT		:= $(LIBFT_DIR)/libft.a
 
 # Source Files
 SRC			= $(SRC_DIR)/000_minishell.c
+SRC			+= $(INIT_DIR)/inti.c
 SRC			+= $(PARSER_DIR)/parser_input_utils.c
 SRC			+= $(PARSER_DIR)/parser_input.c
 SRC			+= $(TOKEN_DIR)/parser_tokens.c
-SRC			+= $(BUILTINS_DIR)/cmd_echo.c
-SRC			+= $(BUILTINS_DIR)/cmd_utils.c
+SRC			+= $(BUILTINS_DIR)/echo.c
+SRC			+= $(BUILTINS_DIR)/utils.c
+SRC			+= $(ERROR_DIR)/error.c
 
 OBJ			:= $(SRC:.c=.o)
 OBJ			:= $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC))
