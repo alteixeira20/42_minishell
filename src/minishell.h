@@ -79,6 +79,8 @@ typedef enum e_exit
 # define NO_VAR -1
 # define INIT_ERR		"Init Error\n"
 # define MALLOC_ERR		"Malloc Error\n"
+# define ENV_INIT_ERR	"Env Init Error\n"
+
 
 //Init Prototypes
 int 	init(t_minishell *sh, char **env);
@@ -101,7 +103,9 @@ void	free_args(char **args);
 
 //env Prototypes
 char    *extract_var(char *var, char **env);
+int		set_var(char *var, char *val, char ***env);
 
 //Error Prototypes
 int 	exit_error(char *msg, int status);
+
 #endif
