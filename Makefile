@@ -37,6 +37,8 @@ SRC			+= $(TOKEN_DIR)/parser_tokens.c
 SRC			+= $(BUILTINS_DIR)/echo.c
 SRC			+= $(BUILTINS_DIR)/utils.c
 SRC			+= $(ERROR_DIR)/error.c
+SRC			+= $(SRC_DIR)/env_get.C
+SRC			+= $(SRC_DIR)/env_set.c
 
 OBJ			:= $(SRC:.c=.o)
 OBJ			:= $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC))
