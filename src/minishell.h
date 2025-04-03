@@ -68,6 +68,7 @@ typedef	struct s_minishell
 	int		**pipes;
 	int		pipe_cnt;
 	int		hd_cnt;
+	char	*home;
 }	t_minishell;
 
 typedef enum e_exit

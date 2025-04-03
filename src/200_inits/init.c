@@ -16,16 +16,16 @@ char    *get_hostname(void)
 {
     int     fd;
     char    *ret;
-    char    *temp;
 
     fd = open("/etc/hostname", O_RDONLY);
     if (fd != -1)
     {
         ret = get_next_line(fd);
-        temp = get_next_line(-1);
+        get_next_line(-1);
         if (ret == NULL || ret[0] == '\0')
             return (close(fd), ft_strdup("1337"));
-        ret = hostname_norm(ret);
+        //ret = hostname_norm(ret);
+        return (close(fd), ret);
     }
     else
         return (close(fd), ft_strdup("1337"));
