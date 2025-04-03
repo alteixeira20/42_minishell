@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 00:02:36 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/03 17:20:26 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/03 22:54:05 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <unistd.h>
 # include <errno.h>
 # include <fcntl.h>
+# include <sys/wait.h>
 
 // Custom Headers
 # include "../lib/libft/libft/libft.h"
@@ -56,7 +57,7 @@ typedef struct s_token
 	struct s_token	*next;
 }	t_token;
 
-typedef	struct s_minishell
+typedef struct s_minishell
 {
 	t_cmd	*cmds;
 	int		cmd_cnt;
@@ -86,32 +87,42 @@ extern int	g_exit;
 # define MALLOC_ERR		"Malloc Error\n"
 # define ENV_INIT_ERR	"Env Init Error\n"
 
-
 //Init Prototypes
-int 	init(t_minishell *sh, char **env);
-char    **init_env(char **env);
+int		init(t_minishell *sh, char **env);
+char	**init_env(char **env);
 
 // Commands Prototypes
 int		cmd_echo(t_cmd *cmd);
-void	free_cmd(t_cmd *cmd);
 t_cmd	*cmd_from_tokens(t_token *tokens);
+char	*get_cmd_path(char *cmd, char **env);
+t_cmd	*cmd_new(void);
+int		add_arg(t_cmd *cmd, char *value);
+int		run_builtin(t_cmd *cmd);
 
 // Tokens Prototypes
 t_token	*token_new(char *value, t_token_type type);
 void	token_add_back(t_token **list, t_token *new_token);
-void	free_token_list(t_token *token);
+int		exec_tokens(t_token *tokens, t_minishell *sh);
+int		process_token(t_token **tokens, t_cmd **current);
+
+// Redirects Prototypes
+int		process_redirect(t_cmd *cmd, t_token *token);
 
 // Parser Prototypes
 t_token	*parse_input(const char *line);
 char	**split_input(const char *str);
-void	free_args(char **args);
 
 //env Prototypes
-char    *extract_var(char *var, char **env);
+char	*extract_var(char *var, char **env);
 int		set_var(char *var, char *val, char ***env);
 char	**env_add_var(char **env, char *new_var);
 
 //Error Prototypes
-int 	exit_error(char *msg, int status);
+int		exit_error(char *msg, int status);
+
+// Free Prototypes
+void	free_split(char **split);
+void	free_cmd(t_cmd *cmd);
+void	free_token_list(t_token *token);
 
 #endif

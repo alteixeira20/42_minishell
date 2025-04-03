@@ -6,106 +6,87 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 01:28:43 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/03 03:31:24 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/04 00:21:14 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-static int	skip_quoted_word(const char *str, int i)
+static int	is_special_char(char c)
 {
-	char	quote;
-
-	quote = str[i];
-	i += 1;
-	while (str[i] && str[i] != quote)
-		i++;
-	return (i);
+	if (c == '|' || c == '<' || c == '>')
+		return (1);
+	return (0);
 }
 
-static int	count_words(const char *str)
+static char	*extract_special_char(const char *str, int *i)
 {
-	int	i;
-	int	counter;
+	int	start;
 
-	i = 0;
-	counter = 0;
-	while (str[i])
-	{
-		while (str[i] == ' ')
-			i++;
-		if (!str[i])
-			break ;
-		counter++;
-		while (str[i] && str[i] != ' ')
-		{
-			if (str[i] == '\'' || str[i] == '\"')
-				i = skip_quoted_word(str, i);
-			i++;
-		}
-	}
-	return (counter);
+	start = *i;
+	if ((str[*i] == '>' || str[*i] == '<') && str[*i] == str[*i + 1])
+		(*i) += 2;
+	else
+		(*i) += 1;
+	return (ft_substr(str, start, *i - start));
 }
 
-static char	*word_dup(const char *str, int *i)
+static char	*extract_word(const char *str, int *i)
 {
 	int		start;
 	char	quote;
-	char	*word;
 
 	start = *i;
-	while (str[*i] && str[*i] != ' ')
+	quote = 0;
+	while (str[*i])
 	{
-		if (str[*i] == '\'' || str[*i] == '\"')
+		if ((str[*i] == '\'' || str[*i] == '"') && !quote)
 		{
-			quote = str[*i];
-			(*i)++;
+			quote = str[(*i)++];
 			while (str[*i] && str[*i] != quote)
 				(*i)++;
+			if (str[*i] == quote)
+				(*i)++;
+			quote = 0;
 		}
-		(*i)++;
+		else if ((ft_isspace(str[*i]) || is_special_char(str[*i])))
+			break ;
+		else
+			(*i)++;
 	}
-	word = ft_substr(str, start, *i - start);
-	if (!word)
-		return (NULL);
-	return (word);
+	return (ft_substr(str, start, *i - start));
 }
 
-void	free_args(char **args)
+static char	*get_next_token(const char *str, int *i)
 {
-	int	i;
-
-	i = 0;
-	while (args[i])
-	{
-		free(args[i]);
-		i++;
-	}
-	free(args);
+	if (is_special_char(str[*i]))
+		return (extract_special_char(str, i));
+	return (extract_word(str, i));
 }
 
 char	**split_input(const char *str)
 {
-	char	**args;
+	char	**result;
 	int		i;
-	int		j;
+	int		count;
+	char	*tmp;
 
 	if (!str)
 		return (NULL);
-	args = malloc(sizeof(char *) * (count_words(str) + 1));
-	if (!args)
+	result = ft_calloc(ft_strlen(str) + 1, sizeof(char *));
+	if (!result)
 		return (NULL);
 	i = 0;
-	j = 0;
+	count = 0;
 	while (str[i])
 	{
-		while (str[i] == ' ' || str[i] == '\t')
+		while (ft_isspace(str[i]))
 			i++;
 		if (!str[i])
 			break ;
-		args[j] = word_dup(str, &i);
-		j++;
+		tmp = get_next_token(str, &i);
+		result[count++] = tmp;
 	}
-	args[j] = NULL;
-	return (args);
+	result[count] = NULL;
+	return (result);
 }

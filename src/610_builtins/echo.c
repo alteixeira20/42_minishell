@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cmd_echo.c                                         :+:      :+:    :+:   */
+/*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 00:16:54 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/03 03:47:11 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/03 23:51:58 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,19 +36,21 @@ static void	copy_unquoted(char *res, const char *arg)
 
 	i = 0;
 	j = 0;
+	quote = 0;
 	while (arg[i])
 	{
-		if (arg[i] == '\'' || arg[i] == '"')
+		if ((arg[i] == '\'' || arg[i] == '"') && !quote)
 		{
-			quote = arg[i];
-			i++;
-			while (arg[i] && arg[i] != quote)
-				res[j++] = arg[i++];
-			if (arg[i] == quote)
-				i++;
+			quote = arg[i++];
+			continue ;
 		}
-		else
-			res[j++] = arg[i++];
+		else if (arg[i] == quote)
+		{
+			quote = 0;
+			i++;
+			continue ;
+		}
+		res[j++] = arg[i++];
 	}
 	res[j] = '\0';
 }
@@ -66,11 +68,28 @@ static char	*strip_quotes(const char *arg)
 	return (res);
 }
 
+static void	print_echo_args(t_cmd *cmd, int i)
+{
+	char	*stripped;
+
+	while (cmd->argv[i])
+	{
+		stripped = strip_quotes(cmd->argv[i]);
+		if (stripped)
+		{
+			ft_putstr_fd(stripped, cmd->output_fd);
+			free(stripped);
+		}
+		if (cmd->argv[i + 1])
+			ft_putchar_fd(' ', cmd->output_fd);
+		i++;
+	}
+}
+
 int	cmd_echo(t_cmd *cmd)
 {
 	int		i;
 	bool	new_line;
-	char	*stripped;
 
 	i = 1;
 	new_line = true;
@@ -81,19 +100,8 @@ int	cmd_echo(t_cmd *cmd)
 		new_line = false;
 		i++;
 	}
-	while (cmd->argv[i])
-	{
-		stripped = strip_quotes(cmd->argv[i]);
-		if (stripped)
-		{
-			ft_putstr_fd(stripped, STDOUT_FILENO);
-			free(stripped);
-		}
-		if (cmd->argv[i + 1])
-			ft_putchar_fd(' ', STDOUT_FILENO);
-		i++;
-	}
+	print_echo_args(cmd, i);
 	if (new_line)
-		ft_putchar_fd('\n', STDOUT_FILENO);
+		ft_putchar_fd('\n', cmd->output_fd);
 	return (0);
 }

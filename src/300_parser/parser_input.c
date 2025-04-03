@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 01:01:14 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/03 03:31:49 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/04 00:00:00 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 static t_token_type	get_token_type(const char *str)
 {
+	if (!str)
+		return (TOKEN_WORD);
 	if (ft_strncmp(str, "|", 2) == 0)
 		return (TOKEN_PIPE);
-	if (ft_strncmp(str, "<", 2) == 0)
-		return (TOKEN_REDIRECT_IN);
 	if (ft_strncmp(str, ">", 2) == 0)
 		return (TOKEN_REDIRECT_OUT);
 	if (ft_strncmp(str, "<", 2) == 0)
@@ -29,24 +29,42 @@ static t_token_type	get_token_type(const char *str)
 	return (TOKEN_WORD);
 }
 
-t_token	*parse_input(const char *line)
+static int	fill_tokens(char **split, t_token **tokens)
 {
-	char	**args;
-	t_token	*tokens;
-	int		i;
+	int				i;
+	t_token			*new;
+	t_token_type	type;
 
-	if (!line)
-		return (NULL);
-	args = split_input(line);
-	if (!args)
-		return (NULL);
-	tokens = NULL;
 	i = 0;
-	while (args[i])
+	while (split[i])
 	{
-		token_add_back(&tokens, token_new(args[i], get_token_type(args[i])));
+		type = get_token_type(split[i]);
+		new = token_new(split[i], type);
+		if (!new)
+			return (FAILURE);
+		token_add_back(tokens, new);
 		i++;
 	}
-	free_args(args);
+	return (SUCCESS);
+}
+
+t_token	*parse_input(const char *line)
+{
+	char			**split;
+	t_token			*tokens;
+
+	tokens = NULL;
+	if (!line)
+		return (NULL);
+	split = split_input(line);
+	if (!split)
+		return (NULL);
+	if (fill_tokens(split, &tokens) == FAILURE)
+	{
+		free_split(split);
+		free_token_list(tokens);
+		return (NULL);
+	}
+	free_split(split);
 	return (tokens);
 }

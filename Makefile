@@ -6,7 +6,7 @@
 #    By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/03 02:10:25 by paalexan          #+#    #+#              #
-#    Updated: 2025/04/03 17:21:38 by paalexan         ###   ########.fr        #
+#    Updated: 2025/04/03 21:29:23 by paalexan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,18 +40,26 @@ PARSER_DIR		= $(SRC_PATH)/300_parser
 TOKEN_DIR		= $(SRC_PATH)/400_tokenizer
 ENV_GET_DIR		= $(SRC_PATH)/500_env_get
 ENV_SET_DIR		= $(SRC_PATH)/510_env_set
+EXEC_DIR		= $(SRC_PATH)/600_exec
 BUILTINS_DIR	= $(SRC_PATH)/610_builtins
 ERROR_DIR		= $(SRC_PATH)/800_error
+FREE_DIR		= $(SRC_PATH)/900_free
+
 SRC				= $(SRC_PATH)/000_minishell.c
 SRC				+= $(INIT_DIR)/init.c
 SRC				+= $(PARSER_DIR)/parser_input_utils.c
 SRC				+= $(PARSER_DIR)/parser_input.c
 SRC				+= $(TOKEN_DIR)/parser_tokens.c
+SRC				+= $(EXEC_DIR)/exec.c
+SRC				+= $(EXEC_DIR)/exec_utils.c
 SRC				+= $(BUILTINS_DIR)/echo.c
+SRC				+= $(BUILTINS_DIR)/redirects_utils.c
+SRC				+= $(BUILTINS_DIR)/cmd_utils.c
 SRC				+= $(ENV_GET_DIR)/env_get.c
 SRC				+= $(ENV_SET_DIR)/env_set.c
 SRC				+= $(BUILTINS_DIR)/utils.c
 SRC				+= $(ERROR_DIR)/error.c
+SRC				+= $(FREE_DIR)/free_utils.c
 
 
 OBJS			= $(SRC:$(SRC_PATH)/%.c=$(BUILD_PATH)/%.o)
