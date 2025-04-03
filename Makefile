@@ -10,89 +10,197 @@
 #                                                                              #
 # **************************************************************************** #
 
-# Compiler & Flags
-CC			:= cc
-CFLAGS		:= -Wall -Werror -Wextra -g
 
-# Directories
-SRC_PATH		:= src
-BUILD_PATH		:= .build
-INIT_DIR		:= $(SRC_PATH)/200_inits
-PARSER_DIR		:= $(SRC_PATH)/300_parser
-TOKEN_DIR		:= $(SRC_PATH)/400_tokenizer
-ENV_GET_DIR		:= $(SRC_PATH)/500_env_get
-ENV_SET_DIR		:= $(SRC_PATH)/510_env_Set
-BUILTINS_DIR	:= $(SRC_PATH)/610_builtins
-ERROR_DIR		:= $(SRCSRC_PATH_DIR)/800_error
-OBJ_DIR			:= obj
+#==============================================================================#
+#                                     NAMES                                    #
+#==============================================================================#
 
-# Libft
-LIBFT_REPO	:= https://github.com/alteixeira20/42_libft.git
-LIBFT_DIR	:= libft
-LIBFT		:= $(LIBFT_DIR)/libft.a
+NAME	:= minishell
 
-# Source Files
-SRC			= $(SRC_PATH)/000_minishell.c
-SRC			+= $(INIT_DIR)/init.c
-SRC			+= $(PARSER_DIR)/parser_input_utils.c
-SRC			+= $(PARSER_DIR)/parser_input.c
-SRC			+= $(TOKEN_DIR)/parser_tokens.c
-SRC			+= $(BUILTINS_DIR)/echo.c
-SRC			+= $(ENV_GET_DIR)/env_get.C
-SRC			+= $(ENV_SET_DIR)/env_set.c
-SRC			+= $(BUILTINS_DIR)/utils.c
-SRC			+= $(ERROR_DIR)/error.c
+### Message Vars
+_SUCCESS 		= [$(GRN)SUCCESS$(D)]
+_INFO 			= [$(BLU)INFO$(D)]
+_NORM 			= [$(MAG)Norminette$(D)]
+_NORM_SUCCESS 	= $(GRN)=== OK:$(D)
+_NORM_INFO 		= $(BLU)File no:$(D)
+_NORM_ERR 		= $(RED)=== KO:$(D)
+_SEP 			= =====================
 
-OBJS        = $(SRC:$(SRC_PATH)/%.c=$(BUILD_PATH)/%.o)
+#==============================================================================#
+#                                    PATHS                                     #
+#==============================================================================#
 
-# Executable
-MINISHELL	:= minishell
+SRC_PATH 		= src
+LIBS_PATH		= lib
+BUILD_PATH		= .build
+TEMP_PATH		= .temp
 
-# Rules
+INIT_DIR		= $(SRC_PATH)/200_inits
+PARSER_DIR		= $(SRC_PATH)/300_parser
+TOKEN_DIR		= $(SRC_PATH)/400_tokenizer
+ENV_GET_DIR		= $(SRC_PATH)/500_env_get
+ENV_SET_DIR		= $(SRC_PATH)/510_env_Set
+BUILTINS_DIR	= $(SRC_PATH)/610_builtins
+ERROR_DIR		= $(SRCSRC_PATH_DIR)/800_error
+SRC				= $(SRC_PATH)/000_minishell.c
+SRC				+= $(INIT_DIR)/init.c
+SRC				+= $(PARSER_DIR)/parser_input_utils.c
+SRC				+= $(PARSER_DIR)/parser_input.c
+SRC				+= $(TOKEN_DIR)/parser_tokens.c
+SRC				+= $(BUILTINS_DIR)/echo.c
+SRC				+= $(ENV_GET_DIR)/env_get.C
+SRC				+= $(ENV_SET_DIR)/env_set.c
+SRC				+= $(BUILTINS_DIR)/utils.c
+SRC				+= $(ERROR_DIR)/error.c
 
-.PHONY: all clean fclean re
 
-all: $(LIBFT) $(MINISHELL)
+OBJS			= $(SRC:$(SRC_PATH)/%.c=$(BUILD_PATH)/%.o)
 
-$(LIBFT):
-	@if [ ! -d "$(LIBFT_DIR)" ]; then \
-		echo "$(ORANGE)$(PREFIX)$(RESET) Cloning $(BOLD)Libft$(RESET) and waiting for compilation..."; \
-		git clone $(LIBFT_REPO) $(LIBFT_DIR) > /dev/null 2>&1; \
-	fi
-	@$(MAKE) -C $(LIBFT_DIR) --silent > /dev/null 2>&1
-	@echo "$(ORANGE)$(PREFIX)$(RESET) $(BOLD)Libft$(RESET) compiled $(GREEN)successfully$(RESET)."
+LIBFT_PATH		= $(LIBS_PATH)/libft
+LIBFT_ARC		= $(LIBFT_PATH)/libft.a
 
-$(BUILD_PATH)/%.o: $(SRC_PATH)/%.c $(HEADERS) | $(BUILD_PATH)
-	@$(MKDIR) $(@D)
-	@printf "${CYAN}${DIM}Compiling: ${WHITE}%-35s${RESET}\r" "$(notdir $<)"
-	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+#==============================================================================#
+#                              COMPILER & FLAGS                                #
+#==============================================================================#
+
+CC		= cc
+
+CFLAGS		= -Wall -Werror -Wextra
+DFLAGS		= -g
+
+INC			= -I
+
+#==============================================================================#
+#                                COMMANDS                                      #
+#==============================================================================#
+
+AR			= ar rcs
+RM			= rm -rf
+MKDIR_P		= mkdir -p
+
+MAKE		= make -C
+
+all: deps $(NAME)
+
+bonus: deps $(NAME_BONUS)
+
+other: $(BUILD_PATH) $(OBJS)
+	@echo "[$(YEL)Compiling Minishell$(D)]"
+	$(CC) $(CFLAGS) $(DFLAGS) $(OBJS) -o $(NAME)
+	@echo "[$(_SUCCESS) compiling $(MAG)Minishell!$(D) $(YEL)🖔$(D)]"
+
+$(BUILD_PATH)/%.o: $(SRC_PATH)/%.c
+	@echo -n "$(MAG)█$(D)"
+	$(CC) $(CFLAGS) $(DFLAGS) -MMD -MP -c $< -o $@
 
 $(BUILD_PATH):
-	@printf "${BLUE}${BOLD}${BUILD} Creating build directory...${RESET}\n"
-	@$(MKDIR) $(BUILD_PATH)
-	@printf "${GREEN}${CHECK} Build directory ready${RESET}\n"
+	$(MKDIR_P) $(BUILD_PATH)
+	@echo "* $(YEL)Creating $(BUILD_PATH) folder:$(D) $(_SUCCESS)"
 
-$(MINISHELL): $(OBJ) $(LIBFT) $(BUILD_PATH)
-	@$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -lreadline -o $(MINISHELL)
-	@echo "$(ORANGE)$(PREFIX)$(RESET) $(BOLD)MiniShell$(RESET) compiled $(GREEN)successfully$(RESET)."
+$(TEMP_PATH):
+	$(MKDIR_P) $(TEMP_PATH)
+	@echo "* $(YEL)Creating $(TEMP_PATH) folder:$(D) $(_SUCCESS)"
 
-re: fclean all
+$(NAME): $(BUILD_PATH) $(LIBFT_ARC) $(OBJS) 
+	@echo "[$(YEL)Compiling Minishell$(D)]"
+	$(CC) $(CFLAGS) $(DFLAGS) $(OBJS) $(LIBFT_ARC) $(MLXFLAGS) -o $(NAME)
+	@echo "[$(_SUCCESS) compiling $(MAG)Minishell!$(D) $(YEL)🖔$(D)]"
 
-clean:
-	@rm -rf $(OBJ_DIR)
-	@rm -f $(MINISHELL)
-	@echo "$(ORANGE)$(PREFIX)$(RESET) All executables and objects were cleaned $(GREEN)successfully$(RESET)."
+$(LIBFT_ARC):
+	$(MAKE) $(LIBFT_PATH) extra
 
-fclean: clean
-	@rm -rf $(LIBFT_DIR)
-	@echo "$(ORANGE)$(PREFIX)$(RESET) Libft was cleaned $(GREEN)successfully$(RESET)."
+deps: 			## Download/Update libft
+	@if test ! -d "$(LIBFT_PATH)"; then make get_libft; \
+		else echo "$(YEL)[libft]$(D) folder found 🖔"; fi
+	@echo " $(RED)$(D) [$(GRN)Nothing to be done!$(D)]"
+
+-include $(BUILD_PATH)/*.d
+
+update_modules:
+	@echo "* $(CYA)Updating submodules$(D)]"
+	git submodule init
+	git submodule update --recursive --remote
+	@echo "* $(GRN)Submodules update$(D): $(_SUCCESS)"
+
+get_libft:
+	@echo "* $(CYA)Getting Libft submodule$(D)]"
+	git clone git@github.com:alteixeira20/42_libft.git $(LIBFT_PATH)
+	@echo "* $(GRN)Libft submodule download$(D): $(_SUCCESS)"
+
+clean: 				## Remove object files
+	@echo "* $(YEL)Removing $(MAG)$(NAME)$(D) and deps $(YEL)object files$(D)"
+	@if [ -d "$(LIBFT_PATH)/$(BUILD_PATH)" ] || [ -d "$(BUILD_PATH)" ] || [ -d "$(TEMP_PATH)" ]; then \
+		if [ -d "$(LIBFT_PATH)/$(BUILD_PATH)" ]; then \
+			$(MAKE) $(LIBFT_PATH) clean; \
+			echo "* $(YEL)Removing $(CYA)libft$(D) object files$(D): $(_SUCCESS)"; \
+		fi; \
+		if [ -d "$(BUILD_PATH)" ]; then \
+			$(RM) $(BUILD_PATH); \
+			echo "* $(YEL)Removing $(CYA)$(BUILD_PATH)$(D) folder & files$(D): $(_SUCCESS)"; \
+		fi; \
+		if [ -d "$(BUILDB_PATH)" ]; then \
+			$(RM) $(BUILDB_PATH); \
+			echo "* $(YEL)Removing $(CYA)$(BUILDB_PATH)$(D) folder & files$(D): $(_SUCCESS)"; \
+		fi; \
+		if [ -d "$(TEMP_PATH)" ]; then \
+			$(RM) $(TEMP_PATH); \
+			echo "* $(YEL)Removing $(CYA)$(TEMP_PATH)$(D) folder & files:$(D) $(_SUCCESS)"; \
+		fi; \
+	else \
+		echo " $(RED)$(D) [$(GRN)Nothing to clean!$(D)]"; \
+	fi
+
+fclean: clean	## Remove archives & executables
+	$(RM) $(NAME) $(NAME_BONUS)
+	@echo "* $(YEL)Cleaning executable$(D): $(_SUCCESS)"
+	$(MAKE) $(LIBFT_PATH) fclean
+	@echo "* $(YEL)Removing libft archive$(D): $(_SUCCESS)"
+
+libclean: fclean	## Remove libs
+	$(RM) $(LIBS_PATH)
+	@echo "* $(YEL)Removing lib folder & files!$(D) : $(_SUCCESS)"
+
+re: fclean all	## Purge and Recompile
+
+help: 			## Display this help page
+	@awk 'BEGIN {FS = ":.*##"; \
+			printf "\n=> Usage:\n\tmake $(GRN)<target>$(D)\n"} \
+		/^[a-zA-Z_0-9-]+:.*?##/ { \
+			printf "\t$(GRN)%-15s$(D) %s\n", $$1, $$2 } \
+		/^##@/ { \
+			printf "\n=> %s\n", substr($$0, 5) } ' Makefile
+## Tweaked from source:
+### https://www.padok.fr/en/blog/beautiful-makefile-awk
+
+.PHONY: deps get_libft update_modules clean fclean libclean re \
+		norm
+
+#==============================================================================#
+#                                  UTILS                                       #
+#==============================================================================#
 
 # Colors
-PREFIX	:= $(shell tput bold)[So_Long]
-BOLD 	:= $(shell tput bold)
-GREEN	:= $(shell tput setaf 2)
-RED  	:= $(shell tput setaf 1)
-YELLOW	:= $(shell tput setaf 3)
-RESET	:= $(shell tput sgr0)
-GREY	:= $(shell tput setaf 8)
-ORANGE	:= $(shell tput setaf 214)
+#
+# Run the following command to get list of available colors
+# bash -c 'for c in {0..255}; do tput setaf $c; tput setaf $c | cat -v; echo =$c; done'
+#
+B  		= $(shell tput bold)
+BLA		= $(shell tput setaf 0)
+RED		= $(shell tput setaf 1)
+GRN		= $(shell tput setaf 2)
+YEL		= $(shell tput setaf 3)
+BLU		= $(shell tput setaf 4)
+MAG		= $(shell tput setaf 5)
+CYA		= $(shell tput setaf 6)
+WHI		= $(shell tput setaf 7)
+GRE		= $(shell tput setaf 8)
+BRED 	= $(shell tput setaf 9)
+BGRN	= $(shell tput setaf 10)
+BYEL	= $(shell tput setaf 11)
+BBLU	= $(shell tput setaf 12)
+BMAG	= $(shell tput setaf 13)
+BCYA	= $(shell tput setaf 14)
+BWHI	= $(shell tput setaf 15)
+D 		= $(shell tput sgr0)
+BEL 	= $(shell tput bel)
+CLR 	= $(shell tput el 1)
