@@ -1,0 +1,71 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/03 00:02:36 by paalexan          #+#    #+#             */
+/*   Updated: 2025/04/03 03:32:29 by paalexan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#ifndef MINISHELL_H
+# define MINISHELL_H
+
+// Standard Headers
+# include <stdbool.h>
+# include <stdlib.h>
+# include <unistd.h>
+
+// Custom Headers
+# include "../libft/libft/libft.h"
+
+// Readline Headers
+# include <readline/readline.h>
+# include <readline/history.h>
+
+// Structs
+typedef struct s_cmd
+{
+	int				argc;
+	char			**argv;
+	int				input_fd;
+	int				output_fd;
+	bool			is_builtin;
+	struct s_cmd	*next;
+}	t_cmd;
+
+typedef enum e_token_type
+{
+	TOKEN_WORD,
+	TOKEN_PIPE,
+	TOKEN_REDIRECT_IN,
+	TOKEN_REDIRECT_OUT,
+	TOKEN_APPEND,
+	TOKEN_HEREDOC
+}	t_token_type;
+
+typedef struct s_token
+{
+	char			*value;
+	t_token_type	type;
+	struct s_token	*next;
+}	t_token;
+
+// Commands Prototypes
+int		cmd_echo(t_cmd *cmd);
+void	free_cmd(t_cmd *cmd);
+t_cmd	*cmd_from_tokens(t_token *tokens);
+
+// Tokens Prototypes
+t_token	*token_new(char *value, t_token_type type);
+void	token_add_back(t_token **list, t_token *new_token);
+void	free_token_list(t_token *token);
+
+// Parser Prototypes
+t_token	*parse_input(const char *line);
+char	**split_input(const char *str);
+void	free_args(char **args);
+
+#endif
