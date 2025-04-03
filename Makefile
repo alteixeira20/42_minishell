@@ -15,14 +15,15 @@ CC			:= cc
 CFLAGS		:= -Wall -Werror -Wextra -g
 
 # Directories
-SRC_DIR			:= src
-INIT_DIR		:= $(SRC_DIR)/200_inits
-PARSER_DIR		:= $(SRC_DIR)/300_parser
-TOKEN_DIR		:= $(SRC_DIR)/400_tokenizer
-ENV_GET_DIR		:= $(SRC_DIR)/500_env_get
-ENV_SET_DIR		:= $(SRC_DIR)/510_env_Set
-BUILTINS_DIR	:= $(SRC_DIR)/610_builtins
-ERROR_DIR		:= $(SRC_DIR)/800_error
+SRC_PATH		:= src
+BUILD_PATH		:= .build
+INIT_DIR		:= $(SRC_PATH)/200_inits
+PARSER_DIR		:= $(SRC_PATH)/300_parser
+TOKEN_DIR		:= $(SRC_PATH)/400_tokenizer
+ENV_GET_DIR		:= $(SRC_PATH)/500_env_get
+ENV_SET_DIR		:= $(SRC_PATH)/510_env_Set
+BUILTINS_DIR	:= $(SRC_PATH)/610_builtins
+ERROR_DIR		:= $(SRCSRC_PATH_DIR)/800_error
 OBJ_DIR			:= obj
 
 # Libft
@@ -31,7 +32,7 @@ LIBFT_DIR	:= libft
 LIBFT		:= $(LIBFT_DIR)/libft.a
 
 # Source Files
-SRC			= $(SRC_DIR)/000_minishell.c
+SRC			= $(SRC_PATH)/000_minishell.c
 SRC			+= $(INIT_DIR)/init.c
 SRC			+= $(PARSER_DIR)/parser_input_utils.c
 SRC			+= $(PARSER_DIR)/parser_input.c
@@ -42,45 +43,11 @@ SRC			+= $(ENV_SET_DIR)/env_set.c
 SRC			+= $(BUILTINS_DIR)/utils.c
 SRC			+= $(ERROR_DIR)/error.c
 
-OBJ			:= $(SRC:.c=.o)
-OBJ			:= $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC))
+OBJS        = $(SRC:$(SRC_PATH)/%.c=$(BUILD_PATH)/%.o)
 
 # Executable
 MINISHELL	:= minishell
 
-# Targets
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
-	@mkdir -p $(dir $@)
-	@$(CC) $(CFLAGS) -c $< -o $@
-
-$(OBJ_DIR)/%.o: $(INIT_DIR)/%.c
-	@mkdir -p $(dir $@)
-	@$(CC) $(CFLAGS) -c $< -o $@
-
-$(OBJ_DIR)/%.o: $(PARSER_DIR)/%.c
-	@mkdir -p $(dir $@)
-	@$(CC) $(CFLAGS) -c $< -o $@
-	
-$(OBJ_DIR)/%.o: $(TOKEN_DIR)/%.c
-	@mkdir -p $(dir $@)
-	@$(CC) $(CFLAGS) -c $< -o $@
-
-$(OBJ_DIR)/%.o: $(ENV_GET_DIR)/%.c
-	@mkdir -p $(dir $@)
-	@$(CC) $(CFLAGS) -c $< -o $@
-	
-$(OBJ_DIR)/%.o: $(ENV_SET_DIR)/%.c
-	@mkdir -p $(dir $@)
-	@$(CC) $(CFLAGS) -c $< -o $@
-
-
-$(OBJ_DIR)/%.o: $(BUILTINS_DIR)/%.c
-	@mkdir -p $(dir $@)
-	@$(CC) $(CFLAGS) -c $< -o $@
-
-$(OBJ_DIR)/%.o: $(ERROR_DIR)/%.c
-	@mkdir -p $(dir $@)
-	@$(CC) $(CFLAGS) -c $< -o $@
 # Rules
 
 .PHONY: all clean fclean re
@@ -95,7 +62,17 @@ $(LIBFT):
 	@$(MAKE) -C $(LIBFT_DIR) --silent > /dev/null 2>&1
 	@echo "$(ORANGE)$(PREFIX)$(RESET) $(BOLD)Libft$(RESET) compiled $(GREEN)successfully$(RESET)."
 
-$(MINISHELL): $(OBJ)
+$(BUILD_PATH)/%.o: $(SRC_PATH)/%.c $(HEADERS) | $(BUILD_PATH)
+	@$(MKDIR) $(@D)
+	@printf "${CYAN}${DIM}Compiling: ${WHITE}%-35s${RESET}\r" "$(notdir $<)"
+	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+
+$(BUILD_PATH):
+	@printf "${BLUE}${BOLD}${BUILD} Creating build directory...${RESET}\n"
+	@$(MKDIR) $(BUILD_PATH)
+	@printf "${GREEN}${CHECK} Build directory ready${RESET}\n"
+
+$(MINISHELL): $(OBJ) $(LIBFT) $(BUILD_PATH)
 	@$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -lreadline -o $(MINISHELL)
 	@echo "$(ORANGE)$(PREFIX)$(RESET) $(BOLD)MiniShell$(RESET) compiled $(GREEN)successfully$(RESET)."
 
