@@ -41,14 +41,14 @@ TOKEN_DIR		= $(SRC_PATH)/400_tokenizer
 ENV_GET_DIR		= $(SRC_PATH)/500_env_get
 ENV_SET_DIR		= $(SRC_PATH)/510_env_Set
 BUILTINS_DIR	= $(SRC_PATH)/610_builtins
-ERROR_DIR		= $(SRCSRC_PATH_DIR)/800_error
+ERROR_DIR		= $(SRCSRC_PATH)/800_error
 SRC				= $(SRC_PATH)/000_minishell.c
 SRC				+= $(INIT_DIR)/init.c
 SRC				+= $(PARSER_DIR)/parser_input_utils.c
 SRC				+= $(PARSER_DIR)/parser_input.c
 SRC				+= $(TOKEN_DIR)/parser_tokens.c
 SRC				+= $(BUILTINS_DIR)/echo.c
-SRC				+= $(ENV_GET_DIR)/env_get.C
+SRC				+= $(ENV_GET_DIR)/env_get.c
 SRC				+= $(ENV_SET_DIR)/env_set.c
 SRC				+= $(BUILTINS_DIR)/utils.c
 SRC				+= $(ERROR_DIR)/error.c
@@ -90,6 +90,7 @@ other: $(BUILD_PATH) $(OBJS)
 	@echo "[$(_SUCCESS) compiling $(MAG)Minishell!$(D) $(YEL)🖔$(D)]"
 
 $(BUILD_PATH)/%.o: $(SRC_PATH)/%.c
+	@(MKDIR_P) $(@D)
 	@echo -n "$(MAG)█$(D)"
 	$(CC) $(CFLAGS) $(DFLAGS) -c $< -o $@
 
