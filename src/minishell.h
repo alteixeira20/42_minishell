@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 00:02:36 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/03 03:32:29 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/03 17:20:26 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@
 # include <fcntl.h>
 
 // Custom Headers
-# include "../libft/libft/libft.h"
-# include "../libft/gnl/get_next_line_bonus.h"
+# include "../lib/libft/libft/libft.h"
+# include "../lib/libft/gnl/get_next_line_bonus.h"
 
 // Readline Headers
 # include <readline/readline.h>
@@ -77,6 +77,8 @@ typedef enum e_exit
 	FAILURE
 }	t_exit;
 
+extern int	g_exit;
+
 //Macros
 # define NO_ENV -1
 # define NO_VAR -1
@@ -107,6 +109,7 @@ void	free_args(char **args);
 //env Prototypes
 char    *extract_var(char *var, char **env);
 int		set_var(char *var, char *val, char ***env);
+char	**env_add_var(char **env, char *new_var);
 
 //Error Prototypes
 int 	exit_error(char *msg, int status);

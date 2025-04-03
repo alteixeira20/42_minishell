@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.c                                        :+:      :+:    :+:   */
+/*   000_minishell.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 02:04:50 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/03 03:32:41 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/03 17:34:31 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ int	main(int ac, char **av, char **env)
 	if (init(sh, env) != SUCCESS)
 		exit_error(INIT_ERR, errno);
 	loop(sh);
+	free(sh);
 	ft_putstr_fd("exit\n", STDOUT_FILENO);
 	return (EXIT_SUCCESS);
 }

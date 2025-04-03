@@ -6,7 +6,7 @@
 #    By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/03 02:10:25 by paalexan          #+#    #+#              #
-#    Updated: 2025/04/03 03:07:29 by paalexan         ###   ########.fr        #
+#    Updated: 2025/04/03 17:21:38 by paalexan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,7 +41,7 @@ TOKEN_DIR		= $(SRC_PATH)/400_tokenizer
 ENV_GET_DIR		= $(SRC_PATH)/500_env_get
 ENV_SET_DIR		= $(SRC_PATH)/510_env_set
 BUILTINS_DIR	= $(SRC_PATH)/610_builtins
-ERROR_DIR		= $(SRCSRC_PATH)/800_error
+ERROR_DIR		= $(SRC_PATH)/800_error
 SRC				= $(SRC_PATH)/000_minishell.c
 SRC				+= $(INIT_DIR)/init.c
 SRC				+= $(PARSER_DIR)/parser_input_utils.c
@@ -104,7 +104,7 @@ $(TEMP_PATH):
 
 $(NAME): $(BUILD_PATH) $(LIBFT_ARC) $(OBJS) 
 	@echo "[$(YEL)Compiling Minishell$(D)]"
-	$(CC) $(CFLAGS) $(DFLAGS) $(OBJS) $(LIBFT_ARC) $(MLXFLAGS) -o $(NAME)
+	$(CC) $(CFLAGS) $(DFLAGS) $(OBJS) $(LIBFT_ARC) -lreadline -o $(NAME)
 	@echo "[$(_SUCCESS) compiling $(MAG)Minishell!$(D) $(YEL)🖔$(D)]"
 
 $(LIBFT_ARC):
@@ -153,7 +153,7 @@ clean: 				## Remove object files
 fclean: clean	## Remove archives & executables
 	$(RM) $(NAME) $(NAME_BONUS)
 	@echo "* $(YEL)Cleaning executable$(D): $(_SUCCESS)"
-	$(MAKE) $(LIBFT_PATH) fclean
+	@rm -rf $(LIBFT_PATH)
 	@echo "* $(YEL)Removing libft archive$(D): $(_SUCCESS)"
 
 libclean: fclean	## Remove libs
