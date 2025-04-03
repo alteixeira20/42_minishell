@@ -53,6 +53,27 @@ typedef struct s_token
 	struct s_token	*next;
 }	t_token;
 
+typedef	struct s_minishell
+{
+	t_cmd	*cmds;
+	int		cmd_cnt;
+	char	**evn;
+	char	**path;
+	char	*hostname;
+	char	*user;
+	int		exit_status;
+	int		**pipes;
+	int		pipe_cnt;
+	int		hd_cnt;
+}	t_minishell;
+
+//Macros
+# define NO_ENV -1
+# define NO_VAR -1
+# define INIT_ERR		"Init Error\n"
+# define MALLOC_ERR		"Malloc Error\n"
+
+
 // Commands Prototypes
 int		cmd_echo(t_cmd *cmd);
 void	free_cmd(t_cmd *cmd);
@@ -67,5 +88,8 @@ void	free_token_list(t_token *token);
 t_token	*parse_input(const char *line);
 char	**split_input(const char *str);
 void	free_args(char **args);
+
+//env Prototypes
+char    *extract_var(char *var, char **env);
 
 #endif

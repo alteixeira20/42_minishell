@@ -23,7 +23,7 @@ void	print_tokens(t_token *tokens)
 	}
 }
 
-int	main(void)
+int	loop(t_minishell *sh)
 {
 	char	*line;
 	t_token	*tokens;
@@ -60,6 +60,20 @@ int	main(void)
 		free_token_list(tokens);
 		free(line);
 	}
+}
+
+int	main(int ac, char **av, char **env)
+{
+	t_minishell	sh;
+	void(av);
+	void(ac);
+
+	sh = ft_calloc(1, sizeof(t_minishell));
+	if (sh == NULL)
+		return (exit_error(MALLOC_ERR, errno), EXIT_FAILURE);
+	if (ft_init(sh, env) != SUCCESS)
+		exit_error(INIT_ERROR, errno);
+	loop(sh);
 	ft_putstr_fd("exit\n", STDOUT_FILENO);
-	return (0);
+	return (EXIT_SUCCESS);
 }

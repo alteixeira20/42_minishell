@@ -16,8 +16,9 @@ CFLAGS		:= -Wall -Werror -Wextra -g
 
 # Directories
 SRC_DIR		:= src
-PARSER_DIR	:= $(SRC_DIR)/parser
-CMDS_DIR	:= $(SRC_DIR)/cmds
+PARSER_DIR	:= $(SRC_DIR)/300_parser
+TOKEN_DIR	:= $(SRC_DIR)/400_tokenizer
+BUILTINS_DIR	:= $(SRC_DIR)/610_builtins
 OBJ_DIR		:= obj
 
 # Libft
@@ -26,10 +27,12 @@ LIBFT_DIR	:= libft
 LIBFT		:= $(LIBFT_DIR)/libft.a
 
 # Source Files
-SRC			:= $(SRC_DIR)/minishell.c \
-			   $(PARSER_DIR)/parser_input.c $(PARSER_DIR)/parser_input_utils.c \
-			   $(PARSER_DIR)/parser_tokens.c \
-			   $(CMDS_DIR)/cmd_echo.c $(CMDS_DIR)/cmd_utils.c
+SRC			= $(SRC_DIR)/000_minishell.c
+SRC			+= $(PARSER_DIR)/parser_input_utils.c
+SRC			+= $(PARSER_DIR)/parser_input.c
+SRC			+= $(TOKEN_DIR)/parser_tokens.c
+SRC			+= $(BUILTINS_DIR)/cmd_echo.c
+SRC			+= $(BUILTINS_DIR)/cmd_utils.c
 
 OBJ			:= $(SRC:.c=.o)
 OBJ			:= $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC))
