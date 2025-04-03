@@ -8,7 +8,7 @@ char    **init_env(char **env)
     n = 0;
     while (env[n])
         ++n;
-    new_env ft_calloc((n + 1), sizeof(char *))
+    new_env = ft_calloc((n + 1), sizeof(char *));
     if (!new_env)
         return (exit_error(MALLOC_ERR, errno), NULL)
     n = -1;
@@ -25,14 +25,12 @@ char    **init_env(char **env)
 char    *extract_var(char *var, char **env)
 {
     char    *tmp;
-    char    *get;
     int     len;
 
     if ((var == NULL) || (env == NULL))
         return (NULL);
     tmp = ft_strjoin(var, "=");
     len = ft_strlen(tmp);
-    get = NULL;
     while(*env)
     {
         if (ft_strncmp(tmp, *env, len) == 0)
