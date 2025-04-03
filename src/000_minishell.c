@@ -52,6 +52,7 @@ int	loop(t_minishell *sh)
 		free_token_list(tokens);
 		free(line);
 	}
+	return (1);
 }
 
 int	main(int ac, char **av, char **env)
@@ -63,7 +64,7 @@ int	main(int ac, char **av, char **env)
 	sh = ft_calloc(1, sizeof(t_minishell));
 	if (sh == NULL)
 		return (exit_error(MALLOC_ERR, errno), EXIT_FAILURE);
-	if (init(sh, env) != SUCCESS)
+	if (init(sh, env) != 1)
 		exit_error(INIT_ERR, errno);
 	loop(sh);
 	ft_putstr_fd("exit\n", STDOUT_FILENO);

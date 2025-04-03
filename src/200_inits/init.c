@@ -26,6 +26,7 @@ int init(t_minishell *sh, char **env)
     sh->pipe_cnt = 0;
     sh->hd_cnt = 0;
     sh->cmds = NULL;
+    return(1);
 }
 
 void    shlvl(t_minishell *sh)
