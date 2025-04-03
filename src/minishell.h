@@ -18,9 +18,11 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <errno.h>
+# include <fcntl.h>
 
 // Custom Headers
 # include "../libft/libft/libft.h"
+# include "../libft/gnl/get_next_line_bonus.h"
 
 // Readline Headers
 # include <readline/readline.h>
