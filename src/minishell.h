@@ -17,6 +17,7 @@
 # include <stdbool.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include <errno.h>
 
 // Custom Headers
 # include "../libft/libft/libft.h"
@@ -73,6 +74,8 @@ typedef	struct s_minishell
 # define INIT_ERR		"Init Error\n"
 # define MALLOC_ERR		"Malloc Error\n"
 
+//Init Prototypes
+int init(t_minishell *sh, char **env);
 
 // Commands Prototypes
 int		cmd_echo(t_cmd *cmd);

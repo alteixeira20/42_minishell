@@ -20,6 +20,7 @@ int	loop(t_minishell *sh)
 	t_token	*tokens;
 	t_cmd	*cmd;
 
+	(void)sh;
 	while (1)
 	{
 		line = readline("minishell$ ");
@@ -55,15 +56,15 @@ int	loop(t_minishell *sh)
 
 int	main(int ac, char **av, char **env)
 {
-	t_minishell	sh;
-	void(av);
-	void(ac);
+	t_minishell	*sh;
+	(void)av;
+	(void)ac;
 
 	sh = ft_calloc(1, sizeof(t_minishell));
 	if (sh == NULL)
 		return (exit_error(MALLOC_ERR, errno), EXIT_FAILURE);
 	if (init(sh, env) != SUCCESS)
-		exit_error(INIT_ERROR, errno);
+		exit_error(INIT_ERR, errno);
 	loop(sh);
 	ft_putstr_fd("exit\n", STDOUT_FILENO);
 	return (EXIT_SUCCESS);
