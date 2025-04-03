@@ -10,7 +10,7 @@ char    **init_env(char **env)
         ++n;
     new_env = ft_calloc((n + 1), sizeof(char *));
     if (!new_env)
-        return (exit_error(MALLOC_ERR, errno), NULL)
+        return (exit_error(MALLOC_ERR, errno), NULL);
     n = -1;
     while (env[++n])
     {
