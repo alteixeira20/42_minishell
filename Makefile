@@ -30,7 +30,7 @@ LIBFT		:= $(LIBFT_DIR)/libft.a
 
 # Source Files
 SRC			= $(SRC_DIR)/000_minishell.c
-SRC			+= $(INIT_DIR)/inti.c
+SRC			+= $(INIT_DIR)/init.c
 SRC			+= $(PARSER_DIR)/parser_input_utils.c
 SRC			+= $(PARSER_DIR)/parser_input.c
 SRC			+= $(TOKEN_DIR)/parser_tokens.c
