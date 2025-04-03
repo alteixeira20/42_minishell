@@ -92,4 +92,6 @@ void	free_args(char **args);
 //env Prototypes
 char    *extract_var(char *var, char **env);
 
+//Error Prototypes
+int exit_error(char *msg, int status);
 #endif

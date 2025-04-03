@@ -12,6 +12,17 @@
 
 #include "../minishell.h"
 
+void	print_tokens(t_token *tokens)
+{
+	while (tokens)
+	{
+		ft_putstr_fd("Token: [", STDOUT_FILENO);
+		ft_putstr_fd(tokens->value, STDOUT_FILENO);
+		ft_putstr_fd("]\n", STDOUT_FILENO);
+		tokens = tokens->next;
+	}
+}
+
 t_token	*token_new(char *value, t_token_type type)
 {
 	t_token	*token;

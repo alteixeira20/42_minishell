@@ -12,6 +12,22 @@
 
 #include "../minishell.h"
 
+int init(t_minishell *sh, char **env)
+{
+    sh->env = init_env(env);
+    shlvl(sh);
+    if (sh->env == NULL)
+        return (exit_error(ENV_INIT_ERR, errno), FAILURE)
+    sh->home = extract_var ("HOME", sh->env);
+    sh->user = extract_var("USER", sh->env);
+    sh->hostname = get_hostname();
+    set_var("OLDPWD", NULL, &sh->env);
+    //termios
+    sh->pipe_cnt = 0;
+    sh->hd_cnt = 0;
+    sh->cmds = NULL;
+}
+
 void    shlvl(t_minishell *sh)
 {
     char    *shlvl;

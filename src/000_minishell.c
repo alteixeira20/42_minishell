@@ -12,16 +12,7 @@
 
 #include "minishell.h"
 
-void	print_tokens(t_token *tokens)
-{
-	while (tokens)
-	{
-		ft_putstr_fd("Token: [", STDOUT_FILENO);
-		ft_putstr_fd(tokens->value, STDOUT_FILENO);
-		ft_putstr_fd("]\n", STDOUT_FILENO);
-		tokens = tokens->next;
-	}
-}
+int	g_exit;
 
 int	loop(t_minishell *sh)
 {
@@ -71,7 +62,7 @@ int	main(int ac, char **av, char **env)
 	sh = ft_calloc(1, sizeof(t_minishell));
 	if (sh == NULL)
 		return (exit_error(MALLOC_ERR, errno), EXIT_FAILURE);
-	if (ft_init(sh, env) != SUCCESS)
+	if (init(sh, env) != SUCCESS)
 		exit_error(INIT_ERROR, errno);
 	loop(sh);
 	ft_putstr_fd("exit\n", STDOUT_FILENO);
