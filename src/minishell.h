@@ -58,7 +58,7 @@ typedef	struct s_minishell
 {
 	t_cmd	*cmds;
 	int		cmd_cnt;
-	char	**evn;
+	char	**env;
 	char	**path;
 	char	*hostname;
 	char	*user;
@@ -68,6 +68,12 @@ typedef	struct s_minishell
 	int		hd_cnt;
 }	t_minishell;
 
+typedef enum e_exit
+{
+	SUCCESS,
+	FAILURE
+}	t_exit;
+
 //Macros
 # define NO_ENV -1
 # define NO_VAR -1
@@ -75,7 +81,8 @@ typedef	struct s_minishell
 # define MALLOC_ERR		"Malloc Error\n"
 
 //Init Prototypes
-int init(t_minishell *sh, char **env);
+int 	init(t_minishell *sh, char **env);
+char    **init_env(char **env);
 
 // Commands Prototypes
 int		cmd_echo(t_cmd *cmd);
@@ -96,5 +103,5 @@ void	free_args(char **args);
 char    *extract_var(char *var, char **env);
 
 //Error Prototypes
-int exit_error(char *msg, int status);
+int 	exit_error(char *msg, int status);
 #endif

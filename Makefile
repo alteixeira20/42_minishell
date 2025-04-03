@@ -19,6 +19,8 @@ SRC_DIR			:= src
 INIT_DIR		:= $(SRC_DIR)/200_inits
 PARSER_DIR		:= $(SRC_DIR)/300_parser
 TOKEN_DIR		:= $(SRC_DIR)/400_tokenizer
+ENV_GET_DIR		:= $(SRC_DIR)/500_env_get
+ENV_SET_DIR		:= $(SRC_DIR)/510_env_Set
 BUILTINS_DIR	:= $(SRC_DIR)/610_builtins
 ERROR_DIR		:= $(SRC_DIR)/800_error
 OBJ_DIR			:= obj
@@ -35,10 +37,10 @@ SRC			+= $(PARSER_DIR)/parser_input_utils.c
 SRC			+= $(PARSER_DIR)/parser_input.c
 SRC			+= $(TOKEN_DIR)/parser_tokens.c
 SRC			+= $(BUILTINS_DIR)/echo.c
+SRC			+= $(ENV_GET_DIR)/env_get.C
+SRC			+= $(ENV_SET_DIR)/env_set.c
 SRC			+= $(BUILTINS_DIR)/utils.c
 SRC			+= $(ERROR_DIR)/error.c
-SRC			+= $(SRC_DIR)/env_get.C
-SRC			+= $(SRC_DIR)/env_set.c
 
 OBJ			:= $(SRC:.c=.o)
 OBJ			:= $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC))
