@@ -1,0 +1,60 @@
+# Echo Command
+echo 42 > test.txt
+echo '42 > test.txt'
+echo "42 > test.txt"
+
+# CD Command
+cd
+cd 
+cd ~
+cd ~/Desktop
+cd -
+cd --
+cd $HOME/Desktop
+cd Desktop/$HOME/
+
+# Export with command execution
+export LS="ls -la"
+$LS
+"$LS"
+export $salmon=food
+export sequence="echo ola | wc"
+$sequence
+export LS="ls -la | wc"
+$LS
+export LS="a=4 ls"
+$LS
+export LS="ls "
+$LS"-la"
+unset $PWD
+
+# Redirections
+echo ola > test.txt
+cat file1.txt > file2.txt > file3.txt
+echo content file1 > file1
+echo content file2 > file2
+cat file1 > /dev/null
+cat ola > /dev/ttys005
+cat file1 > /dev/ttys005
+
+# Syntax Errors
+echo ola |
+echo ola >
+echo ola >>
+echo ola <
+echo ola <<
+
+# Heredoc
+cat << EOF
+cat << "EOF"
+cat << 'EOF'
+cat << EOF""
+cat << EOF''
+cat << EOF"A"
+cat << EOF'A'
+export TEST=EOF
+<<$TEST
+cat <<a > file.txt | cat <<b
+
+# Extra
+cat /dev/ttys005
