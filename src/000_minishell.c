@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 02:04:50 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/04 02:56:42 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/04 03:21:09 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,16 @@ static bool	needs_pipe_continuation(const char *line)
 	return (false);
 }
 
-static char	*read_multiline_input(void)
+static char	*read_multiline_input(t_minishell *sh)
 {
 	char	*line;
 	char	*next;
 	char	*joined;
+	char	*prompt;
 
-	line = readline("minishell$ ");
+	prompt = build_prompt(sh);
+	line = readline(prompt);
+	free(prompt);
 	while (line && needs_pipe_continuation(line))
 	{
 		next = readline("> ");
@@ -51,7 +54,7 @@ int	loop(t_minishell *sh)
 
 	while (1)
 	{
-		line = read_multiline_input();
+		line = read_multiline_input(sh);
 		if (!line)
 			break ;
 		if (*line)

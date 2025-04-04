@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 00:02:36 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/03 22:54:05 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/04 03:25:11 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,8 @@ char	*get_cmd_path(char *cmd, char **env);
 t_cmd	*cmd_new(void);
 int		add_arg(t_cmd *cmd, char *value);
 int		run_builtin(t_cmd *cmd);
+char	*build_cwd(char *cwd, char *home);
+char	*build_prompt(t_minishell *sh);
 
 // Tokens Prototypes
 t_token	*token_new(char *value, t_token_type type);
