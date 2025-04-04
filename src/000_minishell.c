@@ -6,13 +6,43 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 02:04:50 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/03 21:35:07 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/04 02:56:42 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 int	g_exit = 0;
+
+static bool	needs_pipe_continuation(const char *line)
+{
+	int	i;
+
+	i = ft_strlen(line);
+	while (i > 0 && ft_isspace(line[i - 1]))
+		i--;
+	if (i > 0 && line[i - 1] == '|')
+		return (true);
+	return (false);
+}
+
+static char	*read_multiline_input(void)
+{
+	char	*line;
+	char	*next;
+	char	*joined;
+
+	line = readline("minishell$ ");
+	while (line && needs_pipe_continuation(line))
+	{
+		next = readline("> ");
+		joined = ft_strjoin(line, next);
+		free(line);
+		free(next);
+		line = joined;
+	}
+	return (line);
+}
 
 int	loop(t_minishell *sh)
 {
@@ -21,7 +51,7 @@ int	loop(t_minishell *sh)
 
 	while (1)
 	{
-		line = readline("minishell$ ");
+		line = read_multiline_input();
 		if (!line)
 			break ;
 		if (*line)
