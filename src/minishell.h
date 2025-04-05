@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 00:02:36 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/04 03:25:11 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/05 13:07:19 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <errno.h>
 # include <fcntl.h>
 # include <sys/wait.h>
+# include <stdint.h>
 
 // Custom Headers
 # include "../lib/libft/libft/libft.h"
@@ -93,13 +94,17 @@ char	**init_env(char **env);
 
 // Commands Prototypes
 int		cmd_echo(t_cmd *cmd);
+int		cmd_export(t_cmd *cmd, t_minishell *sh);
+int		cmd_env(t_cmd *cmd, t_minishell *sh);
 t_cmd	*cmd_from_tokens(t_token *tokens);
 char	*get_cmd_path(char *cmd, char **env);
 t_cmd	*cmd_new(void);
 int		add_arg(t_cmd *cmd, char *value);
-int		run_builtin(t_cmd *cmd);
+int		run_builtin(t_cmd *cmd, t_minishell *sh);
 char	*build_cwd(char *cwd, char *home);
 char	*build_prompt(t_minishell *sh);
+void	sort_env(char **env);
+char	**copy_env_array(char **env);
 
 // Tokens Prototypes
 t_token	*token_new(char *value, t_token_type type);
@@ -109,17 +114,18 @@ int		process_token(t_token **tokens, t_cmd **current);
 
 // Redirects Prototypes
 int		process_redirect(t_cmd *cmd, t_token *token);
+void	setup_redirections(t_cmd *cmds, int in_fd, int pipe_fd[2]);
 
 // Parser Prototypes
 t_token	*parse_input(const char *line);
 char	**split_input(const char *str);
 
-//env Prototypes
+// Env Prototypes
 char	*extract_var(char *var, char **env);
 int		set_var(char *var, char *val, char ***env);
 char	**env_add_var(char **env, char *new_var);
 
-//Error Prototypes
+// Error Prototypes
 int		exit_error(char *msg, int status);
 
 // Free Prototypes

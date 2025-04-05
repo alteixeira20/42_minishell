@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   builtin_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 02:39:09 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/03 21:33:22 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/05 13:22:22 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,15 @@
 
 static bool	is_builtin_cmd(const char *cmd)
 {
+	if (ft_strncmp(cmd, "env", 4) == 0)
+		return (true);
 	if (ft_strncmp(cmd, "echo", 5) == 0)
+		return (true);
+	if (ft_strncmp(cmd, "cd", 3) == 0)
+		return (true);
+	if (ft_strncmp(cmd, "export", 7) == 0)
+		return (true);
+	if (ft_strncmp(cmd, "unset", 6) == 0)
 		return (true);
 	return (false);
 }
@@ -62,4 +70,17 @@ t_cmd	*cmd_from_tokens(t_token *tokens)
 		return (NULL);
 	finalize_cmds(cmd);
 	return (cmd);
+}
+
+int	run_builtin(t_cmd *cmd, t_minishell *sh)
+{
+	if (!cmd || !cmd->argv || !cmd->argv[0])
+		return (FAILURE);
+	if (ft_strncmp(cmd->argv[0], "env", 4) == 0)
+		return (cmd_env(cmd, sh));
+	if (ft_strncmp(cmd->argv[0], "echo", 5) == 0)
+		return (cmd_echo(cmd));
+	if (ft_strncmp(cmd->argv[0], "export", 7) == 0)
+		return (cmd_export(cmd, sh));
+	return (FAILURE);
 }

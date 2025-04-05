@@ -1,35 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   redirects_utils.c                                  :+:      :+:    :+:   */
+/*   cmd_env.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/04 20:43:21 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/04 20:43:38 by paalexan         ###   ########.fr       */
+/*   Created: 2025/04/05 13:03:17 by paalexan          #+#    #+#             */
+/*   Updated: 2025/04/05 13:09:01 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	setup_redirections(t_cmd *cmds, int in_fd, int pipe_fd[2])
+int	cmd_env(t_cmd *cmd, t_minishell *sh)
 {
-	if (in_fd != STDIN_FILENO)
+	int	i;
+
+	if (!sh || !sh->env)
+		return (FAILURE);
+	if (cmd->argc > 1)
 	{
-		dup2(in_fd, STDIN_FILENO);
-		close(in_fd);
+		ft_putstr_fd("env: too many arguments\n", STDERR_FILENO);
+		return (FAILURE);
 	}
-	if (cmds->input_fd != STDIN_FILENO)
+	i = 0;
+	while (sh->env[i])
 	{
-		dup2(cmds->input_fd, STDIN_FILENO);
-		close(cmds->input_fd);
+		if (ft_strchr(sh->env[i], '='))
+		{
+			ft_putstr_fd(sh->env[i], STDOUT_FILENO);
+			ft_putchar_fd('\n', STDOUT_FILENO);
+		}
+		i++;
 	}
-	if (cmds->output_fd != STDOUT_FILENO)
-		dup2(cmds->output_fd, STDOUT_FILENO);
-	else if (cmds->next)
-	{
-		dup2(pipe_fd[1], STDOUT_FILENO);
-		close(pipe_fd[0]);
-		close(pipe_fd[1]);
-	}
+	return (SUCCESS);
 }

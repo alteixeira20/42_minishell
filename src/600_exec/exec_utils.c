@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 19:24:08 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/03 22:53:39 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/05 12:50:12 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ char	*get_cmd_path(char *cmd, char **env)
 
 	if (!cmd || !env)
 		return (NULL);
-	if (ft_strchr(cmd, '/'))
+	if (cmd[0] == '/')
 		return (ft_strdup(cmd));
 	path_env = extract_var("PATH", env);
 	if (!path_env)
@@ -62,11 +62,4 @@ char	*get_cmd_path(char *cmd, char **env)
 	paths = ft_split(path_env, ':');
 	free (path_env);
 	return (search_path_in_env(cmd, paths));
-}
-
-int	run_builtin(t_cmd *cmd)
-{
-	if (strncmp(cmd->argv[0], "echo", 5) == 0)
-		return (cmd_echo(cmd));
-	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 01:28:43 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/03 20:45:58 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/04 21:11:56 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,8 @@ void	shlvl(t_minishell *sh)
 
 int	init(t_minishell *sh, char **env)
 {
+	char	*pwd;
+
 	sh->env = init_env(env);
 	shlvl(sh);
 	if (sh->env == NULL)
@@ -61,7 +63,12 @@ int	init(t_minishell *sh, char **env)
 	sh->home = extract_var ("HOME", sh->env);
 	sh->user = extract_var("USER", sh->env);
 	sh->hostname = get_hostname();
-	set_var("OLDPWD", NULL, &sh->env);
+	pwd = extract_var("PWD", sh->env);
+	if (pwd)
+	{
+		set_var("OLDPWD", NULL, &sh->env);
+		free(pwd);
+	}
 	sh->pipe_cnt = 0;
 	sh->hd_cnt = 0;
 	sh->cmds = NULL;
