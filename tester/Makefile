@@ -15,21 +15,23 @@ BASH_TMP				= $(BASH_DIR)/tmp_env
 SCRIPTS_DIR				= scripts
 
 # Scripts
-TESTER_SCRIPT			= ./tester.sh
+TESTER_SCRIPT			= $(SCRIPTS_DIR)/set_script_env.sh
 SUMMARY_SCRIPT			= $(SCRIPTS_DIR)/generate_summary_diff.py
-TMUX_SCRIPT				= $(SCRIPTS_DIR)/set_tmux_env.sh
+RUN_MINISHELL			= $(SCRIPTS_DIR)/run_minishell.sh
+RUN_BASH				= $(SCRIPTS_DIR)/run_bash.sh
 
 # Rules
 .PHONY: all run diff summary clean fclean help re
 
-all: run diff summary
+all: check_and_clean run diff summary
 
 re: fclean all
 
 run:
-	@echo "$(ORANGE)$(PREFIX)$(RESET) Launching tmux test interface..."
+	@echo "$(ORANGE)$(PREFIX)$(RESET) Running Output Tests..."
 	@mkdir -p $(MINI_TMP) $(BASH_TMP) $(DIFF_DIR)
-	@$(TMUX_SCRIPT) $(MINISHELL_EXEC) test_cases.txt $(MINI_TMP) $(MINI_DIR) $(BASH_TMP) $(BASH_DIR)
+	@$(RUN_MINISHELL) $(MINISHELL_EXEC) test_cases.txt $(MINI_TMP)
+	@$(RUN_BASH) test_cases.txt $(BASH_TMP)
 
 diff:
 	@echo "$(ORANGE)$(PREFIX)$(RESET) Comparing outputs..."
@@ -75,6 +77,12 @@ fclean: clean
 	@rm -rf $(RESULTS_DIR)
 	@rm -f diff_summary.txt
 	@echo "$(ORANGE)$(PREFIX)$(RESET) Full cleanup done."
+
+check_and_clean:
+	@if [ -d "$(RESULTS_DIR)" ] || [ -f "diff_summary.txt" ]; then \
+		echo "$(ORANGE)$(PREFIX)$(RESET) Previous test results detected."; \
+		$(MAKE) --silent fclean; \
+	fi
 
 help:
 	@echo "$(ORANGE)$(BOLD)Available commands:$(RESET)"

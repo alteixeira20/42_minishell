@@ -3,23 +3,34 @@ echo Hello World 42
 echo "hello    world"
 echo 'Hello World'
 echo "hello "'world'
+echo >
+echo hi >
+echo hi >>
+echo hi <
+echo hi <<
 #echo $HOME
 #echo "$HOME"
 #echo '$HOME'
 #echo "$7asdfsasdf"
 
+# Redirection with existing files
+echo before > tmp_test.txt
+cat < tmp_test.txt
+echo another >> tmp_test.txt
+cat < tmp_test.txt
+rm tmp_test.txt
+
 # Export / Unset / Env
 export
-#export a=1 b=2 c=3
-#export salmon=fish
-#echo $salmon
-#echo $fish
 env
 
-# Execution
-ls -l
+# Commands
 ls
-#cat
-#tee
-#cp
-#tty
+ls -la
+/bin/ls
+/bin/echo hello from bin
+/bin/cat /etc/passwd | head -n 2
+
+# Invalid Commands
+wrongcmd
+/bin/doesnotexist
