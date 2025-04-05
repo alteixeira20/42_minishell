@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 17:31:36 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/03 22:26:23 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/05 16:25:56 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,18 +27,24 @@ void	free_split(char **split)
 
 void	free_cmd(t_cmd *cmd)
 {
-	int	i;
+	t_cmd	*temp;
+	int		i;
 
 	if (!cmd)
 		return ;
-	i = 0;
-	while (cmd->argv && cmd->argv[i])
+	while (cmd)
 	{
-		free(cmd->argv[i]);
-		i++;
+		temp = cmd->next;
+		if (cmd->argv)
+		{
+			i = 0;
+			while (cmd->argv[i])
+				free(cmd->argv[i++]);
+			free(cmd->argv);
+		}
+		free(cmd);
+		cmd = temp;
 	}
-	free(cmd->argv);
-	free(cmd);
 }
 
 void	free_token_list(t_token *token)
@@ -54,4 +60,25 @@ void	free_token_list(t_token *token)
 		free(token);
 		token = next;
 	}
+}
+
+void	free_env_array(char **env)
+{
+	int	i;
+
+	i = 0;
+	while (env && env[i])
+		free(env[i++]);
+	free(env);
+}
+
+void	free_minishell(t_minishell *sh)
+{
+	if (sh->home)
+		free(sh->home);
+	if (sh->user)
+		free(sh->user);
+	if (sh->hostname)
+		free(sh->hostname);
+	free(sh);
 }

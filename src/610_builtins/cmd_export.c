@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 16:49:01 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/05 14:24:32 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/05 15:24:11 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,7 @@ int	cmd_export(t_cmd *cmd, t_minishell *sh)
 	{
 		sort_env(copy);
 		print_exported_vars(copy);
+		free_env_array(copy);
 		return (SUCCESS);
 	}
 	i = 1;

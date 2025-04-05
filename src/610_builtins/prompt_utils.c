@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 17:48:01 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/04 17:51:39 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/05 16:26:28 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,46 +14,28 @@
 
 static char	*prompt_user(t_minishell *sh)
 {
-	char	*result;
-	char	*temp;
+	char	*step1;
+	char	*step2;
+	char	*trimmed;
+	char	*final;
 
-	result = ft_strjoin(sh->user, "@");
-	temp = ft_strjoin(result, sh->hostname);
-	free(result);
-	temp = ft_strtrim(temp, "\n");
-	result = ft_strjoin(temp, ":");
-	free(temp);
-	return (result);
+	step1 = ft_strjoin(sh->user, "@");
+	if (!step1)
+		return (NULL);
+	step2 = ft_strjoin(step1, sh->hostname);
+	free(step1);
+	if (!step2)
+		return (NULL);
+	trimmed = ft_strtrim(step2, "\n");
+	free(step2);
+	if (!trimmed)
+		return (NULL);
+	final = ft_strjoin(trimmed, ":");
+	free(trimmed);
+	return (final);
 }
 
-char	*build_prompt(t_minishell *sh)
-{
-	char	*result;
-	char	*temp;
-	char	*cwd;
-	char	*pwd;
-	char	*home;
-
-	temp = prompt_user(sh);
-	cwd = extract_var("PWD", sh->env);
-	if (cwd == NULL)
-		cwd = getcwd(NULL, 0);
-	if (cwd != NULL)
-	{
-		home = extract_var("HOME", sh->env);
-		if (home == NULL)
-			home = ft_strdup(sh->home);
-		pwd = build_cwd(cwd, home);
-		if (pwd)
-			temp = ft_strjoin(temp, pwd);
-		free(cwd);
-		free(home);
-	}
-	result = ft_strjoin(temp, "$ ");
-	return (free(temp), result);
-}
-
-char	*build_cwd(char *cwd, char *home)
+static char	*build_cwd(char *cwd, char *home)
 {
 	char	*result;
 	int		i;
@@ -74,5 +56,44 @@ char	*build_cwd(char *cwd, char *home)
 		i++;
 	}
 	result[i + (home_len > 0)] = '\0';
+	return (result);
+}
+
+static char	*append_pwd(char *prompt, char *cwd, char *home)
+{
+	char	*cwd_display;
+	char	*joined;
+
+	cwd_display = build_cwd(cwd, home);
+	if (!cwd_display)
+		return (prompt);
+	joined = ft_strjoin(prompt, cwd_display);
+	free(prompt);
+	free(cwd_display);
+	return (joined);
+}
+
+char	*build_prompt(t_minishell *sh)
+{
+	char	*result;
+	char	*prompt;
+	char	*cwd;
+	char	*home;
+
+	prompt = prompt_user(sh);
+	cwd = extract_var("PWD", sh->env);
+	if (!cwd)
+		cwd = getcwd(NULL, 0);
+	if (cwd)
+	{
+		home = extract_var("HOME", sh->env);
+		if (!home)
+			home = ft_strdup(sh->home);
+		prompt = append_pwd(prompt, cwd, home);
+		free(home);
+		free(cwd);
+	}
+	result = ft_strjoin(prompt, "$ ");
+	free(prompt);
 	return (result);
 }

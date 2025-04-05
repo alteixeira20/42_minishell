@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 00:02:36 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/05 13:07:19 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/05 15:36:20 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,6 @@ char	*get_cmd_path(char *cmd, char **env);
 t_cmd	*cmd_new(void);
 int		add_arg(t_cmd *cmd, char *value);
 int		run_builtin(t_cmd *cmd, t_minishell *sh);
-char	*build_cwd(char *cwd, char *home);
 char	*build_prompt(t_minishell *sh);
 void	sort_env(char **env);
 char	**copy_env_array(char **env);
@@ -132,5 +131,7 @@ int		exit_error(char *msg, int status);
 void	free_split(char **split);
 void	free_cmd(t_cmd *cmd);
 void	free_token_list(t_token *token);
+void	free_env_array(char **env);
+void	free_minishell(t_minishell *sh);
 
 #endif
