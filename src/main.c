@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 02:04:50 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/10 22:58:48 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/11 00:20:29 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,14 @@
 
 int	g_exit = 0;
 
-static bool	needs_pipe_continuation(const char *line)
+static void	ctrl_c_handler(int sig)
 {
-	int	i;
-
-	i = ft_strlen(line);
-	while (i > 0 && ft_isspace(line[i - 1]))
-		i--;
-	if (i > 0 && line[i - 1] == '|')
-		return (true);
-	return (false);
+	(void)sig;
+	write(STDOUT_FILENO, "\n", 1);
+	rl_on_new_line();
+	rl_replace_line("", 0);
+	rl_redisplay();
+	g_exit = 1;
 }
 
 static char	*read_multiline_input(t_minishell *sh)
@@ -84,6 +82,8 @@ int	main(int ac, char **av, char **env)
 		return (exit_error(MALLOC_ERR, errno), EXIT_FAILURE);
 	if (init(sh, env) != SUCCESS)
 		exit_error(INIT_ERR, errno);
+	signal(SIGINT, ctrl_c_handler);
+	signal(SIGQUIT, SIG_IGN);
 	loop(sh);
 	free_env_array(sh->env);
 	free_minishell(sh);

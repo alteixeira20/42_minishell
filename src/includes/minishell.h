@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 00:02:36 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/10 22:59:57 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/11 00:17:51 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,8 @@ int		run_builtin(t_cmd *cmd, t_minishell *sh);
 char	*build_prompt(t_minishell *sh);
 void	sort_env(char **env);
 char	**copy_env_array(char **env);
+
+bool	needs_pipe_continuation(const char *line);
 
 // Tokens Prototypes
 t_token	*token_new(char *value, t_token_type type);

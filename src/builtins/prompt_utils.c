@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 17:48:01 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/10 21:48:26 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/11 00:22:01 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,18 @@ static char	*append_pwd(char *prompt, char *cwd, char *home)
 	free(prompt);
 	free(cwd_display);
 	return (joined);
+}
+
+bool	needs_pipe_continuation(const char *line)
+{
+	int	i;
+
+	i = ft_strlen(line);
+	while (i > 0 && ft_isspace(line[i - 1]))
+		i--;
+	if (i > 0 && line[i - 1] == '|')
+		return (true);
+	return (false);
 }
 
 char	*build_prompt(t_minishell *sh)
