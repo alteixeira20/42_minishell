@@ -6,7 +6,7 @@
 #    By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/03 02:10:25 by paalexan          #+#    #+#              #
-#    Updated: 2025/04/03 21:29:23 by paalexan         ###   ########.fr        #
+#    Updated: 2025/04/10 16:22:53 by paalexan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,12 +15,13 @@
 #                                     NAMES                                    #
 #==============================================================================#
 
-NAME	:= minishell
+NAME			:= minishell
 
 ### Message Vars
-_SUCCESS 		= [$(GRN)SUCCESS$(D)]
-_INFO 			= [$(BLU)INFO$(D)]
-_NORM 			= [$(MAG)Norminette$(D)]
+_PREFIX 		= $(MAG)[MiniShell]$(D)
+_SUCCESS 		= $(GRN)[SUCCESS]$(D)
+_INFO 			= $(BLU)[INFO]$(D)
+_NORM 			= $(MAX)[Norminette]$(D)
 _NORM_SUCCESS 	= $(GRN)=== OK:$(D)
 _NORM_INFO 		= $(BLU)File no:$(D)
 _NORM_ERR 		= $(RED)=== KO:$(D)
@@ -52,12 +53,17 @@ SRC				+= $(PARSER_DIR)/parser_input.c
 SRC				+= $(TOKEN_DIR)/parser_tokens.c
 SRC				+= $(EXEC_DIR)/exec.c
 SRC				+= $(EXEC_DIR)/exec_utils.c
-SRC				+= $(BUILTINS_DIR)/echo.c
+SRC				+= $(BUILTINS_DIR)/cmd_echo.c
+SRC				+= $(BUILTINS_DIR)/cmd_export.c
+SRC				+= $(BUILTINS_DIR)/cmd_env.c
+SRC				+= $(BUILTINS_DIR)/cmd_cd.c
+SRC				+= $(BUILTINS_DIR)/redirects.c
 SRC				+= $(BUILTINS_DIR)/redirects_utils.c
 SRC				+= $(BUILTINS_DIR)/cmd_utils.c
+SRC				+= $(BUILTINS_DIR)/builtin_utils.c
+SRC				+= $(BUILTINS_DIR)/prompt_utils.c
 SRC				+= $(ENV_GET_DIR)/env_get.c
 SRC				+= $(ENV_SET_DIR)/env_set.c
-SRC				+= $(BUILTINS_DIR)/utils.c
 SRC				+= $(ERROR_DIR)/error.c
 SRC				+= $(FREE_DIR)/free_utils.c
 
@@ -71,7 +77,7 @@ LIBFT_ARC		= $(LIBFT_PATH)/libft.a
 #                              COMPILER & FLAGS                                #
 #==============================================================================#
 
-CC		= cc
+CC			= cc
 
 CFLAGS		= -Wall -Werror -Wextra
 DFLAGS		= -g
@@ -92,47 +98,42 @@ all: deps $(NAME)
 
 bonus: deps $(NAME_BONUS)
 
-other: $(BUILD_PATH) $(OBJS)
-	@echo "[$(YEL)Compiling Minishell$(D)]"
-	$(CC) $(CFLAGS) $(DFLAGS) $(OBJS) -o $(NAME)
-	@echo "[$(_SUCCESS) compiling $(MAG)Minishell!$(D) $(YEL)🖔$(D)]"
-
 $(BUILD_PATH)/%.o: $(SRC_PATH)/%.c
-	$(MKDIR_P) $(@D)
+	@$(MKDIR_P) $(@D)
 	@echo -n "$(MAG)█$(D)"
-	$(CC) $(CFLAGS) $(DFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) $(DFLAGS) -c $< -o $@
 
 $(BUILD_PATH):
-	$(MKDIR_P) $(BUILD_PATH)
-	@echo "* $(YEL)Creating $(BUILD_PATH) folder:$(D) $(_SUCCESS)"
+	@$(MKDIR_P) $(BUILD_PATH)
+	@echo "$(_PREFIX) $(YEL)Creating $(BUILD_PATH) folder:$(D) $(_SUCCESS)"
+	@echo "$(_PREFIX) $(YEL)Compiling Minishell$(D)"
 
 $(TEMP_PATH):
-	$(MKDIR_P) $(TEMP_PATH)
-	@echo "* $(YEL)Creating $(TEMP_PATH) folder:$(D) $(_SUCCESS)"
+	@$(MKDIR_P) $(TEMP_PATH)
+	@echo "$(_PREFIX) $(YEL)Creating $(TEMP_PATH) folder:$(D) $(_SUCCESS)"
 
 $(NAME): $(BUILD_PATH) $(LIBFT_ARC) $(OBJS) 
-	@echo "[$(YEL)Compiling Minishell$(D)]"
-	$(CC) $(CFLAGS) $(DFLAGS) $(OBJS) $(LIBFT_ARC) -lreadline -o $(NAME)
-	@echo "[$(_SUCCESS) compiling $(MAG)Minishell!$(D) $(YEL)🖔$(D)]"
+	@$(CC) $(CFLAGS) $(DFLAGS) $(OBJS) $(LIBFT_ARC) -lreadline -o $(NAME)
+	@echo "\n$(_PREFIX) Compilation was $(BGRN)successful$(D)."
 
 $(LIBFT_ARC):
 	$(MAKE) $(LIBFT_PATH)
 
 deps: 			## Download/Update libft
 	@if test ! -d "$(LIBFT_PATH)"; then make get_libft; \
-		else echo "$(YEL)[libft]$(D) folder found 🖔"; fi
-	@echo " $(RED)$(D) [$(GRN)Nothing to be done!$(D)]"
+		else echo "$(_PREFIX) $(BYEL)Libft$(D) folder found 🖔"; fi
+	@echo "$(_PREFIX) Nothing to be done!"
 
 
 update_modules:
 	@echo "* $(CYA)Updating submodules$(D)]"
-	git submodule init
-	git submodule update --recursive --remote
+	@git submodule init
+	@git submodule update --recursive --remote
 	@echo "* $(GRN)Submodules update$(D): $(_SUCCESS)"
 
 get_libft:
 	@echo "* $(CYA)Getting Libft submodule$(D)]"
-	git clone git@github.com:alteixeira20/42_libft.git $(LIBFT_PATH)
+	@git clone git@github.com:alteixeira20/42_libft.git $(LIBFT_PATH)
 	@echo "* $(GRN)Libft submodule download$(D): $(_SUCCESS)"
 
 clean: 				## Remove object files
@@ -140,23 +141,28 @@ clean: 				## Remove object files
 	@if [ -d "$(LIBFT_PATH)/$(BUILD_PATH)" ] || [ -d "$(BUILD_PATH)" ] || [ -d "$(TEMP_PATH)" ]; then \
 		if [ -d "$(LIBFT_PATH)/$(BUILD_PATH)" ]; then \
 			$(MAKE) $(LIBFT_PATH) clean; \
-			echo "* $(YEL)Removing $(CYA)libft$(D) object files$(D): $(_SUCCESS)"; \
+			echo "$(_PREFIX) Removing $(CYA)libft$(D) object files$(D): $(_SUCCESS)"; \
 		fi; \
 		if [ -d "$(BUILD_PATH)" ]; then \
 			$(RM) $(BUILD_PATH); \
-			echo "* $(YEL)Removing $(CYA)$(BUILD_PATH)$(D) folder & files$(D): $(_SUCCESS)"; \
+			echo "$(_PREFIX) Removing $(CYA)$(BUILD_PATH)$(D) folder & files$(D): $(_SUCCESS)"; \
 		fi; \
 		if [ -d "$(BUILDB_PATH)" ]; then \
 			$(RM) $(BUILDB_PATH); \
-			echo "* $(YEL)Removing $(CYA)$(BUILDB_PATH)$(D) folder & files$(D): $(_SUCCESS)"; \
+			echo "$(_PREFIX) Removing $(CYA)$(BUILDB_PATH)$(D) folder & files$(D): $(_SUCCESS)"; \
 		fi; \
 		if [ -d "$(TEMP_PATH)" ]; then \
 			$(RM) $(TEMP_PATH); \
-			echo "* $(YEL)Removing $(CYA)$(TEMP_PATH)$(D) folder & files:$(D) $(_SUCCESS)"; \
+			echo "*$(_PREFIX) Removing $(CYA)$(TEMP_PATH)$(D) folder & files:$(D) $(_SUCCESS)"; \
 		fi; \
 	else \
-		echo " $(RED)$(D) [$(GRN)Nothing to clean!$(D)]"; \
+		echo "$(_PREFIX) Nothing to clean!"; \
 	fi
+
+valgrind:
+	@echo "{\n readline leaks\n   Memcheck:Leak\n...\n   fun:readline\n}\n{\n   leak add_history\n   Memcheck:Leak\n...\n   fun:add_history\n}" > readline.supp
+	/usr/bin/valgrind --suppressions=readline.supp --leak-check=full -s --show-leak-kinds=all ./$(NAME)
+	@rm -f readline.supp
 
 fclean: clean	## Remove archives & executables
 	$(RM) $(NAME) $(NAME_BONUS)

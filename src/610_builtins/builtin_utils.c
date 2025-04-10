@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 02:39:09 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/05 13:22:22 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/10 16:22:13 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,9 +78,11 @@ int	run_builtin(t_cmd *cmd, t_minishell *sh)
 		return (FAILURE);
 	if (ft_strncmp(cmd->argv[0], "env", 4) == 0)
 		return (cmd_env(cmd, sh));
-	if (ft_strncmp(cmd->argv[0], "echo", 5) == 0)
+	else if (ft_strncmp(cmd->argv[0], "echo", 5) == 0)
 		return (cmd_echo(cmd));
-	if (ft_strncmp(cmd->argv[0], "export", 7) == 0)
+	else if (ft_strncmp(cmd->argv[0], "export", 7) == 0)
 		return (cmd_export(cmd, sh));
+	else if (ft_strncmp(cmd->argv[0], "cd", 3) == 0)
+		return (cmd_cd(cmd, sh));
 	return (FAILURE);
 }
