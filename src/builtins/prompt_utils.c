@@ -6,11 +6,11 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 17:48:01 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/05 16:26:28 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/10 21:48:26 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../includes/minishell.h"
 
 static char	*prompt_user(t_minishell *sh)
 {

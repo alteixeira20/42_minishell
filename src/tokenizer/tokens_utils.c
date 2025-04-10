@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser_tokens.c                                    :+:      :+:    :+:   */
+/*   tokens_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 01:07:31 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/03 21:18:55 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/10 23:01:03 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../includes/minishell.h"
 
 t_token	*token_new(char *value, t_token_type type)
 {

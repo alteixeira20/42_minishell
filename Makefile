@@ -6,177 +6,159 @@
 #    By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/03 02:10:25 by paalexan          #+#    #+#              #
-#    Updated: 2025/04/10 16:22:53 by paalexan         ###   ########.fr        #
+#    Updated: 2025/04/10 23:15:10 by paalexan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 
-#==============================================================================#
-#                                     NAMES                                    #
-#==============================================================================#
+# **************************************************************************** #
+#                             Variables Declarion                              #
+# **************************************************************************** #
 
-NAME			:= minishell
+### Executable
+NAME			= minishell
+
+### Repositories
+LIBFT_REPO  	= git@github.com:alteixeira20/42_libft.git
 
 ### Message Vars
-_PREFIX 		= $(MAG)[MiniShell]$(D)
-_SUCCESS 		= $(GRN)[SUCCESS]$(D)
-_INFO 			= $(BLU)[INFO]$(D)
-_NORM 			= $(MAX)[Norminette]$(D)
-_NORM_SUCCESS 	= $(GRN)=== OK:$(D)
-_NORM_INFO 		= $(BLU)File no:$(D)
-_NORM_ERR 		= $(RED)=== KO:$(D)
-_SEP 			= =====================
+PREFIX 			= $(B)$(MAG)[MiniShell]$(D)
+SUCCESSFULLY 	= $(GRN)successfully$(D)
+NORM_SUCCESS 	= $(GRN)=== OK:$(D)
+NORM_INFO 		= $(BLU)File no:$(D)
+NORM_ERR 		= $(RED)=== KO:$(D)
+SEP 			= =====================
 
-#==============================================================================#
-#                                    PATHS                                     #
-#==============================================================================#
+# **************************************************************************** #
+#                                 Directories                                  #
+# **************************************************************************** #
 
-SRC_PATH 		= src
-LIBS_PATH		= lib
-BUILD_PATH		= .build
-TEMP_PATH		= .temp
+LIBFT_DIR		= libft
+LIBFT			= $(LIBFT_DIR)/libft.a
 
-INIT_DIR		= $(SRC_PATH)/200_inits
-PARSER_DIR		= $(SRC_PATH)/300_parser
-TOKEN_DIR		= $(SRC_PATH)/400_tokenizer
-ENV_GET_DIR		= $(SRC_PATH)/500_env_get
-ENV_SET_DIR		= $(SRC_PATH)/510_env_set
-EXEC_DIR		= $(SRC_PATH)/600_exec
-BUILTINS_DIR	= $(SRC_PATH)/610_builtins
-ERROR_DIR		= $(SRC_PATH)/800_error
-FREE_DIR		= $(SRC_PATH)/900_free
+SRC_DIR 		= src
+INIT_DIR		= $(SRC_DIR)/inits
+PARSER_DIR		= $(SRC_DIR)/parser
+TOKEN_DIR		= $(SRC_DIR)/tokenizer
+ENV_DIR			= $(SRC_DIR)/env
+EXEC_DIR		= $(SRC_DIR)/exec
+BUILTINS_DIR	= $(SRC_DIR)/builtins
+REDIRECTS_DIR	= $(SRC_DIR)/redirects
+ERROR_DIR		= $(SRC_DIR)/error
+FREE_DIR		= $(SRC_DIR)/free
 
-SRC				= $(SRC_PATH)/000_minishell.c
+TEMP_DIR		= .temp
+OBJ_DIR			= .obj
+
+# **************************************************************************** #
+#                                 Source Files                                 #
+# **************************************************************************** #
+
+SRC				= $(SRC_DIR)/main.c
 SRC				+= $(INIT_DIR)/init.c
-SRC				+= $(PARSER_DIR)/parser_input_utils.c
-SRC				+= $(PARSER_DIR)/parser_input.c
-SRC				+= $(TOKEN_DIR)/parser_tokens.c
+SRC				+= $(PARSER_DIR)/parser.c
+SRC				+= $(PARSER_DIR)/parser_utils.c
+SRC				+= $(TOKEN_DIR)/tokens_utils.c
 SRC				+= $(EXEC_DIR)/exec.c
 SRC				+= $(EXEC_DIR)/exec_utils.c
+SRC				+= $(ENV_DIR)/env_get.c
+SRC				+= $(ENV_DIR)/env_set.c
+SRC				+= $(ENV_DIR)/env_utils.c
 SRC				+= $(BUILTINS_DIR)/cmd_echo.c
 SRC				+= $(BUILTINS_DIR)/cmd_export.c
 SRC				+= $(BUILTINS_DIR)/cmd_env.c
 SRC				+= $(BUILTINS_DIR)/cmd_cd.c
-SRC				+= $(BUILTINS_DIR)/redirects.c
-SRC				+= $(BUILTINS_DIR)/redirects_utils.c
-SRC				+= $(BUILTINS_DIR)/cmd_utils.c
 SRC				+= $(BUILTINS_DIR)/builtin_utils.c
 SRC				+= $(BUILTINS_DIR)/prompt_utils.c
-SRC				+= $(ENV_GET_DIR)/env_get.c
-SRC				+= $(ENV_SET_DIR)/env_set.c
+SRC				+= $(REDIRECTS_DIR)/redirects.c
+SRC				+= $(REDIRECTS_DIR)/redirects_utils.c
 SRC				+= $(ERROR_DIR)/error.c
 SRC				+= $(FREE_DIR)/free_utils.c
 
 
-OBJS			= $(SRC:$(SRC_PATH)/%.c=$(BUILD_PATH)/%.o)
+# **************************************************************************** #
+#                                   Targets                                    #
+# **************************************************************************** #
 
-LIBFT_PATH		= $(LIBS_PATH)/libft
-LIBFT_ARC		= $(LIBFT_PATH)/libft.a
+OBJS			= $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
+
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+	@mkdir -p $(@D)
+	@$(CC) $(CFLAGS) $(DFLAGS) -c $< -o $@
 
 #==============================================================================#
 #                              COMPILER & FLAGS                                #
 #==============================================================================#
 
 CC			= cc
-
 CFLAGS		= -Wall -Werror -Wextra
 DFLAGS		= -g
-
-INC			= -I
 
 #==============================================================================#
 #                                COMMANDS                                      #
 #==============================================================================#
 
-AR			= ar rcs
-RM			= rm -rf
-MKDIR_P		= mkdir -p
-
 MAKE		= make -C
 
-all: deps $(NAME)
+all: $(LIBFT) $(NAME)
 
-bonus: deps $(NAME_BONUS)
-
-$(BUILD_PATH)/%.o: $(SRC_PATH)/%.c
-	@$(MKDIR_P) $(@D)
-	@echo -n "$(MAG)█$(D)"
-	@$(CC) $(CFLAGS) $(DFLAGS) -c $< -o $@
-
-$(BUILD_PATH):
-	@$(MKDIR_P) $(BUILD_PATH)
-	@echo "$(_PREFIX) $(YEL)Creating $(BUILD_PATH) folder:$(D) $(_SUCCESS)"
-	@echo "$(_PREFIX) $(YEL)Compiling Minishell$(D)"
-
-$(TEMP_PATH):
-	@$(MKDIR_P) $(TEMP_PATH)
-	@echo "$(_PREFIX) $(YEL)Creating $(TEMP_PATH) folder:$(D) $(_SUCCESS)"
-
-$(NAME): $(BUILD_PATH) $(LIBFT_ARC) $(OBJS) 
-	@$(CC) $(CFLAGS) $(DFLAGS) $(OBJS) $(LIBFT_ARC) -lreadline -o $(NAME)
-	@echo "\n$(_PREFIX) Compilation was $(BGRN)successful$(D)."
-
-$(LIBFT_ARC):
-	$(MAKE) $(LIBFT_PATH)
-
-deps: 			## Download/Update libft
-	@if test ! -d "$(LIBFT_PATH)"; then make get_libft; \
-		else echo "$(_PREFIX) $(BYEL)Libft$(D) folder found 🖔"; fi
-	@echo "$(_PREFIX) Nothing to be done!"
-
-
-update_modules:
-	@echo "* $(CYA)Updating submodules$(D)]"
-	@git submodule init
-	@git submodule update --recursive --remote
-	@echo "* $(GRN)Submodules update$(D): $(_SUCCESS)"
-
-get_libft:
-	@echo "* $(CYA)Getting Libft submodule$(D)]"
-	@git clone git@github.com:alteixeira20/42_libft.git $(LIBFT_PATH)
-	@echo "* $(GRN)Libft submodule download$(D): $(_SUCCESS)"
-
-clean: 				## Remove object files
-	@echo "* $(YEL)Removing $(MAG)$(NAME)$(D) and deps $(YEL)object files$(D)"
-	@if [ -d "$(LIBFT_PATH)/$(BUILD_PATH)" ] || [ -d "$(BUILD_PATH)" ] || [ -d "$(TEMP_PATH)" ]; then \
-		if [ -d "$(LIBFT_PATH)/$(BUILD_PATH)" ]; then \
-			$(MAKE) $(LIBFT_PATH) clean; \
-			echo "$(_PREFIX) Removing $(CYA)libft$(D) object files$(D): $(_SUCCESS)"; \
-		fi; \
-		if [ -d "$(BUILD_PATH)" ]; then \
-			$(RM) $(BUILD_PATH); \
-			echo "$(_PREFIX) Removing $(CYA)$(BUILD_PATH)$(D) folder & files$(D): $(_SUCCESS)"; \
-		fi; \
-		if [ -d "$(BUILDB_PATH)" ]; then \
-			$(RM) $(BUILDB_PATH); \
-			echo "$(_PREFIX) Removing $(CYA)$(BUILDB_PATH)$(D) folder & files$(D): $(_SUCCESS)"; \
-		fi; \
-		if [ -d "$(TEMP_PATH)" ]; then \
-			$(RM) $(TEMP_PATH); \
-			echo "*$(_PREFIX) Removing $(CYA)$(TEMP_PATH)$(D) folder & files:$(D) $(_SUCCESS)"; \
-		fi; \
-	else \
-		echo "$(_PREFIX) Nothing to clean!"; \
+$(LIBFT):
+	@if [ ! -d "$(LIBFT_DIR)" ]; then \
+		echo "$(PREFIX) Cloning $(BOLD)Libft$(RESET) and waiting for compilation..."; \
+		git clone $(LIBFT_REPO) $(LIBFT_DIR) > /dev/null 2>&1; \
 	fi
+	@$(MAKE) $(LIBFT_DIR) --silent > /dev/null 2>&1
+	@echo "$(PREFIX) $(BOLD)Libft$(RESET) compiled $(SUCCESSFULLY)."
+
+$(OBJ_DIR):
+	@mkdir -p $(OBJ_DIR)
+
+$(NAME): $(OBJ_DIR) $(LIBFT) $(OBJS) 
+	@$(CC) $(CFLAGS) $(DFLAGS) $(OBJS) $(LIBFT) -lreadline -o $(NAME)
+	@echo "$(PREFIX) $(BOLD)Executable$(RESET) compiled $(SUCCESSFULLY)."
 
 valgrind:
+	@if [ ! -f "$(NAME)" ]; then \
+		echo "$(PREFIX) Executable not found. Running 'make'..."; \
+		make --silent; \
+	fi
 	@echo "{\n readline leaks\n   Memcheck:Leak\n...\n   fun:readline\n}\n{\n   leak add_history\n   Memcheck:Leak\n...\n   fun:add_history\n}" > readline.supp
-	/usr/bin/valgrind --suppressions=readline.supp --leak-check=full -s --show-leak-kinds=all ./$(NAME)
+	@valgrind --suppressions=readline.supp --leak-check=full -s --show-leak-kinds=all ./$(NAME)
 	@rm -f readline.supp
 
-fclean: clean	## Remove archives & executables
-	$(RM) $(NAME) $(NAME_BONUS)
-	@echo "* $(YEL)Cleaning executable$(D): $(_SUCCESS)"
-	@rm -rf $(LIBFT_PATH)
-	@echo "* $(YEL)Removing libft archive$(D): $(_SUCCESS)"
+norm:
+	@echo "$(PREFIX) Running norminette on source files...$(D)"
+	@norminette $(SRC) | while read -r line; do \
+		if echo $$line | grep -q "Error"; then \
+			echo "$(NORM_ERR) $$line"; \
+		elif echo $$line | grep -q "OK!"; then \
+			echo "$(NORM_SUCCESS) $$line"; \
+		else \
+			echo "$(NORM_INFO) $$line"; \
+		fi; \
+	done
 
-libclean: fclean	## Remove libs
-	$(RM) $(LIBS_PATH)
-	@echo "* $(YEL)Removing lib folder & files!$(D) : $(_SUCCESS)"
+clean:
+	@if [ -d "$(OBJ_DIR)" ] || [ -f "$(NAME)" ]; then \
+		rm -rf $(OBJ_DIR) $(NAME); \
+		echo "$(PREFIX) Objects & Executable removed $(SUCCESSFULLY)"; \
+	else \
+		echo "$(PREFIX) No Objects & Executable to clean."; \
+	fi
+	@rm -f readline.supp
 
-re: fclean all	## Purge and Recompile
+fclean:
+	@make clean --silent
+	@if [ -d "$(LIBFT_DIR)" ]; then \
+		rm -rf $(LIBFT_DIR); \
+		echo "$(PREFIX) Libft removed $(SUCCESSFULLY)"; \
+	else \
+		echo "$(PREFIX) No Libft folder to clean."; \
+	fi
 
-help: 			## Display this help page
+re: fclean all
+
+help:
 	@awk 'BEGIN {FS = ":.*##"; \
 			printf "\n=> Usage:\n\tmake $(GRN)<target>$(D)\n"} \
 		/^[a-zA-Z_0-9-]+:.*?##/ { \
@@ -186,8 +168,7 @@ help: 			## Display this help page
 ## Tweaked from source:
 ### https://www.padok.fr/en/blog/beautiful-makefile-awk
 
-.PHONY: deps get_libft update_modules clean fclean libclean re \
-		norm
+.PHONY: clean fclean re norm
 
 #==============================================================================#
 #                                  UTILS                                       #

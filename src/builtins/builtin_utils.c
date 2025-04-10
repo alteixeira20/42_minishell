@@ -6,11 +6,11 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 02:39:09 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/10 16:22:13 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/10 21:47:31 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../includes/minishell.h"
 
 static bool	is_builtin_cmd(const char *cmd)
 {

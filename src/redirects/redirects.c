@@ -6,11 +6,11 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 20:38:08 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/04 02:42:39 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/10 21:48:41 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../includes/minishell.h"
 
 static int	open_input_file(const char *filename)
 {

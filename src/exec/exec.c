@@ -6,11 +6,11 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 18:31:43 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/10 16:08:32 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/10 23:01:15 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../includes/minishell.h"
 
 static void	exec_child(t_cmd *cmds, int in_fd, int pipe_fd[2], t_minishell *sh)
 {

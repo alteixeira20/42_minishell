@@ -6,11 +6,11 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 16:12:15 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/10 16:29:57 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/10 21:47:39 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../includes/minishell.h"
 
 static void	update_pwd_vars(char *oldpwd, t_minishell *sh)
 {

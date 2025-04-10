@@ -6,11 +6,11 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 22:16:38 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/10 15:49:20 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/10 21:47:12 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../includes/minishell.h"
 
 char	**env_add_var(char **env, char *new_var)
 {

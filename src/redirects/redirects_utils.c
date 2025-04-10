@@ -6,11 +6,11 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 20:43:21 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/04 20:43:38 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/10 21:48:47 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../includes/minishell.h"
 
 void	setup_redirections(t_cmd *cmds, int in_fd, int pipe_fd[2])
 {

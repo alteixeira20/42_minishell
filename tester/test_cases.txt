@@ -20,17 +20,17 @@ echo another >> tmp_test.txt
 cat < tmp_test.txt
 rm tmp_test.txt
 
-# Export / Unset / Env
-export
-env
-
 # Commands
+export
+export VAR=42
+env | grep VAR
 ls
 ls -la
 /bin/ls
 /bin/echo hello from bin
 /bin/cat /etc/passwd | head -n 2
-
+ls | wc
+"Hello | World"
 # Invalid Commands
 wrongcmd
 /bin/doesnotexist

@@ -6,11 +6,11 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 16:49:01 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/10 16:07:05 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/10 23:19:04 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../includes/minishell.h"
 
 static bool	is_valid_identifier(const char *str)
 {
@@ -110,5 +110,6 @@ int	cmd_export(t_cmd *cmd, t_minishell *sh)
 			export_assign(cmd->argv[i], sh);
 		i++;
 	}
+	free_env_array(copy);
 	return (SUCCESS);
 }

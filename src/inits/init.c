@@ -6,11 +6,11 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 01:28:43 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/04 21:11:56 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/10 23:00:17 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../includes/minishell.h"
 
 char	*get_hostname(void)
 {

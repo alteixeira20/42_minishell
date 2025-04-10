@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 00:02:36 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/10 16:22:34 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/10 22:59:57 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@
 # include <stdint.h>
 
 // Custom Headers
-# include "../lib/libft/libft/libft.h"
-# include "../lib/libft/gnl/get_next_line_bonus.h"
+# include "../../libft/libft/libft.h"
+# include "../../libft/gnl/get_next_line_bonus.h"
 
 // Readline Headers
 # include <readline/readline.h>
