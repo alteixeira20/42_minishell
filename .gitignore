@@ -1,8 +1,0 @@
-.gitignore
-.build/
-.temp/
-minishell
-emptyshell.c
-minishell_luigi
-minishell_zedro
-tester/
