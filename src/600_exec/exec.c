@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 18:31:43 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/05 14:19:23 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/10 16:08:32 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,15 +54,15 @@ static void	close_parent_pipe(int *in_fd, int pipe_fd[2], t_cmd *cmds)
 	}
 }
 
-int	exec_pipeline(t_cmd *cmds, t_minishell *sh)
+int	exec_pipeline(t_cmd *cmds, t_minishell *sh, int in_fd)
 {
 	int		pipe_fd[2];
-	int		in_fd;
 	pid_t	pid;
 	int		status;
 	bool	has_pipe;
 
-	in_fd = 0;
+	if (!cmds->next && cmds->is_builtin)
+		return (run_builtin(cmds, sh));
 	while (cmds)
 	{
 		has_pipe = (cmds->next != NULL);
@@ -86,11 +86,13 @@ int	exec_pipeline(t_cmd *cmds, t_minishell *sh)
 int	exec_tokens(t_token *tokens, t_minishell *sh)
 {
 	t_cmd	*cmds;
+	int		in_fd;
 
 	cmds = cmd_from_tokens(tokens);
 	if (!cmds)
 		return (FAILURE);
-	exec_pipeline(cmds, sh);
+	in_fd = 0;
+	exec_pipeline(cmds, sh, in_fd);
 	free_cmd(cmds);
 	return (SUCCESS);
 }

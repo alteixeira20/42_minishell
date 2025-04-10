@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 16:49:01 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/05 15:24:11 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/10 16:07:05 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static void	export_assign(const char *arg, t_minishell *sh)
 	char	*val;
 
 	equal = ft_strchr(arg, '=');
-	if (!equal)
+	if (equal)
 	{
 		key = ft_substr(arg, 0, equal - arg);
 		val = ft_strdup(equal + 1);
@@ -53,7 +53,7 @@ static void	export_assign(const char *arg, t_minishell *sh)
 		key = ft_strdup(arg);
 		val = NULL;
 	}
-	if (key && val)
+	if (key)
 		set_var(key, val, &sh->env);
 	free(key);
 	free(val);
@@ -110,7 +110,5 @@ int	cmd_export(t_cmd *cmd, t_minishell *sh)
 			export_assign(cmd->argv[i], sh);
 		i++;
 	}
-	if (cmd->argc > 1)
-		set_var("_", cmd->argv[cmd->argc - 1], &sh->env);
 	return (SUCCESS);
 }

@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 22:16:38 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/03 23:53:53 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/10 15:49:20 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ char	**env_add_var(char **env, char *new_var)
 	}
 	new_env[i++] = ft_strdup(new_var);
 	new_env[i] = NULL;
+	free_env_array(env);
 	return (new_env);
 }
 
@@ -45,47 +46,47 @@ int	var_from_env(char *var, char **env)
 	len = ft_strlen(var);
 	while (env[++i])
 	{
-		if ((ft_strncmp(var, env[i], len) == SUCCESS) \
-			&& ((env[i][len] == '=') || (env[i][len == '\0'])))
+		if ((ft_strncmp(var, env[i], len) == SUCCESS)
+			&& (env[i][len] == '=' || env[i][len] == '\0'))
 			return (i);
 	}
 	return (NO_VAR);
 }
 
-static void	ft_swapenvs(char **a, char **b)
+static char	*create_var_str(char *var, char *val)
 {
 	char	*tmp;
+	char	*new;
 
-	if (!a || !b)
-		return ;
-	tmp = *a;
-	*a = *b;
-	*b = tmp;
+	if (!val)
+		return (ft_strdup(var));
+	tmp = ft_strjoin(var, "=");
+	if (!tmp)
+		return (NULL);
+	new = ft_strjoin(tmp, val);
+	free(tmp);
+	return (new);
 }
 
 int	set_var(char *var, char *val, char ***env)
 {
 	char	*new;
-	char	*tmp;
 	int		i;
 
-	if (!*env)
+	if (!env | !*env)
 		return (NO_ENV);
-	if (val)
-	{
-		tmp = ft_strjoin(var, "=");
-		new = ft_strjoin(tmp, val);
-		free(tmp);
-	}
-	else
-		new = ft_strdup(var);
+	new = create_var_str(var, val);
+	if (!new)
+		return (FAILURE);
 	i = var_from_env(var, *env);
 	if (i == NO_VAR)
-		(*env) = env_add_var(*env, new);
+		*env = env_add_var(*env, new);
 	else
 	{
-		ft_swapenvs(&(*env)[i], &new);
-		free(new);
+		free((*env)[i]);
+		(*env)[i] = new;
 	}
+	if (i == NO_VAR)
+		free(new);
 	return (SUCCESS);
 }
