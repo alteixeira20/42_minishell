@@ -32,25 +32,19 @@ static void	copy_unquoted(char *res, const char *arg)
 {
 	int	i;
 	int	j;
-	int	quote;
+	int	quote_tp;
 
 	i = 0;
 	j = 0;
-	quote = 0;
+	quote_tp = quote_type(arg[0]);
 	while (arg[i])
 	{
-		if ((arg[i] == '\'' || arg[i] == '"') && !quote)
-		{
-			quote = arg[i++];
-			continue ;
-		}
-		else if (arg[i] == quote)
-		{
-			quote = 0;
-			i++;
-			continue ;
-		}
-		res[j++] = arg[i++];
+		if (arg[i] == '\'' && quote_tp != 1)
+			res[j++] = arg[i++];
+		if (arg[i] == '\"' && quote_tp != 2)
+			res[j++] = arg[i++];
+		else
+			res[j++] = arg[i++];
 	}
 	res[j] = '\0';
 }

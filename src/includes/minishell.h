@@ -105,6 +105,7 @@ int		run_builtin(t_cmd *cmd, t_minishell *sh);
 char	*build_prompt(t_minishell *sh);
 void	sort_env(char **env);
 char	**copy_env_array(char **env);
+int		quote_type(char arg);
 
 bool	needs_pipe_continuation(const char *line);
 

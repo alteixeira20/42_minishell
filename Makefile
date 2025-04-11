@@ -71,11 +71,11 @@ SRC				+= $(BUILTINS_DIR)/cmd_env.c
 SRC				+= $(BUILTINS_DIR)/cmd_cd.c
 SRC				+= $(BUILTINS_DIR)/builtin_utils.c
 SRC				+= $(BUILTINS_DIR)/prompt_utils.c
+SRC				+= $(BUILTINS_DIR)/cmd_echo_utils.c
 SRC				+= $(REDIRECTS_DIR)/redirects.c
 SRC				+= $(REDIRECTS_DIR)/redirects_utils.c
 SRC				+= $(ERROR_DIR)/error.c
 SRC				+= $(FREE_DIR)/free_utils.c
-
 
 # **************************************************************************** #
 #                                   Targets                                    #

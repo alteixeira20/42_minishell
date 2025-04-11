@@ -1,0 +1,7 @@
+lib/
+minishell
+.build/
+.temp/
+tester/results
+tester/diff_sumary.txt
+tester/results/
