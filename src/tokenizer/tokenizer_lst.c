@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tokens_utils.c                                     :+:      :+:    :+:   */
+/*   tokenizer_lst.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/03 01:07:31 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/11 23:34:51 by paalexan         ###   ########.fr       */
+/*   Created: 2025/04/12 00:44:36 by paalexan          #+#    #+#             */
+/*   Updated: 2025/04/12 00:50:12 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,32 +40,4 @@ void	token_add_back(t_token **list, t_token *new_token)
 	while (temp->next)
 		temp = temp->next;
 	temp->next = new_token;
-}
-
-int	process_token(t_token **tokens, t_cmd **current)
-{
-	if ((*tokens)->type == TOKEN_WORD)
-		add_arg(*current, (*tokens)->value);
-	else if ((*tokens)->type == TOKEN_PIPE)
-	{
-		(*current)->next = cmd_new();
-		if (!(*current)->next)
-			return (-1);
-		*current = (*current)->next;
-	}
-	else if ((*tokens)->type == TOKEN_REDIRECT_IN
-		|| (*tokens)->type == TOKEN_REDIRECT_OUT
-		|| (*tokens)->type == TOKEN_APPEND)
-	{
-		if (process_redirect(*current, *tokens) == -1)
-			return (-1);
-		*tokens = (*tokens)->next;
-	}
-	else if ((*tokens)->type == TOKEN_HEREDOC)
-	{
-		if (handle_redirect_heredoc(*current, (*tokens)->next) == -1)
-			return (-1);
-		*tokens = (*tokens)->next;
-	}
-	return (0);
 }

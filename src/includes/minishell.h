@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 00:02:36 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/11 23:20:27 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/12 00:46:02 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,9 @@ void	token_add_back(t_token **list, t_token *new_token);
 int		exec_tokens(t_token *tokens, t_minishell *sh);
 int		process_token(t_token **tokens, t_cmd **current);
 int		handle_redirect_heredoc(t_cmd *cmd, t_token *file_tok);
+int		is_special_char(char c);
+char	*extract_special_char(const char *str, int *i);
+char	*unescape_token(const char *str);
 
 // Redirects Prototypes
 int		process_redirect(t_cmd *cmd, t_token *token);

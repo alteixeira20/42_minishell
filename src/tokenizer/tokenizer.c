@@ -1,59 +1,65 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser_utils.c                                     :+:      :+:    :+:   */
+/*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 01:28:43 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/10 23:00:45 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/12 00:49:30 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-static int	is_special_char(char c)
+static void	advance_inside_quotes(const char *str, int *i)
 {
-	if (c == '|' || c == '<' || c == '>')
-		return (1);
-	return (0);
+	char	quote;
+
+	quote = str[(*i)++];
+	while (str[*i] && str[*i] != quote)
+	{
+		if (quote == '"' && str[*i] == '\\' && str[*i + 1])
+			(*i)++;
+		(*i)++;
+	}
+	if (str[*i] == quote)
+		(*i)++;
 }
 
-static char	*extract_special_char(const char *str, int *i)
+static void	advance_word_bounds(const char *str, int *i)
 {
-	int	start;
+	int		escaped;
 
-	start = *i;
-	if ((str[*i] == '>' || str[*i] == '<') && str[*i] == str[*i + 1])
-		(*i) += 2;
-	else
-		(*i) += 1;
-	return (ft_substr(str, start, *i - start));
+	escaped = 0;
+	while (str[*i])
+	{
+		if (!escaped && str[*i] == '\\')
+		{
+			escaped = 1;
+			if (str[++(*i)])
+				(*i)++;
+			continue ;
+		}
+		if (!escaped && (str[*i] == '\'' || str[*i] == '"'))
+		{
+			advance_inside_quotes(str, i);
+			continue ;
+		}
+		else if (!escaped && (ft_isspace(str[*i]) || is_special_char(str[*i])))
+			break ;
+		else
+			(*i)++;
+		escaped = 0;
+	}
 }
 
 static char	*extract_word(const char *str, int *i)
 {
-	int		start;
-	char	quote;
+	int	start;
 
 	start = *i;
-	quote = 0;
-	while (str[*i])
-	{
-		if ((str[*i] == '\'' || str[*i] == '"') && !quote)
-		{
-			quote = str[(*i)++];
-			while (str[*i] && str[*i] != quote)
-				(*i)++;
-			if (str[*i] == quote)
-				(*i)++;
-			quote = 0;
-		}
-		else if ((ft_isspace(str[*i]) || is_special_char(str[*i])))
-			break ;
-		else
-			(*i)++;
-	}
+	advance_word_bounds(str, i);
 	return (ft_substr(str, start, *i - start));
 }
 
@@ -85,7 +91,7 @@ char	**split_input(const char *str)
 		if (!str[i])
 			break ;
 		tmp = get_next_token(str, &i);
-		result[count++] = tmp;
+		result[count++] = unescape_token(tmp);
 	}
 	result[count] = NULL;
 	return (result);

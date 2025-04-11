@@ -1,4 +1,6 @@
-# Echo Command
+# ========================
+# Echo Command & Quoting
+# ========================
 echo Hello World 42
 echo "hello    world"
 echo 'Hello World'
@@ -18,25 +20,99 @@ echo "$USER $HOME"
 echo "user is $USER and home is $HOME"
 echo $USER!
 echo ""$USER""
+echo "hello | world"   # quoted pipe should be literal
+echo hello\|world      # escaped pipe
 
-# Redirection with existing files
+# ========================
+# Redirection with files
+# ========================
 echo before > tmp_test.txt
 cat < tmp_test.txt
 echo another >> tmp_test.txt
 cat < tmp_test.txt
 rm tmp_test.txt
 
-# Commands
+# Redirection edge cases
+echo first > file > file2      # chained redirection
+cat < file2
+rm file file2
+
+echo one>space.txt
+echo two >>space.txt
+cat <space.txt
+rm space.txt
+
+# ========================
+# Heredoc Testing
+# ========================
+cat << EOF
+line 1
+line 2
+EOF
+
+cat << 'EOF'
+$HOME should not expand
+EOF
+
+# Multiple heredocs
+cat << A | cat << B
+heredoc left
+A
+heredoc right
+B
+
+# ========================
+# Environment
+# ========================
 export
 export VAR=42
+echo $VAR
 env | grep VAR
+export PATH=/tmp
+echo $PATH
+
+# ========================
+# Builtins & Commands
+# ========================
 ls
 ls -la
 /bin/ls
 /bin/echo hello from bin
 /bin/cat /etc/passwd | head -n 2
 ls | wc
-"Hello | World"
-# Invalid Commands
-wrongcmd
-/bin/doesnotexist
+
+# ========================
+# Pipes & Execution
+# ========================
+echo hello | cat
+echo one | echo two | echo three
+echo piped | grep pipe
+echo part1 | cat | wc
+
+# ========================
+# Invalid Input & Edge Syntax
+# ========================
+wrongcmd                      # invalid command
+/bin/doesnotexist             # non-existing path
+echo hello |
+ls >                          # incomplete redirection
+|                             # invalid leading pipe
+echo hello > missing.txt |    # trailing pipe after redir
+rm -f missing.txt
+
+# ========================
+# Variable Expansion Logic
+# ========================
+export TEST1="ABC DEF"
+echo "$TEST1"
+echo $TEST1!
+echo "Start:$TEST1:End"
+export TEST2=
+echo $TEST2
+echo "$TEST2"
+
+# ========================
+# Exit Behavior
+# ========================
+exit 42
+echo still running   # should not print
