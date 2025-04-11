@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 02:04:50 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/11 22:59:28 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/11 23:56:06 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,28 +45,43 @@ static char	*read_multiline_input(t_minishell *sh)
 	return (line);
 }
 
+static int	handle_input_line(t_minishell *sh, char *line)
+{
+	t_token	*tokens;
+
+	if (*line)
+		add_history(line);
+	if (ft_strncmp(line, "exit", 5) == 0 && ft_strlen(line) == 4)
+	{
+		free(line);
+		return (0);
+	}
+	tokens = parse_input(line, sh);
+	if (g_exit == 130)
+	{
+		free_token_list(tokens);
+		free(line);
+		g_exit = 0;
+		return (1);
+	}
+	if (tokens)
+		exec_tokens(tokens, sh);
+	free_token_list(tokens);
+	free(line);
+	return (1);
+}
+
 int	loop(t_minishell *sh)
 {
 	char	*line;
-	t_token	*tokens;
 
 	while (1)
 	{
 		line = read_multiline_input(sh);
 		if (!line)
 			break ;
-		if (*line)
-			add_history(line);
-		if (ft_strncmp(line, "exit", 5) == 0 && ft_strlen(line) == 4)
-		{
-			free(line);
+		if (!handle_input_line(sh, line))
 			break ;
-		}
-		tokens = parse_input(line, sh);
-		if (tokens)
-			exec_tokens(tokens, sh);
-		free_token_list(tokens);
-		free(line);
 	}
 	return (1);
 }

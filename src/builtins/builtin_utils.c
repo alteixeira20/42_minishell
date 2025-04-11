@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 02:39:09 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/10 21:47:31 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/11 23:38:55 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,10 @@ static t_cmd	*build_cmd_list(t_token *tokens)
 				first = current;
 		}
 		if (process_token(&tokens, &current) == -1)
+		{
+			free_cmd(first);
 			return (NULL);
+		}
 		tokens = tokens->next;
 	}
 	return (first);
