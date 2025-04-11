@@ -8,10 +8,16 @@ echo hi >
 echo hi >>
 echo hi <
 echo hi <<
-#echo $HOME
-#echo "$HOME"
-#echo '$HOME'
-#echo "$7asdfsasdf"
+echo $HOME
+echo "$HOME"
+echo '$HOME'
+echo "$7asdfsasdf"
+echo "Hello $USER"
+echo '$USER "$HOME"'
+echo "$USER $HOME"
+echo "user is $USER and home is $HOME"
+echo $USER!
+echo ""$USER""
 
 # Redirection with existing files
 echo before > tmp_test.txt

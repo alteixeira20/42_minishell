@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 14:34:23 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/11 15:11:29 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/11 16:11:26 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,11 @@ static char	*expand_one(const char *str, int *i, t_minishell *sh)
 	start = ++(*i);
 	if (str[start] == '?')
 		return (++(*i), get_var_value("?", sh));
+	if (!ft_isalpha(str[start]) && str[start] != '_')
+	{
+		(*i)++;
+		return (ft_strdup(""));
+	}
 	while (str[*i] && is_valid_var_char(str[*i]))
 		(*i)++;
 	name = ft_substr(str, start, *i - start);
@@ -66,8 +71,10 @@ char	*expand_token_value(const char *str, t_minishell *sh)
 	res = ft_strdup("");
 	while (str[i])
 	{
-		if ((str[i] == '\'' || str[i] == '"') && !quote)
+		if (!quote && (str[i] == '\'' || str[i] == '"'))
 			quote = str[i++];
+		else if (quote == '\'')
+			ft_str_append_char(&res, str[i++]);
 		else if (str[i] == quote)
 		{
 			quote = 0;
