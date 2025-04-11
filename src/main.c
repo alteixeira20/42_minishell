@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 02:04:50 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/11 00:20:29 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/11 14:51:41 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int	loop(t_minishell *sh)
 			free(line);
 			break ;
 		}
-		tokens = parse_input(line);
+		tokens = parse_input(line, sh);
 		if (tokens)
 			exec_tokens(tokens, sh);
 		free_token_list(tokens);

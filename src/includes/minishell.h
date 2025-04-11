@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 00:02:36 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/11 00:17:51 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/11 14:52:42 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,8 +119,9 @@ int		process_redirect(t_cmd *cmd, t_token *token);
 void	setup_redirections(t_cmd *cmds, int in_fd, int pipe_fd[2]);
 
 // Parser Prototypes
-t_token	*parse_input(const char *line);
+t_token	*parse_input(const char *line, t_minishell *sh);
 char	**split_input(const char *str);
+char	*expand_token_value(const char *value, t_minishell *sh);
 
 // Env Prototypes
 char	*extract_var(char *var, char **env);

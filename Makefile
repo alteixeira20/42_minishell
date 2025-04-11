@@ -6,7 +6,7 @@
 #    By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/03 02:10:25 by paalexan          #+#    #+#              #
-#    Updated: 2025/04/10 23:15:10 by paalexan         ###   ########.fr        #
+#    Updated: 2025/04/11 14:53:01 by paalexan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -57,6 +57,7 @@ OBJ_DIR			= .obj
 SRC				= $(SRC_DIR)/main.c
 SRC				+= $(INIT_DIR)/init.c
 SRC				+= $(PARSER_DIR)/parser.c
+SRC				+= $(PARSER_DIR)/parser_expansion.c
 SRC				+= $(PARSER_DIR)/parser_utils.c
 SRC				+= $(TOKEN_DIR)/tokens_utils.c
 SRC				+= $(EXEC_DIR)/exec.c

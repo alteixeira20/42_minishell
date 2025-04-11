@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 01:01:14 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/10 23:00:38 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/11 14:53:42 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,17 +29,20 @@ static t_token_type	get_token_type(const char *str)
 	return (TOKEN_WORD);
 }
 
-static int	fill_tokens(char **split, t_token **tokens)
+static int	fill_tokens(char **split, t_token **tokens, t_minishell *sh)
 {
 	int				i;
 	t_token			*new;
 	t_token_type	type;
+	char			*expanded;
 
 	i = 0;
 	while (split[i])
 	{
 		type = get_token_type(split[i]);
-		new = token_new(split[i], type);
+		expanded = expand_token_value(split[i], sh);
+		new = token_new(expanded, type);
+		free(expanded);
 		if (!new)
 			return (FAILURE);
 		token_add_back(tokens, new);
@@ -48,7 +51,7 @@ static int	fill_tokens(char **split, t_token **tokens)
 	return (SUCCESS);
 }
 
-t_token	*parse_input(const char *line)
+t_token	*parse_input(const char *line, t_minishell *sh)
 {
 	char			**split;
 	t_token			*tokens;
@@ -59,7 +62,7 @@ t_token	*parse_input(const char *line)
 	split = split_input(line);
 	if (!split)
 		return (NULL);
-	if (fill_tokens(split, &tokens) == FAILURE)
+	if (fill_tokens(split, &tokens, sh) == FAILURE)
 	{
 		free_split(split);
 		free_token_list(tokens);
