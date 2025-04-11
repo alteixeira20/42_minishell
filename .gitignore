@@ -5,3 +5,5 @@ minishell
 tester/results
 tester/diff_sumary.txt
 tester/results/
+.obj/
+libft/
