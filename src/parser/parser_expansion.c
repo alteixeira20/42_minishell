@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 14:34:23 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/11 16:11:26 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/11 22:57:58 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,14 @@ static bool	is_valid_var_char(char c)
 
 static char	*get_var_value(const char *name, t_minishell *sh)
 {
+	char	*raw;
+
+	raw = extract_var((char *)name, sh->env);
 	if (!ft_strncmp(name, "?", 2))
 		return (ft_itoa(sh->exit_status));
-	return (extract_var((char *)name, sh->env));
+	if (!raw)
+		return (NULL);
+	return (ft_strdup(raw));
 }
 
 static char	*expand_one(const char *str, int *i, t_minishell *sh)
@@ -33,6 +38,11 @@ static char	*expand_one(const char *str, int *i, t_minishell *sh)
 	start = ++(*i);
 	if (str[start] == '?')
 		return (++(*i), get_var_value("?", sh));
+	if (!ft_isalpha(str[start]) && str[start] != '_')
+	{
+		(*i)++;
+		return (ft_strdup(""));
+	}
 	while (str[*i] && is_valid_var_char(str[*i]))
 		(*i)++;
 	name = ft_substr(str, start, *i - start);
