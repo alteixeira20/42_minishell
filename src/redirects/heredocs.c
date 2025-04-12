@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 18:54:17 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/12 03:22:06 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/12 18:04:07 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static void	heredoc_child(const char *delim, int pipe_out)
 		line = readline("> ");
 		if (!line)
 		{
-			print_heredoc_warning(line, delim);
+			print_heredoc_warning(delim);
 			break ;
 		}
 		if (!ft_strncmp(line, delim, ft_strlen(delim) + 1) || g_exit == 130)
