@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 01:01:14 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/12 00:11:27 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/12 04:34:06 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static int	fill_tokens(char **split, t_token **tokens, t_minishell *sh)
 	{
 		type = get_token_type(split[i]);
 		expanded = expand_token_value(split[i], sh);
-		new = token_new(expanded, type);
+		new = token_new(expanded, type, sh);
 		free(expanded);
 		if (!new)
 			return (FAILURE);

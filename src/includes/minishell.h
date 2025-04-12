@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 00:02:36 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/12 04:12:22 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/12 17:57:16 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ char	*get_cmd_path(char *cmd, char **env);
 bool	needs_pipe_continuation(const char *line);
 
 // Tokens Prototypes
-t_token	*token_new(char *value, t_token_type type);
+t_token	*token_new(char *value, t_token_type type, t_minishell *sh);
 void	token_add_back(t_token **list, t_token *new_token);
 int		exec_tokens(t_token *tokens, t_minishell *sh);
 int		process_token(t_token **tokens, t_cmd **current);
@@ -130,6 +130,10 @@ int		process_heredoc(const char *delim);
 t_token	*parse_input(const char *line, t_minishell *sh);
 char	**split_input(const char *str);
 char	*expand_token_value(const char *value, t_minishell *sh);
+char	*expand_one(const char *str, int *i, t_minishell *sh);
+void	handle_single_quote(const char *str, int *i, char **res);
+void	handle_double_quote(const char *str, int *i, t_minishell *sh, char **res);
+void	handle_dollar(const char *str, int *i, t_minishell *sh, char **res);
 
 // Env Prototypes
 char	*extract_var(char *var, char **env);
@@ -137,11 +141,10 @@ int		set_var(char *var, char *val, char ***env);
 char	**env_add_var(char **env, char *new_var);
 void	sort_env(char **env);
 char	**copy_env_array(char **env);
-int		quote_type(char arg);
 
 // Error Prototypes
 int		exit_error(char *msg, int status);
-void	print_heredoc_warning(char *line, const char *delim);
+void	print_heredoc_warning(const char *delim);
 
 // Free Prototypes
 void	free_split(char **split);

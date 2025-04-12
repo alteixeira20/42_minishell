@@ -6,22 +6,18 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 17:19:32 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/12 03:22:32 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/12 04:22:58 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	print_heredoc_warning(char *line, const char *delim)
+void	print_heredoc_warning(const char *delim)
 {
-	if (!line)
-	{
-		ft_putstr_fd("warning: here-document at line 1 ", STDERR_FILENO);
-		ft_putstr_fd("delimited by end-of-file (wanted `", STDERR_FILENO);
-		ft_putstr_fd((char *)delim, STDERR_FILENO);
-		ft_putstr_fd("'=\n", STDERR_FILENO);
-		g_exit = 130;
-	}
+	ft_putstr_fd("warning: here-document at line 1 ", STDERR_FILENO);
+	ft_putstr_fd("delimited by end-of-file (wanted `", STDERR_FILENO);
+	ft_putstr_fd((char *)delim, STDERR_FILENO);
+	ft_putstr_fd("'=\n", STDERR_FILENO);
 }
 
 int	exit_error(char *msg, int status)

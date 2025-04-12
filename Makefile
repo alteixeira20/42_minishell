@@ -6,7 +6,7 @@
 #    By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/03 02:10:25 by paalexan          #+#    #+#              #
-#    Updated: 2025/04/12 04:10:19 by paalexan         ###   ########.fr        #
+#    Updated: 2025/04/12 17:57:41 by paalexan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -57,6 +57,7 @@ OBJ_DIR			= .obj
 SRC				= $(SRC_DIR)/main.c
 SRC				+= $(INIT_DIR)/init.c
 SRC				+= $(PARSER_DIR)/parser.c
+SRC				+= $(PARSER_DIR)/parser_utils.c
 SRC				+= $(PARSER_DIR)/parser_expansion.c
 SRC				+= $(TOKEN_DIR)/tokenizer.c
 SRC				+= $(TOKEN_DIR)/tokenizer_utils.c
@@ -76,7 +77,6 @@ SRC				+= $(BUILTINS_DIR)/cmd_cd.c
 SRC				+= $(BUILTINS_DIR)/cmd_exit.c
 SRC				+= $(BUILTINS_DIR)/builtin_utils.c
 SRC				+= $(BUILTINS_DIR)/prompt_utils.c
-SRC				+= $(BUILTINS_DIR)/cmd_echo_utils.c
 SRC				+= $(REDIRECTS_DIR)/redirects.c
 SRC				+= $(REDIRECTS_DIR)/redirects_utils.c
 SRC				+= $(REDIRECTS_DIR)/heredocs.c

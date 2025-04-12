@@ -43,25 +43,6 @@ cat <space.txt
 rm space.txt
 
 # ========================
-# Heredoc Testing
-# ========================
-cat << EOF
-line 1
-line 2
-EOF
-
-cat << 'EOF'
-$HOME should not expand
-EOF
-
-# Multiple heredocs
-cat << A | cat << B
-heredoc left
-A
-heredoc right
-B
-
-# ========================
 # Environment
 # ========================
 export

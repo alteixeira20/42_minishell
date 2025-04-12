@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 14:34:23 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/11 22:57:58 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/12 17:59:57 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static char	*get_var_value(const char *name, t_minishell *sh)
 	return (ft_strdup(raw));
 }
 
-static char	*expand_one(const char *str, int *i, t_minishell *sh)
+char	*expand_one(const char *str, int *i, t_minishell *sh)
 {
 	int		start;
 	char	*name;
@@ -53,19 +53,7 @@ static char	*expand_one(const char *str, int *i, t_minishell *sh)
 	return (val);
 }
 
-static void	handle_dollar(const char *str, int *i, t_minishell *sh, char **res)
-{
-	char	*val;
-	char	*tmp;
-
-	val = expand_one(str, i, sh);
-	tmp = ft_strjoin(*res, val);
-	free(*res);
-	free(val);
-	*res = tmp;
-}
-
-char	*expand_token_value(const char *str, t_minishell *sh)
+static char	*expand_core(const char *str, t_minishell *sh)
 {
 	int		i;
 	char	quote;
@@ -76,17 +64,26 @@ char	*expand_token_value(const char *str, t_minishell *sh)
 	res = ft_strdup("");
 	while (str[i])
 	{
-		if ((str[i] == '\'' || str[i] == '"') && !quote)
-			quote = str[i++];
-		else if (str[i] == quote)
-		{
-			quote = 0;
-			i++;
-		}
-		else if (str[i] == '$' && quote != '\'')
+		if (str[i] == '\'' && quote == 0)
+			handle_single_quote(str, &i, &res);
+		else if (str[i] == '"' && quote == 0)
+			handle_double_quote(str, &i, sh, &res);
+		else if (str[i] == '$')
 			handle_dollar(str, &i, sh, &res);
 		else
 			ft_str_append_char(&res, str[i++]);
 	}
 	return (res);
+}
+
+char	*expand_token_value(const char *str, t_minishell *sh)
+{
+	size_t	len;
+
+	if (!str)
+		return (NULL);
+	len = ft_strlen(str);
+	if (len >= 2 && str[0] == '\'' && str[len - 1] == '\'')
+		return (ft_strdup(str));
+	return (expand_core(str, sh));
 }

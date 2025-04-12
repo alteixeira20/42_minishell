@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 00:16:54 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/10 21:47:47 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/12 18:01:16 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,38 +28,17 @@ static bool	is_valid_n_flag(const char *arg)
 	return (true);
 }
 
-static void	copy_unquoted(char *res, const char *arg)
+static char	*strip_outer_quotes(const char *s)
 {
-	int	i;
-	int	j;
-	int	quote_tp;
+	size_t	len;
 
-	i = 0;
-	j = 0;
-	quote_tp = quote_type(arg[0]);
-	while (arg[i])
-	{
-		if (arg[i] == '\'' && quote_tp != 1)
-			res[j++] = arg[i++];
-		if (arg[i] == '\"' && quote_tp != 2)
-			res[j++] = arg[i++];
-		else
-			res[j++] = arg[i++];
-	}
-	res[j] = '\0';
-}
-
-static char	*strip_quotes(const char *arg)
-{
-	char	*res;
-
-	if (!arg)
+	if (!s)
 		return (NULL);
-	res = malloc(ft_strlen(arg) + 1);
-	if (!res)
-		return (NULL);
-	copy_unquoted(res, arg);
-	return (res);
+	len = ft_strlen(s);
+	if (len >= 2 && ((s[0] == '\'' && s[len - 1] == '\'')
+			|| (s[0] == '"' && s[len - 1] == '"')))
+		return (ft_substr(s, 1, len - 2));
+	return (ft_strdup(s));
 }
 
 static void	print_echo_args(t_cmd *cmd, int i)
@@ -68,7 +47,7 @@ static void	print_echo_args(t_cmd *cmd, int i)
 
 	while (cmd->argv[i])
 	{
-		stripped = strip_quotes(cmd->argv[i]);
+		stripped = strip_outer_quotes(cmd->argv[i]);
 		if (stripped)
 		{
 			ft_putstr_fd(stripped, cmd->output_fd);
@@ -78,6 +57,16 @@ static void	print_echo_args(t_cmd *cmd, int i)
 			ft_putchar_fd(' ', cmd->output_fd);
 		i++;
 	}
+}
+
+int	quote_type(char arg)
+{
+	if (arg == '\'')
+		return (1);
+	else if (arg == '\"')
+		return (2);
+	else
+		return (0);
 }
 
 int	cmd_echo(t_cmd *cmd)
