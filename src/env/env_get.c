@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 22:16:44 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/10 21:47:21 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/12 21:28:24 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,21 +37,23 @@ char	**init_env(char **env)
 char	*extract_var(char *var, char **env)
 {
 	char	*tmp;
+	char	*val;
 	int		len;
 
 	if ((var == NULL) || (env == NULL))
 		return (NULL);
 	tmp = ft_strjoin(var, "=");
 	len = ft_strlen(tmp);
+	val = NULL;
 	while (*env)
 	{
 		if (ft_strncmp(tmp, *env, len) == 0)
 		{
-			var = ft_strdup(*env + len);
+			val = ft_strdup(*env + len);
 			break ;
 		}
 		++env;
 	}
 	free(tmp);
-	return (var);
+	return (val);
 }

@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 01:28:43 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/12 18:00:39 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/12 21:32:58 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,9 @@ static char	*extract_word(const char *str, int *i)
 			(*i)++;
 			quote = 0;
 		}
-		else if (!quote && (ft_isspace(str[*i]) || is_special_char(str[*i])))
+		else if (!quote && (ft_isspace(str[*i])
+				|| (is_special_char(str[*i])
+					&& (*i == 0 || str[*i - 1] != '\\'))))
 			break ;
 		else
 			(*i)++;
