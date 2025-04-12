@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 02:04:50 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/11 23:56:06 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/12 02:20:41 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,11 +51,6 @@ static int	handle_input_line(t_minishell *sh, char *line)
 
 	if (*line)
 		add_history(line);
-	if (ft_strncmp(line, "exit", 5) == 0 && ft_strlen(line) == 4)
-	{
-		free(line);
-		return (0);
-	}
 	tokens = parse_input(line, sh);
 	if (g_exit == 130)
 	{

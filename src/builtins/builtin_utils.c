@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 02:39:09 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/11 23:38:55 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/12 02:24:12 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ static bool	is_builtin_cmd(const char *cmd)
 	if (ft_strncmp(cmd, "export", 7) == 0)
 		return (true);
 	if (ft_strncmp(cmd, "unset", 6) == 0)
+		return (true);
+	if (ft_strncmp(cmd, "exit", 5) == 0)
 		return (true);
 	return (false);
 }
@@ -87,5 +89,7 @@ int	run_builtin(t_cmd *cmd, t_minishell *sh)
 		return (cmd_export(cmd, sh));
 	else if (ft_strncmp(cmd->argv[0], "cd", 3) == 0)
 		return (cmd_cd(cmd, sh));
+	else if (ft_strncmp(cmd->argv[0], "exit", 4) == 0)
+		return (cmd_exit(cmd, sh));
 	return (FAILURE);
 }
