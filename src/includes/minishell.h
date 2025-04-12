@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 00:02:36 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/12 02:43:33 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/12 04:12:22 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,11 +88,20 @@ extern int	g_exit;
 # define MALLOC_ERR		"Malloc Error\n"
 # define ENV_INIT_ERR	"Env Init Error\n"
 
-//Init Prototypes
+// Init Prototypes
 int		init(t_minishell *sh, char **env);
 char	**init_env(char **env);
 
+// Exec & Builtins Prototypes
+void	exec_child(t_cmd *cmds, int in_fd, int pipe_fd[2], t_minishell *sh);
+int		add_arg(t_cmd *cmd, char *value);
+int		run_builtin(t_cmd *cmd, t_minishell *sh);
+char	*build_prompt(t_minishell *sh);
+void	surpress_parent_sig(struct sigaction *o_int, struct sigaction *o_quit);
+void	restore_parent_sig(struct sigaction *o_int, struct sigaction *o_quit);
+
 // Commands Prototypes
+t_cmd	*cmd_new(void);
 int		cmd_echo(t_cmd *cmd);
 int		cmd_export(t_cmd *cmd, t_minishell *sh);
 int		cmd_env(t_cmd *cmd, t_minishell *sh);
@@ -100,14 +109,6 @@ int		cmd_cd(t_cmd *cmd, t_minishell *sh);
 int		cmd_exit(t_cmd *cmd, t_minishell *sh);
 t_cmd	*cmd_from_tokens(t_token *tokens);
 char	*get_cmd_path(char *cmd, char **env);
-t_cmd	*cmd_new(void);
-int		add_arg(t_cmd *cmd, char *value);
-int		run_builtin(t_cmd *cmd, t_minishell *sh);
-char	*build_prompt(t_minishell *sh);
-void	sort_env(char **env);
-char	**copy_env_array(char **env);
-int		quote_type(char arg);
-
 bool	needs_pipe_continuation(const char *line);
 
 // Tokens Prototypes
@@ -134,9 +135,13 @@ char	*expand_token_value(const char *value, t_minishell *sh);
 char	*extract_var(char *var, char **env);
 int		set_var(char *var, char *val, char ***env);
 char	**env_add_var(char **env, char *new_var);
+void	sort_env(char **env);
+char	**copy_env_array(char **env);
+int		quote_type(char arg);
 
 // Error Prototypes
 int		exit_error(char *msg, int status);
+void	print_heredoc_warning(char *line, const char *delim);
 
 // Free Prototypes
 void	free_split(char **split);

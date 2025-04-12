@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 19:24:08 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/10 21:46:56 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/12 03:56:46 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,45 +62,4 @@ char	*get_cmd_path(char *cmd, char **env)
 	paths = ft_split(path_env, ':');
 	free (path_env);
 	return (search_path_in_env(cmd, paths));
-}
-
-int	add_arg(t_cmd *cmd, char *value)
-{
-	int		i;
-	char	**new_argv;
-
-	i = 0;
-	while (cmd->argv && cmd->argv[i])
-		i++;
-	new_argv = malloc(sizeof(char *) * (i + 2));
-	if (!new_argv)
-		return (FAILURE);
-	i = 0;
-	while (cmd->argv && cmd->argv[i])
-	{
-		new_argv[i] = cmd->argv[i];
-		i++;
-	}
-	new_argv[i++] = ft_strdup(value);
-	new_argv[i] = NULL;
-	free(cmd->argv);
-	cmd->argv = new_argv;
-	cmd->argc++;
-	return (SUCCESS);
-}
-
-t_cmd	*cmd_new(void)
-{
-	t_cmd	*cmd;
-
-	cmd = ft_calloc(1, sizeof(t_cmd));
-	if (!cmd)
-		return (NULL);
-	cmd->input_fd = STDIN_FILENO;
-	cmd->output_fd = STDOUT_FILENO;
-	cmd->argc = 0;
-	cmd->argv = NULL;
-	cmd->is_builtin = false;
-	cmd->next = NULL;
-	return (cmd);
 }

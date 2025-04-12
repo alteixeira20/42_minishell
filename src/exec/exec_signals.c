@@ -1,32 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.c                                            :+:      :+:    :+:   */
+/*   exec_signals.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/03 17:19:32 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/12 03:22:32 by paalexan         ###   ########.fr       */
+/*   Created: 2025/04/12 04:04:54 by paalexan          #+#    #+#             */
+/*   Updated: 2025/04/12 04:12:12 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	print_heredoc_warning(char *line, const char *delim)
+void	surpress_parent_sig(struct sigaction *o_int, struct sigaction *o_quit)
 {
-	if (!line)
-	{
-		ft_putstr_fd("warning: here-document at line 1 ", STDERR_FILENO);
-		ft_putstr_fd("delimited by end-of-file (wanted `", STDERR_FILENO);
-		ft_putstr_fd((char *)delim, STDERR_FILENO);
-		ft_putstr_fd("'=\n", STDERR_FILENO);
-		g_exit = 130;
-	}
+	struct sigaction	sa;
+
+	sa.sa_handler = SIG_IGN;
+	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = 0;
+	sigaction(SIGINT, &sa, o_int);
+	sigaction(SIGQUIT, &sa, o_quit);
 }
 
-int	exit_error(char *msg, int status)
+void	restore_parent_sig(struct sigaction *o_int, struct sigaction *o_quit)
 {
-	ft_putstr_fd(msg, STDERR_FILENO);
-	g_exit = status;
-	return (FAILURE);
+	sigaction(SIGINT, o_int, NULL);
+	sigaction(SIGQUIT, o_quit, NULL);
 }

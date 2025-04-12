@@ -1,0 +1,53 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_child.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/12 03:40:27 by paalexan          #+#    #+#             */
+/*   Updated: 2025/04/12 04:11:55 by paalexan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../includes/minishell.h"
+
+static void	handle_cmd_error(t_cmd *cmd)
+{
+	if (ft_strchr(cmd->argv[0], '/'))
+	{
+		perror(cmd->argv[0]);
+		exit(127);
+	}
+	ft_putstr_fd(cmd->argv[0], STDERR_FILENO);
+	ft_putstr_fd(": command not found\n", STDERR_FILENO);
+	exit(127);
+}
+
+static void	try_exec_binary(t_cmd *cmd, t_minishell *sh)
+{
+	char	*full_path;
+
+	full_path = get_cmd_path(cmd->argv[0], sh->env);
+	if (!full_path)
+		handle_cmd_error(cmd);
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
+	execve(full_path, cmd->argv, sh->env);
+	free(full_path);
+	handle_cmd_error(cmd);
+}
+
+void	exec_child(t_cmd *cmds, int in_fd, int pipe_fd[2], t_minishell *sh)
+{
+	setup_redirections(cmds, in_fd, pipe_fd);
+	if (!cmds->argv || !cmds->argv[0])
+	{
+		if (cmds->output_fd != STDOUT_FILENO || cmds->input_fd != STDIN_FILENO)
+			exit(SUCCESS);
+		exit(FAILURE);
+	}
+	if (cmds->is_builtin)
+		exit(run_builtin(cmds, sh));
+	try_exec_binary(cmds, sh);
+}
