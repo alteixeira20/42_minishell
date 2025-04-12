@@ -4,6 +4,8 @@
 echo Hello World 42
 echo "hello    world"
 echo 'Hello World'
+echo 'Hello World' # shouldn't be printed
+echo Hello World # shouldn't be printed
 echo "hello "'world'
 echo >
 echo hi >
@@ -20,20 +22,21 @@ echo "$USER $HOME"
 echo "user is $USER and home is $HOME"
 echo $USER!
 echo ""$USER""
-echo "hello | world"   # quoted pipe should be literal
-echo hello\|world      # escaped pipe
+echo "hello | world"
+echo hello\|world
 
 # ========================
 # Redirection with files
 # ========================
 echo before > tmp_test.txt
+ls tmp_test.txt
 cat < tmp_test.txt
 echo another >> tmp_test.txt
 cat < tmp_test.txt
 rm tmp_test.txt
 
 # Redirection edge cases
-echo first > file > file2      # chained redirection
+echo first > file > file2
 cat < file2
 rm file file2
 
@@ -73,12 +76,12 @@ echo part1 | cat | wc
 # ========================
 # Invalid Input & Edge Syntax
 # ========================
-wrongcmd                      # invalid command
-/bin/doesnotexist             # non-existing path
+wrongcmd
+/bin/doesnotexist
 echo hello |
-ls >                          # incomplete redirection
-|                             # invalid leading pipe
-echo hello > missing.txt |    # trailing pipe after redir
+ls >
+|
+echo hello > missing.txt |
 rm -f missing.txt
 
 # ========================
@@ -96,4 +99,4 @@ echo "$TEST2"
 # Exit Behavior
 # ========================
 exit 42
-echo still running   # should not print
+echo still running

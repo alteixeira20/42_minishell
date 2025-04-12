@@ -22,8 +22,13 @@ grep -vE '^\s*#|^\s*$' "$TEST_FILE" | while IFS= read -r line; do
 			-e '/^declare -x _=.*$/d'
 			-e '/^declare -x _P9K_TTY=.*$/d'
 			-e 's/^declare -x SHLVL=.*/declare -x SHLVL=42/'
+			-e 's/^minishell> //'
 		)
 		echo "$line" | "$MINISHELL" 2>&1 | sed -E "${sed_clean[@]}" >> "$outfile"
+		# 🧹 Remove echoed command and exit from output
+		escaped_line=$(printf '%s\n' "$line" | sed 's/[\/&]/\\&/g')
+		sed -i "/^$escaped_line$/d" "$outfile"
+		sed -i '/^exit$/d' "$outfile"
 	else
 		sed_clean=(
 			-e '/^\w+@.*\$ .*/d'

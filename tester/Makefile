@@ -71,6 +71,9 @@ diff:
 		echo "$(MAG)$(PREFIX)$(RED) $(BOLD)$$fail/$$total Tests Failed.$(RESET) Check $(BOLD)diff_summary.txt$(RESET) for more info."; \
 	fi
 
+summary:
+	@python3 $(SUMMARY_SCRIPT)
+
 fclean: clean
 	@rm -rf $(RESULTS_DIR)
 	@rm -f diff_summary.txt
