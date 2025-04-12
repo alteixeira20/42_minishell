@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 02:04:50 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/12 02:20:41 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/12 21:52:53 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,20 @@ static char	*read_multiline_input(t_minishell *sh)
 	char	*next;
 	char	*joined;
 	char	*prompt;
+	t_token	*tokens;
 
 	prompt = build_prompt(sh);
 	line = readline(prompt);
 	free(prompt);
 	while (line && needs_pipe_continuation(line))
 	{
+		tokens = parse_input(line, sh);
+		if (!tokens || check_syntax(tokens))
+		{
+			free_token_list(tokens);
+			break ;
+		}
+		free_token_list(tokens);
 		next = readline("> ");
 		joined = ft_strjoin(line, next);
 		free(line);

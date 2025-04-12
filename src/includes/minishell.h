@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 00:02:36 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/12 21:18:01 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/12 21:43:42 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,6 +145,7 @@ char	**copy_env_array(char **env);
 // Error Prototypes
 int		exit_error(char *msg, int status);
 void	print_heredoc_warning(const char *delim);
+int		check_syntax(t_token *tokens);
 
 // Free Prototypes
 void	free_split(char **split);

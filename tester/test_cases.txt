@@ -63,6 +63,7 @@ ls -la
 /bin/ls
 /bin/echo hello from bin
 /bin/cat /etc/passwd | head -n 2
+cd ..
 ls | wc
 
 # ========================
