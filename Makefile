@@ -6,7 +6,7 @@
 #    By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/03 02:10:25 by paalexan          #+#    #+#              #
-#    Updated: 2025/04/12 02:43:59 by paalexan         ###   ########.fr        #
+#    Updated: 2025/04/12 04:10:19 by paalexan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -62,6 +62,9 @@ SRC				+= $(TOKEN_DIR)/tokenizer.c
 SRC				+= $(TOKEN_DIR)/tokenizer_utils.c
 SRC				+= $(TOKEN_DIR)/tokenizer_lst.c
 SRC				+= $(EXEC_DIR)/exec.c
+SRC				+= $(EXEC_DIR)/exec_child.c
+SRC				+= $(EXEC_DIR)/exec_cmd.c
+SRC				+= $(EXEC_DIR)/exec_signals.c
 SRC				+= $(EXEC_DIR)/exec_utils.c
 SRC				+= $(ENV_DIR)/env_get.c
 SRC				+= $(ENV_DIR)/env_set.c
