@@ -4,6 +4,8 @@ TEST_FILE=$1
 TMP_ENV=$2
 OUT_DIR=$(dirname "$TMP_ENV")
 
+cd "$(cd "$(dirname "$0")/.." && pwd)" || exit 1
+
 mkdir -p "$OUT_DIR"
 
 i=1
