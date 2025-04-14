@@ -30,7 +30,8 @@ int	check_syntax(t_token *tokens)
 	{
 		if (tokens->type == TOKEN_PIPE
 			&& tokens->next->type == TOKEN_PIPE)
-			return (ft_putendl_fd("syntax error near unexpected token `|'", 2), 1);
+			return (ft_putendl_fd("syntax error near unexpected token `|'",
+					2), 1);
 		tokens = tokens->next;
 	}
 	if (tokens->type == TOKEN_PIPE)

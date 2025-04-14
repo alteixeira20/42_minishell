@@ -132,9 +132,9 @@ char	**split_input(const char *str);
 char	*expand_token_value(const char *value, t_minishell *sh);
 char	*expand_one(const char *str, int *i, t_minishell *sh);
 void	handle_single_quote(const char *str, int *i, char **res);
-void	handle_double_quote(const char *str, int *i, t_minishell *sh, char **res);
+void	handle_double_quote(const char *str, int *i, t_minishell *sh,
+			char **res);
 void	handle_dollar(const char *str, int *i, t_minishell *sh, char **res);
-bool	check_for_dollar(const char *str);
 
 // Env Prototypes
 char	*extract_var(char *var, char **env);

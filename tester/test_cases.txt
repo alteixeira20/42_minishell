@@ -27,6 +27,7 @@ echo hello\|world
 echo $
 echo "$"
 echo "aspas ->'"
+echo " | $"
 
 # ========================
 # Redirection with files

@@ -16,12 +16,27 @@ void	handle_dollar(const char *str, int *i, t_minishell *sh, char **res)
 {
 	char	*val;
 	char	*tmp;
+	char	*dol;
 
-	val = expand_one(str, i, sh);
-	tmp = ft_strjoin(*res, val);
-	free(*res);
-	free(val);
-	*res = tmp;
+	dol = ft_strchr(str, '$');
+	++dol;
+	if (!ft_isprint(*dol) || (ft_isprint(*dol) && (*dol == '\"'
+				|| *dol == '\'' || *dol == ' ')))
+	{
+		(*i)++;
+		tmp = ft_strjoin(*res, "$");
+		free(*res);
+		*res = tmp;
+	}
+	else
+	{
+		val = expand_one(str, i, sh);
+		tmp = ft_strjoin(*res, val);
+		free(*res);
+		free(val);
+		*res = tmp;
+	}
+	(void)*val;
 }
 
 void	handle_single_quote(const char *str, int *i, char **res)
@@ -57,18 +72,4 @@ void	handle_double_quote(const char *s, int *i, t_minishell *sh, char **res)
 	}
 	if (s[*i] == '"')
 		(*i)++;
-}
-
-bool	check_for_dollar(const char *str)
-{
-	int	i;
-	bool contains;
-
-	i = -1;
-	while (str[++i])
-	{
-		if (str[i] != '\"' && str[i] != '\'' && str[i] != '$')
-			contains = true;
-	}
-	return (contains);
 }
