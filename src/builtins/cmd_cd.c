@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 16:12:15 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/10 21:47:39 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/14 15:44:13 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ int	cmd_cd(t_cmd *cmd, t_minishell *sh)
 	char	*oldpwd;
 	char	*target;
 
+	if (cmd->argv[2][0])
+		return (exit_error("minishell: cd: too many arguments\n", 1));
 	oldpwd = getcwd(NULL, 0);
 	if (!cmd->argv[1] || ft_strncmp(cmd->argv[1], "~", 2) == SUCCESS)
 		target = extract_var("HOME", sh->env);
