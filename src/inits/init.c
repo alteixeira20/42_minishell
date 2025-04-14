@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 01:28:43 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/10 23:00:17 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/14 15:04:32 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int	init(t_minishell *sh, char **env)
 	pwd = extract_var("PWD", sh->env);
 	if (pwd)
 	{
-		set_var("OLDPWD", NULL, &sh->env);
+		set_var("OLDPWD", pwd, &sh->env);
 		free(pwd);
 	}
 	sh->pipe_cnt = 0;
