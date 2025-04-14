@@ -56,17 +56,15 @@ char	*expand_one(const char *str, int *i, t_minishell *sh)
 static char	*expand_core(const char *str, t_minishell *sh)
 {
 	int		i;
-	char	quote;
 	char	*res;
 
 	i = 0;
-	quote = 0;
 	res = ft_strdup("");
 	while (str[i])
 	{
-		if (str[i] == '\'' && quote == 0)
+		if (str[i] == '\'')
 			handle_single_quote(str, &i, &res);
-		else if (str[i] == '"' && quote == 0)
+		else if (str[i] == '"')
 			handle_double_quote(str, &i, sh, &res);
 		else if (str[i] == '$')
 			handle_dollar(str, &i, sh, &res);

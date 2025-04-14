@@ -34,15 +34,12 @@ static int	fill_tokens(char **split, t_token **tokens, t_minishell *sh)
 	int				i;
 	t_token			*new;
 	t_token_type	type;
-	char			*expanded;
 
 	i = 0;
 	while (split[i])
 	{
 		type = get_token_type(split[i]);
-		expanded = expand_token_value(split[i], sh);
-		new = token_new(expanded, type, sh);
-		free(expanded);
+		new = token_new(split[i], type, sh);
 		if (!new)
 			return (FAILURE);
 		token_add_back(tokens, new);

@@ -59,16 +59,6 @@ static void	print_echo_args(t_cmd *cmd, int i)
 	}
 }
 
-int	quote_type(char arg)
-{
-	if (arg == '\'')
-		return (1);
-	else if (arg == '\"')
-		return (2);
-	else
-		return (0);
-}
-
 int	cmd_echo(t_cmd *cmd)
 {
 	int		i;
