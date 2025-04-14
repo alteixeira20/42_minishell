@@ -59,6 +59,8 @@ static char	*expand_core(const char *str, t_minishell *sh)
 	char	*res;
 
 	i = 0;
+	if (!check_for_dollar(str))
+		return (ft_strdup("$"));
 	res = ft_strdup("");
 	while (str[i])
 	{

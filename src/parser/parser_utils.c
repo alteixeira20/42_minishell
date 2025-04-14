@@ -58,3 +58,17 @@ void	handle_double_quote(const char *s, int *i, t_minishell *sh, char **res)
 	if (s[*i] == '"')
 		(*i)++;
 }
+
+bool	check_for_dollar(const char *str)
+{
+	int	i;
+	bool contains;
+
+	i = -1;
+	while (str[++i])
+	{
+		if (str[i] != '\"' && str[i] != '\'' && str[i] != '$')
+			contains = true;
+	}
+	return (contains);
+}

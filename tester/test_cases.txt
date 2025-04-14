@@ -24,6 +24,9 @@ echo $USER!
 echo ""$USER""
 echo "hello | world"
 echo hello\|world
+echo $
+echo "$"
+echo "aspas ->'"
 
 # ========================
 # Redirection with files
