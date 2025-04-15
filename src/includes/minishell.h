@@ -93,7 +93,8 @@ extern int	g_exit;
 //	Execution
 int		exec_tokens(t_token *tokens, t_minishell *sh);
 int		exec_pipeline(t_cmd *cmds, t_minishell *sh, int in_fd);
-int		run_single_command(t_cmd **cmds, t_minishell *sh, int *in_fd, pid_t *pid_out);
+int		run_single_command(t_cmd **cmds, t_minishell *sh, int *in_fd,
+			pid_t *pid_out);
 int		prepare_pipe(int pipe_fd[2], int has_next);
 int		fork_command(t_cmd *cmd, t_minishell *sh, int *in_fd, int pipe_fd[2]);
 void	handle_parent_cleanup(int *in_fd, int pipe_fd[2], int has_next);
@@ -134,7 +135,8 @@ char	*unescape_token(const char *str);
 char	*expand_token_value(const char *value, t_minishell *sh);
 char	*expand_one(const char *str, int *i, t_minishell *sh);
 void	handle_single_quote(const char *str, int *i, char **res);
-void	handle_double_quote(const char *str, int *i, t_minishell *sh, char **res);
+void	handle_double_quote(const char *str, int *i, t_minishell *sh,
+			char **res);
 void	handle_dollar(const char *str, int *i, t_minishell *sh, char **res);
 
 //	Redirections & Heredocs
@@ -170,4 +172,3 @@ int		init(t_minishell *sh, char **env);
 char	**init_env(char **env);
 
 #endif
-
