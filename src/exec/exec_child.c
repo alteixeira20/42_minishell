@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 03:40:27 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/14 21:33:04 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/15 02:27:30 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,16 @@
 
 static void	handle_cmd_error(t_cmd *cmd)
 {
+	struct stat	st;
+
 	if (ft_strchr(cmd->argv[0], '/'))
 	{
+		if (stat(cmd->argv[0], &st) == 0 && S_ISDIR(st.st_mode))
+		{
+			ft_putstr_fd(cmd->argv[0], STDERR_FILENO);
+			ft_putstr_fd(": Is a directory\n", STDERR_FILENO);
+			exit(126);
+		}
 		perror(cmd->argv[0]);
 		exit(127);
 	}
@@ -35,8 +43,9 @@ static void	try_exec_binary(t_cmd *cmd, t_minishell *sh)
 	signal(SIGQUIT, SIG_DFL);
 	signal(SIGPIPE, SIG_DFL);
 	execve(full_path, cmd->argv, sh->env);
+	perror(full_path);
 	free(full_path);
-	handle_cmd_error(cmd);
+	exit(127);
 }
 
 void	exec_child(t_cmd *cmd, int in_fd, int pipe_fd[2], t_minishell *sh)

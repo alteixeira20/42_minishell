@@ -6,31 +6,32 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 00:02:36 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/15 00:36:10 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/15 02:06:30 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-// 🧠 Standard Libs
+// Standard Libs
 # include <stdbool.h>
 # include <stdlib.h>
 # include <unistd.h>
 # include <errno.h>
 # include <fcntl.h>
 # include <sys/wait.h>
+# include <sys/stat.h>
 # include <stdint.h>
 
-// 🧰 Custom Libs
+// Custom Libs
 # include "../../libft/libft/libft.h"
 # include "../../libft/gnl/get_next_line_bonus.h"
 
-// ⌨️ Readline
+// Readline
 # include <readline/readline.h>
 # include <readline/history.h>
 
-// 🧩 Structs
+// Structs
 typedef struct s_cmd
 {
 	int				argc;
