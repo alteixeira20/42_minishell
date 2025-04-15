@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 02:39:09 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/12 02:24:12 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/15 03:01:41 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,11 +47,12 @@ static t_cmd	*build_cmd_list(t_token *tokens)
 				first = current;
 		}
 		if (process_token(&tokens, &current) == -1)
-		{
-			free_cmd(first);
-			return (NULL);
-		}
-		tokens = tokens->next;
+			return (free_cmd(first), NULL);
+		if (current->input_fd == -1 || current->output_fd == -1)
+			while (tokens && tokens->type != TOKEN_PIPE)
+				tokens = tokens->next;
+		else
+			tokens = tokens->next;
 	}
 	return (first);
 }

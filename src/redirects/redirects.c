@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 20:38:08 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/15 00:35:55 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/15 02:51:36 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,11 +43,15 @@ static int	handle_redirect_in(t_cmd *cmd, t_token *file_tok)
 	{
 		ft_putstr_fd("minishell: syntax error ", STDERR_FILENO);
 		ft_putstr_fd("near unexpected token `newline'\n", STDERR_FILENO);
-		return (-1);
+		cmd->input_fd = -1;
+		return (0);
 	}
 	fd = open_input_file(file_tok->value);
 	if (fd == -1)
-		return (-1);
+	{
+		cmd->input_fd = -1;
+		return (0);
+	}
 	if (cmd->input_fd != STDIN_FILENO)
 		close(cmd->input_fd);
 	cmd->input_fd = fd;
@@ -62,11 +66,15 @@ static int	handle_redirect_out(t_cmd *cmd, t_token *file_tok, bool append)
 	{
 		ft_putstr_fd("minishell: syntax error ", STDERR_FILENO);
 		ft_putstr_fd("near unexpected token `newline'\n", STDERR_FILENO);
-		return (-1);
+		cmd->output_fd = -1;
+		return (0);
 	}
 	fd = open_output_file(file_tok->value, append);
 	if (fd == -1)
-		return (-1);
+	{
+		cmd->output_fd = -1;
+		return (0);
+	}
 	if (cmd->output_fd != STDOUT_FILENO)
 		close(cmd->output_fd);
 	cmd->output_fd = fd;
@@ -79,6 +87,7 @@ int	process_redirect(t_cmd *cmd, t_token *token)
 	{
 		ft_putstr_fd("minishell: syntax error ", STDERR_FILENO);
 		ft_putstr_fd("near unexpected token `newline'\n", STDERR_FILENO);
+		cmd->input_fd = -1;
 		return (-1);
 	}
 	if (token->type == TOKEN_REDIRECT_IN)

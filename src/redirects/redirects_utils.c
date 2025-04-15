@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 20:43:21 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/14 19:09:37 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/15 02:55:58 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ int	handle_redirect_heredoc(t_cmd *cmd, t_token *file_tok)
 	{
 		ft_putstr_fd("minishell: syntax error ", STDERR_FILENO);
 		ft_putstr_fd("near unexpected token `newline'\n", STDERR_FILENO);
+		cmd->input_fd = -1;
 		return (-1);
 	}
 	if (cmd->input_fd < 0)
@@ -54,7 +55,10 @@ int	handle_redirect_heredoc(t_cmd *cmd, t_token *file_tok)
 		close(cmd->input_fd);
 	fd = process_heredoc(file_tok->value);
 	if (fd == -1)
+	{
+		cmd->input_fd = -1;
 		return (-1);
+	}
 	cmd->input_fd = fd;
 	return (0);
 }
