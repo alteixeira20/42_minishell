@@ -23,11 +23,9 @@ grep -vE '^\s*#|^\s*$' "$TEST_FILE" | while IFS= read -r line; do
 			-e 's/\x1B\[[0-9;]*[A-Za-z]//g'
 			-e "/^\`.*'$/d"
 			-e 's/^declare -x SHLVL=.*/declare -x SHLVL=42/'
-			-e 's/^declare -x OLDPWD=.*/declare -x OLDPWD/'
 			-e '/^declare -x _=.*$/d'
-			-e '/^declare -x _P9K_TTY=.*$/d'
 		)
-		bash -c "$line" 2>&1 | sed -E "${sed_clean[@]}" >> "$outfile"
+		echo "$line" | bash 2>&1 | sed -E "${sed_clean[@]}" >> "$outfile"
 	else
 		sed_clean=(
 			-e '/^\w+@.*\$ .*/d'
@@ -41,12 +39,8 @@ grep -vE '^\s*#|^\s*$' "$TEST_FILE" | while IFS= read -r line; do
 			-e 's/^declare -x SHLVL=.*/declare -x SHLVL=42/'
 			-e '/^_=.*/d'
 			-e '/^declare -x _=.*/d'
-			-e '/^OLDPWD=.*/d'
-			-e '/^declare -x OLDPWD=.*/d'
-			-e '/^_P9K_.*=.*/d'
-			-e '/^declare -x _P9K_.*=.*/d'
 		)
-		bash -c "$line" 2>&1 | sed -E "${sed_clean[@]}" | sort >> "$outfile"
+		echo "$line" | bash 2>&1 | sed -E "${sed_clean[@]}" | sort >> "$outfile"
 	fi
 
 	echo "__CMD_END__" >> "$outfile"

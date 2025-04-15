@@ -28,6 +28,8 @@ echo $
 echo "$"
 echo "aspas ->'"
 echo " | $"
+echo <missing <"./test_files/infile" <missing
+echo <123 <456 hi | echo 42
 
 # ========================
 # Redirection with files
@@ -47,7 +49,17 @@ rm file file2
 echo one>space.txt
 echo two >>space.txt
 cat <space.txt
+chmod 000 space.txt
+cat space.txt
+chmod 644 space.txt
+./space.txt
 rm space.txt
+
+cd tester/
+ls -l
+cat <"./test_files/small_file" | echo 42
+cat <"./test_files/big_file" | echo 42
+cat <missing | cat <"./test_files/small_file"
 
 # ========================
 # Environment
@@ -55,6 +67,7 @@ rm space.txt
 export
 export VAR=42
 echo $VAR
+env
 env | grep VAR
 export PATH=/tmp
 echo $PATH
@@ -67,7 +80,6 @@ ls -la
 /bin/ls
 /bin/echo hello from bin
 /bin/cat /etc/passwd | head -n 2
-cd ..
 ls | wc
 
 # ========================
@@ -80,9 +92,12 @@ echo part1 | cat | wc
 env | sort | grep -v SHLVL | grep -v ^_
 export PIPETEST=42 | env | grep PIPETEST
 cat export | grep PIPETEST
+cat <"./tester/test_files/small_file" | grep 42
+cat <"./tester/test_files/big_file" | grep oi
+yes | echo Hi
 
 # ========================
-# Invalid Input & Edge Syntax
+# Invalid Input & Syntax
 # ========================
 wrongcmd
 /bin/doesnotexist
@@ -91,6 +106,15 @@ ls >
 |
 echo hello > missing.txt |
 rm -f missing.txt
+./test_files
+$EMPTY
+$EMPTY echo hi
+
+
+# ========================
+# Permissions
+# ========================
+cat /etc/shadow
 
 # ========================
 # Variable Expansion Logic
@@ -106,5 +130,6 @@ echo "$TEST2"
 # ========================
 # Exit Behavior
 # ========================
+cd ..
 exit 42
 echo still running

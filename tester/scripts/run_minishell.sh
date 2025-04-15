@@ -19,10 +19,8 @@ grep -vE '^\s*#|^\s*$' "$TEST_FILE" | while IFS= read -r line; do
 			-e '/^\w+@.*\$ .*/d'
 			-e '/^exit$/d'
 			-e 's/^(minishell|bash): //'
-			-e 's/^declare -x OLDPWD=.*/declare -x OLDPWD/'
 			-e 's/\x1B\[[0-9;]*[A-Za-z]//g'
 			-e '/^declare -x _=.*$/d'
-			-e '/^declare -x _P9K_TTY=.*$/d'
 			-e 's/^declare -x SHLVL=.*/declare -x SHLVL=42/'
 			-e 's/^minishell> //'
 		)
@@ -41,10 +39,6 @@ grep -vE '^\s*#|^\s*$' "$TEST_FILE" | while IFS= read -r line; do
 			-e 's/^declare -x SHLVL=.*/declare -x SHLVL=42/'
 			-e '/^_=.*/d'
 			-e '/^declare -x _=.*/d'
-			-e '/^OLDPWD=.*/d'
-			-e '/^declare -x OLDPWD=.*/d'
-			-e '/^_P9K_.*=.*/d'
-			-e '/^declare -x _P9K_.*=.*/d'
 		)
 		echo "$line" | "$MINISHELL" 2>&1 | sed -E "${sed_clean[@]}" | sort >> "$outfile"
 	fi
