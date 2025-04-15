@@ -23,6 +23,8 @@ grep -vE '^\s*#|^\s*$' "$TEST_FILE" | while IFS= read -r line; do
 			-e '/^declare -x _=.*$/d'
 			-e 's/^declare -x SHLVL=.*/declare -x SHLVL=42/'
 			-e 's/^minishell> //'
+			-e '/^-> .*/d'
+			-e '/^[^ ]+ +\/home\/.*/d'
 		)
 		echo "$line" | "$MINISHELL" 2>&1 | sed -E "${sed_clean[@]}" >> "$outfile"
 		# 🧹 Remove echoed command and exit from output
@@ -39,6 +41,8 @@ grep -vE '^\s*#|^\s*$' "$TEST_FILE" | while IFS= read -r line; do
 			-e 's/^declare -x SHLVL=.*/declare -x SHLVL=42/'
 			-e '/^_=.*/d'
 			-e '/^declare -x _=.*/d'
+			-e '/^-> .*/d'
+			-e '/^[^ ]+ +\/home\/.*/d'
 		)
 		echo "$line" | "$MINISHELL" 2>&1 | sed -E "${sed_clean[@]}" | sort >> "$outfile"
 	fi
