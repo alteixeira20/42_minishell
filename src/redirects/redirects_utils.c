@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 20:43:21 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/11 23:57:50 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/14 19:09:37 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,10 @@ void	setup_redirections(t_cmd *cmds, int in_fd, int pipe_fd[2])
 		close(pipe_fd[0]);
 		close(pipe_fd[1]);
 	}
+	if (pipe_fd[0] != -1)
+		close(pipe_fd[0]);
+	if (pipe_fd[1] != -1)
+		close(pipe_fd[1]);
 }
 
 int	handle_redirect_heredoc(t_cmd *cmd, t_token *file_tok)

@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 03:40:27 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/12 04:11:55 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/14 21:33:04 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,21 +33,27 @@ static void	try_exec_binary(t_cmd *cmd, t_minishell *sh)
 		handle_cmd_error(cmd);
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
+	signal(SIGPIPE, SIG_DFL);
 	execve(full_path, cmd->argv, sh->env);
 	free(full_path);
 	handle_cmd_error(cmd);
 }
 
-void	exec_child(t_cmd *cmds, int in_fd, int pipe_fd[2], t_minishell *sh)
+void	exec_child(t_cmd *cmd, int in_fd, int pipe_fd[2], t_minishell *sh)
 {
-	setup_redirections(cmds, in_fd, pipe_fd);
-	if (!cmds->argv || !cmds->argv[0])
+	setup_redirections(cmd, in_fd, pipe_fd);
+	if (!cmd->argv || !cmd->argv[0])
 	{
-		if (cmds->output_fd != STDOUT_FILENO || cmds->input_fd != STDIN_FILENO)
+		if (cmd->input_fd != STDIN_FILENO || cmd->output_fd != STDOUT_FILENO)
 			exit(SUCCESS);
 		exit(FAILURE);
 	}
-	if (cmds->is_builtin)
-		exit(run_builtin(cmds, sh));
-	try_exec_binary(cmds, sh);
+	if (cmd->is_builtin)
+	{
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
+		signal(SIGPIPE, SIG_DFL);
+		exit(run_builtin(cmd, sh));
+	}
+	try_exec_binary(cmd, sh);
 }

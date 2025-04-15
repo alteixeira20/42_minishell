@@ -6,63 +6,59 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 18:31:43 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/12 04:12:38 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/15 00:25:20 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-static void	close_parent_pipe(int *in_fd, int pipe_fd[2], t_cmd *cmds)
+static int	count_commands(t_cmd *cmd)
 {
-	if (*in_fd != 0)
-		close(*in_fd);
-	if (cmds->next)
+	int	count;
+
+	count = 0;
+	while (cmd)
 	{
-		close(pipe_fd[1]);
-		*in_fd = pipe_fd[0];
+		count++;
+		cmd = cmd->next;
 	}
-	else
-	{
-		close(pipe_fd[0]);
-		close(pipe_fd[1]);
-	}
+	return (count);
 }
 
-static int	run_single_command(t_cmd **cmds, t_minishell *sh, int *in_fd)
+int	execute_all(t_cmd *cmds, t_minishell *sh, int *in_fd, pid_t *pids)
 {
-	pid_t				pid;
-	int					pipe_fd[2];
-	int					status;
-	struct sigaction	old_int;
-	struct sigaction	old_quit;
+	int	i;
 
-	if ((*cmds)->next && pipe(pipe_fd) == -1)
-		return (perror("pipe"), FAILURE);
-	pid = fork();
-	if (pid == -1)
-		return (perror("fork"), FAILURE);
-	if (pid == 0)
-		exec_child(*cmds, *in_fd, pipe_fd, sh);
-	surpress_parent_sig(&old_int, &old_quit);
-	waitpid(pid, &status, 0);
-	restore_parent_sig(&old_int, &old_quit);
-	if ((*cmds)->next)
-		close_parent_pipe(in_fd, pipe_fd, *cmds);
-	else if (*in_fd != 0)
-		close(*in_fd);
-	*cmds = (*cmds)->next;
+	i = 0;
+	while (cmds)
+	{
+		if (run_single_command(&cmds, sh, in_fd, &pids[i]) == FAILURE)
+			return (FAILURE);
+		i++;
+	}
 	return (SUCCESS);
 }
 
 int	exec_pipeline(t_cmd *cmds, t_minishell *sh, int in_fd)
 {
-	if (!cmds->next && cmds->is_builtin)
+	int		cmd_count;
+	pid_t	*pids;
+
+	if (!cmds->next && cmds->is_builtin
+		&& in_fd == STDIN_FILENO
+		&& cmds->input_fd == STDIN_FILENO
+		&& cmds->output_fd == STDOUT_FILENO)
 		return (run_builtin(cmds, sh));
-	while (cmds)
-	{
-		if (run_single_command(&cmds, sh, &in_fd) == FAILURE)
-			return (FAILURE);
-	}
+	cmd_count = count_commands(cmds);
+	pids = malloc(sizeof(pid_t) * cmd_count);
+	if (!pids)
+		return (FAILURE);
+	if (execute_all(cmds, sh, &in_fd, pids) == FAILURE)
+		return (free(pids), FAILURE);
+	wait_all_children(pids, cmd_count);
+	free(pids);
+	if (in_fd != STDIN_FILENO)
+		close(in_fd);
 	return (SUCCESS);
 }
 
