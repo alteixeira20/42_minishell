@@ -25,7 +25,10 @@ grep -vE '^\s*#|^\s*$' "$TEST_FILE" | while IFS= read -r line; do
 			-e 's/^declare -x SHLVL=.*/declare -x SHLVL=42/'
 			-e '/^declare -x _=.*$/d'
 		)
-		echo "$line" | bash 2>&1 | sed -E "${sed_clean[@]}" >> "$outfile"
+bash 2>&1 <<EOF | sed -E "${sed_clean[@]}" >> "$outfile"
+$line
+exit
+EOF
 	else
 		sed_clean=(
 			-e '/^\w+@.*\$ .*/d'
@@ -40,7 +43,10 @@ grep -vE '^\s*#|^\s*$' "$TEST_FILE" | while IFS= read -r line; do
 			-e '/^_=.*/d'
 			-e '/^declare -x _=.*/d'
 		)
-		echo "$line" | bash 2>&1 | sed -E "${sed_clean[@]}" | sort >> "$outfile"
+bash 2>&1 <<EOF | sed -E "${sed_clean[@]}" | sort >> "$outfile"
+$line
+exit
+EOF
 	fi
 
 	echo "__CMD_END__" >> "$outfile"
