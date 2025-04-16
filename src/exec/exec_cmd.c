@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 03:55:09 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/12 17:01:24 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/15 17:23:29 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,4 +51,31 @@ t_cmd	*cmd_new(void)
 	cmd->is_builtin = false;
 	cmd->next = NULL;
 	return (cmd);
+}
+
+t_cmd	*reverse_cmd_list(t_cmd *cmd)
+{
+	t_cmd	*prev;
+	t_cmd	*next;
+
+	prev = NULL;
+	while (cmd)
+	{
+		next = cmd->next;
+		cmd->next = prev;
+		prev = cmd;
+		cmd = next;
+	}
+	return (prev);
+}
+
+bool	has_redirection_error(t_cmd *cmds)
+{
+	while (cmds)
+	{
+		if (cmds->input_fd == -1 || cmds->output_fd == -1)
+			return (true);
+		cmds = cmds->next;
+	}
+	return (false);
 }

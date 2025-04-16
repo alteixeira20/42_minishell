@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 00:02:36 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/15 02:06:30 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/15 17:24:47 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,8 @@ t_cmd	*cmd_new(void);
 t_cmd	*cmd_from_tokens(t_token *tokens);
 char	*get_cmd_path(char *cmd, char **env);
 int		add_arg(t_cmd *cmd, char *value);
+t_cmd	*reverse_cmd_list(t_cmd *cmd);
+bool	has_redirection_error(t_cmd *cmds);
 
 //	Parsing & Tokens
 t_token	*parse_input(const char *line, t_minishell *sh);
