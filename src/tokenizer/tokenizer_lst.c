@@ -39,7 +39,7 @@ void	token_add_back(t_token **list, t_token *new_token)
 {
 	t_token	*temp;
 
-	if (!list || !new_token)
+	if (!list || !new_token || ft_strlen(new_token->value) == 0)
 		return ;
 	if (*list == NULL)
 	{
