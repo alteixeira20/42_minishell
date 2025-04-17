@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cmd_cd.c                                           :+:      :+:    :+:   */
+/*   builtin_cd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 16:12:15 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/15 01:57:42 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/17 01:28:38 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-static void	update_pwd(char *oldpwd, t_minishell *sh)
+static void	update_pwd(char *oldpwd, t_msh *sh)
 {
 	char	*newpwd;
 
@@ -25,7 +25,7 @@ static void	update_pwd(char *oldpwd, t_minishell *sh)
 	}
 }
 
-static char	*handle_special_targets(char *arg, t_minishell *sh)
+static char	*handle_special_targets(char *arg, t_msh *sh)
 {
 	char	*oldpwd;
 
@@ -43,7 +43,7 @@ static char	*handle_special_targets(char *arg, t_minishell *sh)
 	return (arg);
 }
 
-static char	*get_target_dir(t_cmd *cmd, t_minishell *sh)
+static char	*get_target_dir(t_cmd *cmd, t_msh *sh)
 {
 	char	*dir;
 
@@ -62,7 +62,7 @@ static int	handle_cd_error(char *oldpwd, const char *target)
 	return (FAILURE);
 }
 
-int	cmd_cd(t_cmd *cmd, t_minishell *sh)
+int	cmd_cd(t_cmd *cmd, t_msh *sh)
 {
 	char	*oldpwd;
 	char	*target;

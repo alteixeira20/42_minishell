@@ -6,13 +6,13 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 17:48:01 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/11 00:22:01 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/16 19:58:01 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-static char	*prompt_user(t_minishell *sh)
+static char	*prompt_user(t_msh *sh)
 {
 	char	*step1;
 	char	*step2;
@@ -41,12 +41,14 @@ static char	*build_cwd(char *cwd, char *home)
 	int		i;
 	int		cwd_len;
 	int		home_len;
+	int		size;
 
 	cwd_len = ft_strlen(cwd);
 	home_len = ft_strlen(home);
 	if (ft_strncmp(cwd, home, home_len) != 0)
 		home_len = 0;
-	result = ft_calloc((cwd_len - home_len + (home_len > 0) + 1), sizeof(char));
+	size = cwd_len - home_len + (home_len > 0) + 1;
+	result = ft_calloc(size, sizeof(char));
 	i = 0;
 	if (home_len > 0)
 		result[0] = '~';
@@ -85,7 +87,7 @@ bool	needs_pipe_continuation(const char *line)
 	return (false);
 }
 
-char	*build_prompt(t_minishell *sh)
+char	*build_prompt(t_msh *sh)
 {
 	char	*result;
 	char	*prompt;

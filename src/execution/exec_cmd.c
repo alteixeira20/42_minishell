@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 03:55:09 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/15 17:23:29 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/17 16:33:13 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ int	add_arg(t_cmd *cmd, char *value)
 	int		i;
 	char	**new_argv;
 
+	if (!value)
+		return (FAILURE);
 	i = 0;
 	while (cmd->argv && cmd->argv[i])
 		i++;
@@ -46,13 +48,14 @@ t_cmd	*cmd_new(void)
 		return (NULL);
 	cmd->input_fd = STDIN_FILENO;
 	cmd->output_fd = STDOUT_FILENO;
+	cmd->input_file = NULL;
+	cmd->output_file = NULL;
 	cmd->argc = 0;
 	cmd->argv = NULL;
 	cmd->is_builtin = false;
 	cmd->next = NULL;
 	return (cmd);
 }
-
 t_cmd	*reverse_cmd_list(t_cmd *cmd)
 {
 	t_cmd	*prev;
@@ -67,6 +70,17 @@ t_cmd	*reverse_cmd_list(t_cmd *cmd)
 		cmd = next;
 	}
 	return (prev);
+}
+
+t_cmd	*cmd_from_tokens(t_token *tokens, t_msh *sh)
+{
+	t_cmd	*cmd;
+
+	cmd = build_cmd_list(tokens, sh);
+	if (!cmd)
+		return (NULL);
+	finalize_cmds(cmd);
+	return (cmd);
 }
 
 bool	has_redirection_error(t_cmd *cmds)

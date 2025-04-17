@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 22:16:38 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/10 21:47:12 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/16 19:08:37 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,20 +73,21 @@ int	set_var(char *var, char *val, char ***env)
 	char	*new;
 	int		i;
 
-	if (!env | !*env)
+	if (!env || !*env)
 		return (NO_ENV);
 	new = create_var_str(var, val);
 	if (!new)
 		return (FAILURE);
 	i = var_from_env(var, *env);
 	if (i == NO_VAR)
+	{
 		*env = env_add_var(*env, new);
+		free(new);
+	}
 	else
 	{
 		free((*env)[i]);
 		(*env)[i] = new;
 	}
-	if (i == NO_VAR)
-		free(new);
 	return (SUCCESS);
 }

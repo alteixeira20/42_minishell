@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 01:28:43 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/14 15:04:32 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/16 17:30:46 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,14 @@ char	*get_hostname(void)
 		return (close(fd), ft_strdup("1337"));
 }
 
-void	shlvl(t_minishell *sh)
+void	shlvl(t_msh *sh)
 {
 	char	*shlvl;
 	char	*new;
 	int		i;
 
+	if (!sh || !sh->env)
+		return ;
 	i = 0;
 	shlvl = extract_var("SHLVL", sh->env);
 	if (shlvl)
@@ -52,7 +54,7 @@ void	shlvl(t_minishell *sh)
 		set_var("SHLVL", "1", &sh->env);
 }
 
-int	init(t_minishell *sh, char **env)
+int	init(t_msh *sh, char **env)
 {
 	char	*pwd;
 
@@ -69,8 +71,14 @@ int	init(t_minishell *sh, char **env)
 		set_var("OLDPWD", pwd, &sh->env);
 		free(pwd);
 	}
+	sh->cmds = NULL;
+	sh->cmd_cnt = 0;
+	sh->pipes = NULL;
 	sh->pipe_cnt = 0;
 	sh->hd_cnt = 0;
-	sh->cmds = NULL;
+	sh->path = NULL;
+	sh->exit_status = 0;
+	sh->heredoc_interrupted = false;
+	sh->had_syntax_error = false;
 	return (SUCCESS);
 }

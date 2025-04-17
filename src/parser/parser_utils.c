@@ -6,13 +6,13 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 04:36:27 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/15 00:36:01 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/16 19:30:43 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	handle_dollar(const char *str, int *i, t_minishell *sh, char **res)
+void	handle_dollar(const char *str, int *i, t_msh *sh, char **res)
 {
 	char	*val;
 	char	*tmp;
@@ -23,6 +23,7 @@ void	handle_dollar(const char *str, int *i, t_minishell *sh, char **res)
 	if (!ft_isprint(*dol) || (ft_isprint(*dol) && (*dol == '\"'
 				|| *dol == '\'' || *dol == ' ')))
 	{
+		(void)*val;
 		(*i)++;
 		tmp = ft_strjoin(*res, "$");
 		free(*res);
@@ -36,7 +37,6 @@ void	handle_dollar(const char *str, int *i, t_minishell *sh, char **res)
 		free(val);
 		*res = tmp;
 	}
-	(void)*val;
 }
 
 void	handle_single_quote(const char *str, int *i, char **res)
@@ -57,7 +57,7 @@ void	handle_single_quote(const char *str, int *i, char **res)
 		(*i)++;
 }
 
-void	handle_double_quote(const char *s, int *i, t_minishell *sh, char **res)
+void	handle_double_quote(const char *s, int *i, t_msh *sh, char **res)
 {
 	(*i)++;
 	while (s[*i] && s[*i] != '"')

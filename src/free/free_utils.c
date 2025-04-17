@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 17:31:36 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/10 21:49:00 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/17 15:43:54 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,6 @@ void	free_cmd(t_cmd *cmd)
 	t_cmd	*temp;
 	int		i;
 
-	if (!cmd)
-		return ;
 	while (cmd)
 	{
 		temp = cmd->next;
@@ -42,6 +40,10 @@ void	free_cmd(t_cmd *cmd)
 				free(cmd->argv[i++]);
 			free(cmd->argv);
 		}
+		if (cmd->input_file)
+			free(cmd->input_file);
+		if (cmd->output_file)
+			free(cmd->output_file);
 		free(cmd);
 		cmd = temp;
 	}
@@ -69,10 +71,11 @@ void	free_env_array(char **env)
 	i = 0;
 	while (env && env[i])
 		free(env[i++]);
-	free(env);
+	if (env)
+		free(env);
 }
 
-void	free_minishell(t_minishell *sh)
+void	free_minishell(t_msh *sh)
 {
 	if (sh->home)
 		free(sh->home);
@@ -80,5 +83,6 @@ void	free_minishell(t_minishell *sh)
 		free(sh->user);
 	if (sh->hostname)
 		free(sh->hostname);
-	free(sh);
+	if (sh)
+		free(sh);
 }

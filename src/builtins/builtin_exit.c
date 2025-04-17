@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cmd_exit.c                                         :+:      :+:    :+:   */
+/*   builtin_exit.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 02:22:28 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/12 03:04:20 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/16 19:57:34 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static int	handle_not_numeric(char	*arg)
 	return (0);
 }
 
-int	cmd_exit(t_cmd *cmd, t_minishell *sh)
+int	cmd_exit(t_cmd *cmd, t_msh *sh)
 {
 	long	code;
 

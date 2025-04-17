@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 01:01:14 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/12 21:19:44 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/17 15:12:09 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,20 +16,20 @@ static t_token_type	get_token_type(const char *str)
 {
 	if (!str)
 		return (TOKEN_WORD);
-	if (ft_strncmp(str, "|", 2) == 0)
+	if (ft_strcmp(str, "|") == 0)
 		return (TOKEN_PIPE);
-	if (ft_strncmp(str, ">", 2) == 0)
+	if (ft_strcmp(str, ">") == 0)
 		return (TOKEN_REDIRECT_OUT);
-	if (ft_strncmp(str, "<", 2) == 0)
+	if (ft_strcmp(str, "<") == 0)
 		return (TOKEN_REDIRECT_IN);
-	if (ft_strncmp(str, ">>", 3) == 0)
+	if (ft_strcmp(str, ">>") == 0)
 		return (TOKEN_APPEND);
-	if (ft_strncmp(str, "<<", 3) == 0)
+	if (ft_strcmp(str, "<<") == 0)
 		return (TOKEN_HEREDOC);
 	return (TOKEN_WORD);
 }
 
-static int	fill_tokens(char **split, t_token **tokens, t_minishell *sh)
+static int	fill_tokens(char **split, t_token **tokens, t_msh *sh)
 {
 	int				i;
 	t_token			*new;
@@ -70,7 +70,7 @@ static char	*strip_unquoted_comment(char *line)
 	return (new_line);
 }
 
-t_token	*parse_input(const char *line, t_minishell *sh)
+t_token	*parse_input(const char *line, t_msh *sh)
 {
 	char	*clean_line;
 	char	**split;

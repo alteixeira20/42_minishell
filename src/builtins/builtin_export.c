@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cmd_export.c                                       :+:      :+:    :+:   */
+/*   builtin_export.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 16:49:01 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/10 23:19:04 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/16 19:57:45 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static void	export_invalid_identifier(const char *arg)
 	g_exit = 1;
 }
 
-static void	export_assign(const char *arg, t_minishell *sh)
+static void	export_assign(const char *arg, t_msh *sh)
 {
 	char	*equal;
 	char	*key;
@@ -88,7 +88,7 @@ static void	print_exported_vars(char **env)
 	}
 }
 
-int	cmd_export(t_cmd *cmd, t_minishell *sh)
+int	cmd_export(t_cmd *cmd, t_msh *sh)
 {
 	int		i;
 	char	**copy;

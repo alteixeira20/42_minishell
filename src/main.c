@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 02:04:50 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/12 21:52:53 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/16 17:17:43 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,7 @@
 
 int	g_exit = 0;
 
-static void	ctrl_c_handler(int sig)
-{
-	(void)sig;
-	write(STDOUT_FILENO, "\n", 1);
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_redisplay();
-	g_exit = 1;
-}
-
-static char	*read_multiline_input(t_minishell *sh)
+static char	*read_multiline_input(t_msh *sh)
 {
 	char	*line;
 	char	*next;
@@ -53,7 +43,7 @@ static char	*read_multiline_input(t_minishell *sh)
 	return (line);
 }
 
-static int	handle_input_line(t_minishell *sh, char *line)
+static int	handle_input_line(t_msh *sh, char *line)
 {
 	t_token	*tokens;
 
@@ -68,13 +58,13 @@ static int	handle_input_line(t_minishell *sh, char *line)
 		return (1);
 	}
 	if (tokens)
-		exec_tokens(tokens, sh);
+		exec_ast(tokens, sh);
 	free_token_list(tokens);
 	free(line);
 	return (1);
 }
 
-int	loop(t_minishell *sh)
+int	loop(t_msh *sh)
 {
 	char	*line;
 
@@ -91,17 +81,16 @@ int	loop(t_minishell *sh)
 
 int	main(int ac, char **av, char **env)
 {
-	t_minishell	*sh;
+	t_msh	*sh;
 
 	(void)av;
 	(void)ac;
-	sh = ft_calloc(1, sizeof(t_minishell));
+	sh = ft_calloc(1, sizeof(t_msh));
 	if (sh == NULL)
 		return (exit_error(MALLOC_ERR, errno), EXIT_FAILURE);
 	if (init(sh, env) != SUCCESS)
 		exit_error(INIT_ERR, errno);
-	signal(SIGINT, ctrl_c_handler);
-	signal(SIGQUIT, SIG_IGN);
+	set_interactive_signals();
 	loop(sh);
 	free_env_array(sh->env);
 	free_minishell(sh);

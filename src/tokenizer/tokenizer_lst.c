@@ -6,13 +6,13 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 00:44:36 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/12 04:30:34 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/17 02:35:42 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-t_token	*token_new(char *value, t_token_type type, t_minishell *sh)
+t_token	*token_new(char *value, t_token_type type, t_msh *sh)
 {
 	t_token	*token;
 
@@ -20,7 +20,14 @@ t_token	*token_new(char *value, t_token_type type, t_minishell *sh)
 	if (!token)
 		return (NULL);
 	if (type == TOKEN_WORD)
+	{
 		token->value = expand_token_value(value, sh);
+		if (!token->value)
+		{
+			free(token);
+			return (NULL);
+		}
+	}
 	else
 		token->value = ft_strdup(value);
 	token->type = type;

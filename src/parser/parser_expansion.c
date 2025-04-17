@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 14:34:23 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/12 21:04:58 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/17 15:13:03 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,19 +17,19 @@ static bool	is_valid_var_char(char c)
 	return (ft_isalnum(c) || c == '_');
 }
 
-static char	*get_var_value(const char *name, t_minishell *sh)
+static char	*get_var_value(const char *name, t_msh *sh)
 {
 	char	*raw;
 
-	raw = extract_var((char *)name, sh->env);
-	if (!ft_strncmp(name, "?", 2))
+	if (!ft_strcmp(name, "?"))
 		return (ft_itoa(sh->exit_status));
+	raw = extract_var((char *)name, sh->env);
 	if (!raw)
 		return (NULL);
 	return (ft_strdup(raw));
 }
 
-char	*expand_one(const char *str, int *i, t_minishell *sh)
+char	*expand_one(const char *str, int *i, t_msh *sh)
 {
 	int		start;
 	char	*name;
@@ -53,7 +53,7 @@ char	*expand_one(const char *str, int *i, t_minishell *sh)
 	return (val);
 }
 
-static char	*expand_core(const char *str, t_minishell *sh)
+static char	*expand_core(const char *str, t_msh *sh)
 {
 	int		i;
 	char	*res;
@@ -74,7 +74,7 @@ static char	*expand_core(const char *str, t_minishell *sh)
 	return (res);
 }
 
-char	*expand_token_value(const char *str, t_minishell *sh)
+char	*expand_token_value(const char *str, t_msh *sh)
 {
 	size_t	len;
 

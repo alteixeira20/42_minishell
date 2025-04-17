@@ -6,7 +6,7 @@
 #    By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/03 02:10:25 by paalexan          #+#    #+#              #
-#    Updated: 2025/04/14 21:32:15 by paalexan         ###   ########.fr        #
+#    Updated: 2025/04/16 21:10:34 by paalexan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,12 +38,13 @@ LIBFT			= $(LIBFT_DIR)/libft.a
 
 SRC_DIR 		= src
 INIT_DIR		= $(SRC_DIR)/inits
+SIGNAL_DIR		= $(SRC_DIR)/signals
 PARSER_DIR		= $(SRC_DIR)/parser
 TOKEN_DIR		= $(SRC_DIR)/tokenizer
 ENV_DIR			= $(SRC_DIR)/env
-EXEC_DIR		= $(SRC_DIR)/exec
+EXEC_DIR		= $(SRC_DIR)/execution
 BUILTINS_DIR	= $(SRC_DIR)/builtins
-REDIRECTS_DIR	= $(SRC_DIR)/redirects
+REDIRECTS_DIR	= $(SRC_DIR)/redirection
 ERROR_DIR		= $(SRC_DIR)/error
 FREE_DIR		= $(SRC_DIR)/free
 
@@ -56,6 +57,7 @@ OBJ_DIR			= .obj
 
 SRC				= $(SRC_DIR)/main.c
 SRC				+= $(INIT_DIR)/init.c
+SRC				+= $(SIGNAL_DIR)/signals.c
 SRC				+= $(PARSER_DIR)/parser.c
 SRC				+= $(PARSER_DIR)/parser_utils.c
 SRC				+= $(PARSER_DIR)/parser_expansion.c
@@ -71,15 +73,16 @@ SRC				+= $(EXEC_DIR)/exec_utils.c
 SRC				+= $(ENV_DIR)/env_get.c
 SRC				+= $(ENV_DIR)/env_set.c
 SRC				+= $(ENV_DIR)/env_utils.c
-SRC				+= $(BUILTINS_DIR)/cmd_echo.c
-SRC				+= $(BUILTINS_DIR)/cmd_export.c
-SRC				+= $(BUILTINS_DIR)/cmd_env.c
-SRC				+= $(BUILTINS_DIR)/cmd_cd.c
-SRC				+= $(BUILTINS_DIR)/cmd_exit.c
+SRC				+= $(BUILTINS_DIR)/builtin_echo.c
+SRC				+= $(BUILTINS_DIR)/builtin_export.c
+SRC				+= $(BUILTINS_DIR)/builtin_env.c
+SRC				+= $(BUILTINS_DIR)/builtin_cd.c
+SRC				+= $(BUILTINS_DIR)/builtin_exit.c
 SRC				+= $(BUILTINS_DIR)/builtin_utils.c
 SRC				+= $(BUILTINS_DIR)/prompt_utils.c
 SRC				+= $(REDIRECTS_DIR)/redirects.c
 SRC				+= $(REDIRECTS_DIR)/redirects_utils.c
+SRC				+= $(REDIRECTS_DIR)/heredocs_utils.c
 SRC				+= $(REDIRECTS_DIR)/heredocs.c
 SRC				+= $(ERROR_DIR)/error.c
 SRC				+= $(FREE_DIR)/free_utils.c

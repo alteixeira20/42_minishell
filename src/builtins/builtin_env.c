@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cmd_env.c                                          :+:      :+:    :+:   */
+/*   builtin_env.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 13:03:17 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/10 21:47:54 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/16 19:57:21 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	cmd_env(t_cmd *cmd, t_minishell *sh)
+int	cmd_env(t_cmd *cmd, t_msh *sh)
 {
 	int	i;
 
