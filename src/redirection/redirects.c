@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 20:38:08 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/17 15:43:41 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/17 17:32:35 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	process_redirect(t_cmd *cmd, t_token *token, t_msh *sh)
 	return (0);
 }
 
-static void apply_input_redirect(t_cmd *cmd)
+static void	apply_input_redirect(t_cmd *cmd)
 {
 	if (cmd->input_file && cmd->input_fd == STDIN_FILENO)
 	{

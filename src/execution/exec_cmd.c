@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 03:55:09 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/17 16:33:13 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/17 17:26:47 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ t_cmd	*cmd_new(void)
 	cmd->next = NULL;
 	return (cmd);
 }
+
 t_cmd	*reverse_cmd_list(t_cmd *cmd)
 {
 	t_cmd	*prev;

@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 01:07:31 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/17 16:40:19 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/17 17:26:22 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,29 +71,31 @@ static int	handle_redirect_token(t_token *tokens, t_cmd *cmd, t_msh *sh)
 	return (0);
 }
 
-int	process_token(t_token *tokens, t_cmd **current, t_msh *sh)
+int	process_token(t_token **tokens, t_cmd **current, t_msh *sh)
 {
-	int	status;
+	t_token	*tok;
+	int		status;
 
-	if (!tokens || !current || !*current || !sh)
+	if (!tokens || !*tokens || !current || !*current || !sh)
 		return (-1);
-	if (tokens->type == TOKEN_WORD)
+	tok = *tokens;
+	if (tok->type == TOKEN_WORD)
 	{
-		printf("[DEBUG] = tokens value [%s]\n", tokens->value);
-		if (add_arg(*current, tokens->value) == FAILURE)
+		if (add_arg(*current, tok->value) == FAILURE)
 			return (-1);
+		*tokens = tok->next;
 	}
-	else if (tokens->type == TOKEN_PIPE)
-	{
-		(*current)->next = cmd_new();
-		if (!(*current)->next)
-			return (-1);
-		*current = (*current)->next;
-	}
+	else if (tok->type == TOKEN_PIPE)
+		return (0);
 	else
 	{
-		status = handle_redirect_token(tokens, *current, sh);
+		status = handle_redirect_token(tok, *current, sh);
 		if (status == -1)
 			(*current)->input_fd = -1;
+		if (tok->next)
+			*tokens = tok->next->next;
+		else
+			*tokens = NULL;
 	}
-	return (0);}
+	return (0);
+}

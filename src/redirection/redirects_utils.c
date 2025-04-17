@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 21:08:18 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/17 15:48:26 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/17 17:34:48 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,10 @@ int	handle_redirect_out(t_cmd *cmd, t_token *file_tok, bool append)
 		cmd->output_fd = -1;
 		return (0);
 	}
-	flags = O_WRONLY | O_CREAT | (append ? O_APPEND : O_TRUNC);
+	if (append)
+		flags = O_WRONLY | O_CREAT | O_APPEND;
+	else
+		flags = O_WRONLY | O_CREAT | O_TRUNC;
 	fd = open(file_tok->value, flags, 0644);
 	if (fd < 0)
 	{

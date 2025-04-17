@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 16:54:50 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/17 16:36:35 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/17 17:24:02 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,7 +154,7 @@ void	handle_dollar(const char *str, int *i, t_msh *sh, char **res);
 /*                                 TOKENIZER                                  */
 /* ************************************************************************** */
 
-int		process_token(t_token *tokens, t_cmd **current, t_msh *sh);
+int		process_token(t_token **tokens, t_cmd **current, t_msh *sh);
 int		check_syntax(t_token *tokens);
 int		is_special_char(char c);
 char	*extract_special_char(const char *str, int *i);
