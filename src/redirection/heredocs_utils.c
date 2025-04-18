@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 18:12:05 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/16 19:59:08 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/18 13:59:23 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ char	*write_heredoc_to_tmp(const char *delim, int index)
 	if (!filename)
 		return (NULL);
 	fd = open(filename, O_CREAT | O_WRONLY | O_TRUNC, 0600);
-	if (fd == -1)
+	if (fd < 0)
 	{
 		free(filename);
 		return (NULL);

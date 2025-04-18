@@ -30,6 +30,7 @@ echo "aspas ->'"
 echo " | $"
 echo <missing <"./test_files/infile" <missing
 echo <123 <456 hi | echo 42
+echo hi >>./test_files/invalid_permission >./outfiles/outfile01 | echo bye
 
 # ========================
 # Redirection with files
@@ -81,6 +82,7 @@ ls -la
 /bin/echo hello from bin
 /bin/cat /etc/passwd | head -n 2
 ls | wc
+ls >./outfiles/outfile01 >>./test_files/invalid_permission >>./outfiles/outfile02
 
 # ========================
 # Pipes & Execution

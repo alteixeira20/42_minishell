@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 01:28:43 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/16 17:30:46 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/18 14:19:00 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,6 @@ int	init(t_msh *sh, char **env)
 	sh->path = NULL;
 	sh->exit_status = 0;
 	sh->heredoc_interrupted = false;
-	sh->had_syntax_error = false;
+	sh->error_printed = false;
 	return (SUCCESS);
 }

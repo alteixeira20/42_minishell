@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 01:07:31 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/17 17:26:22 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/18 15:08:51 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,14 +58,14 @@ static int	handle_redirect_token(t_token *tokens, t_cmd *cmd, t_msh *sh)
 		|| tokens->type == TOKEN_REDIRECT_OUT
 		|| tokens->type == TOKEN_APPEND)
 	{
-		if (process_redirect(cmd, tokens, sh) == -1)
-			return (-1);
+		if (process_redirect(cmd, tokens, sh) == FAILURE)
+			return (FAILURE);
 		tokens = tokens->next;
 	}
 	else if (tokens->type == TOKEN_HEREDOC)
 	{
-		if (handle_redirect_heredoc(cmd, tokens->next, sh) == -1)
-			return (-1);
+		if (handle_redirect_heredoc(cmd, sh, tokens->next) == FAILURE)
+			return (FAILURE);
 		tokens = tokens->next;
 	}
 	return (0);
@@ -74,28 +74,26 @@ static int	handle_redirect_token(t_token *tokens, t_cmd *cmd, t_msh *sh)
 int	process_token(t_token **tokens, t_cmd **current, t_msh *sh)
 {
 	t_token	*tok;
-	int		status;
 
 	if (!tokens || !*tokens || !current || !*current || !sh)
-		return (-1);
+		return (FAILURE);
 	tok = *tokens;
 	if (tok->type == TOKEN_WORD)
 	{
 		if (add_arg(*current, tok->value) == FAILURE)
-			return (-1);
+			return (FAILURE);
 		*tokens = tok->next;
 	}
 	else if (tok->type == TOKEN_PIPE)
-		return (0);
+		return (SUCCESS);
 	else
 	{
-		status = handle_redirect_token(tok, *current, sh);
-		if (status == -1)
+		if (handle_redirect_token(tok, *current, sh) == FAILURE)
 			(*current)->input_fd = -1;
 		if (tok->next)
 			*tokens = tok->next->next;
 		else
 			*tokens = NULL;
 	}
-	return (0);
+	return (SUCCESS);
 }

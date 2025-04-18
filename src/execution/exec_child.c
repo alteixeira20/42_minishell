@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 03:40:27 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/18 01:39:10 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/18 14:35:29 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ static void	try_exec_binary(t_cmd *cmd, t_msh *sh)
 
 void	exec_child(t_cmd *cmd, int in_fd, int pipe_fd[2], t_msh *sh)
 {
-	setup_redirections(cmd, in_fd, pipe_fd);
+	setup_redirections(cmd, sh, in_fd, pipe_fd);
 	if (!cmd->argv || !cmd->argv[0] || cmd->argv[0][0] == '\0')
 	{
 		if (cmd->input_fd != STDIN_FILENO || cmd->output_fd != STDOUT_FILENO)

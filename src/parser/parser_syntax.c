@@ -6,11 +6,9 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 00:46:26 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/18 01:41:57 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/18 13:41:40 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-#include "../includes/minishell.h"
 
 #include "../includes/minishell.h"
 

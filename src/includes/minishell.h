@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 16:54:50 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/18 01:07:05 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/18 15:00:28 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ typedef struct s_minishell
 	int		hd_cnt;
 
 	bool	heredoc_interrupted;
-	bool	had_syntax_error;
+	bool	error_printed;
 }	t_msh;
 
 typedef enum e_exit
@@ -217,10 +217,10 @@ t_cmd		*reverse_cmd_list(t_cmd *cmd);
 /* ************************************************************************** */
 
 int			process_redirect(t_cmd *cmd, t_token *token, t_msh *sh);
-void		setup_redirections(t_cmd *cmds, int in_fd, int pipe_fd[2]);
+void		setup_redirections(t_cmd *cmds, t_msh *sh, int in_fd, int pipe_fd[2]);
 int			handle_redirect_in(t_cmd *cmd, t_token *file_tok);
 int			handle_redirect_out(t_cmd *cmd, t_token *file_tok, bool append);
-int			handle_redirect_heredoc(t_cmd *cmd, t_token *file_tok, t_msh *sh);
+int			handle_redirect_heredoc(t_cmd *cmd, t_msh *sh, t_token *file_tok);
 char		*write_heredoc_to_tmp(const char *delim, int index);
 
 /* ************************************************************************** */
