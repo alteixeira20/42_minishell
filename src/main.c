@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 02:04:50 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/16 17:17:43 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/18 01:42:41 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,32 +14,43 @@
 
 int	g_exit = 0;
 
-static char	*read_multiline_input(t_msh *sh)
+static char	*read_continuation_loop(char *line, t_msh *sh)
 {
-	char	*line;
-	char	*next;
-	char	*joined;
-	char	*prompt;
-	t_token	*tokens;
+	char		*next;
+	char		*joined;
+	t_token		*tokens;
+	t_syntax	status;
 
-	prompt = build_prompt(sh);
-	line = readline(prompt);
-	free(prompt);
-	while (line && needs_pipe_continuation(line))
+	tokens = parse_input(line, sh);
+	status = check_cmd_syntax(tokens, false);
+	while (status == SYNTAX_INCOMPLETE)
 	{
-		tokens = parse_input(line, sh);
-		if (!tokens || check_syntax(tokens))
-		{
-			free_token_list(tokens);
-			break ;
-		}
 		free_token_list(tokens);
 		next = readline("> ");
+		if (!next)
+			break ;
 		joined = ft_strjoin(line, next);
 		free(line);
 		free(next);
 		line = joined;
+		tokens = parse_input(line, sh);
+		status = check_cmd_syntax(tokens, false);
 	}
+	free_token_list(tokens);
+	return (line);
+}
+
+static char	*read_multiline_input(t_msh *sh)
+{
+	char	*line;
+	char	*prompt;
+
+	prompt = build_prompt(sh);
+	line = readline(prompt);
+	free(prompt);
+	if (!line)
+		return (NULL);
+	line = read_continuation_loop(line, sh);
 	return (line);
 }
 
@@ -57,8 +68,13 @@ static int	handle_input_line(t_msh *sh, char *line)
 		g_exit = 0;
 		return (1);
 	}
-	if (tokens)
-		exec_ast(tokens, sh);
+	if (check_cmd_syntax(tokens, true) == SYNTAX_ERROR)
+	{
+		free_token_list(tokens);
+		free(line);
+		return (1);
+	}
+	exec_ast(tokens, sh);
 	free_token_list(tokens);
 	free(line);
 	return (1);

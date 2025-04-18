@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 21:08:18 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/17 17:34:48 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/18 01:36:49 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,21 @@
 
 int	handle_redirect_in(t_cmd *cmd, t_token *file_tok)
 {
+	int	fd;
+
 	if (!file_tok || file_tok->type != TOKEN_WORD || !file_tok->value)
+		return (FAILURE);
+	fd = open(file_tok->value, O_RDONLY);
+	if (fd < 0)
 	{
-		ft_putstr_fd("minishell: syntax error ", STDERR_FILENO);
-		ft_putstr_fd("near unexpected token `newline'\n", STDERR_FILENO);
-		cmd->input_file = NULL;
-		return (0);
+		perror(file_tok->value);
+		return (FAILURE);
 	}
 	if (cmd->input_file)
 		free(cmd->input_file);
 	cmd->input_file = ft_strdup(file_tok->value);
-	return (1);
+	close(fd);
+	return (SUCCESS);
 }
 
 int	handle_redirect_out(t_cmd *cmd, t_token *file_tok, bool append)

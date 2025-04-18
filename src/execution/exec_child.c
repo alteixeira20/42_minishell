@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 03:40:27 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/17 15:14:27 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/18 01:39:10 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,16 +32,8 @@ static int	get_exec_error_code(char *path)
 
 static void	handle_cmd_error(t_cmd *cmd)
 {
-	struct stat	st;
-
 	if (ft_strchr(cmd->argv[0], '/'))
 	{
-		if (stat(cmd->argv[0], &st) == 0 && S_ISDIR(st.st_mode))
-		{
-			ft_putstr_fd(cmd->argv[0], STDERR_FILENO);
-			ft_putstr_fd(": Is a directory\n", STDERR_FILENO);
-			exit(126);
-		}
 		perror(cmd->argv[0]);
 		exit(127);
 	}
@@ -52,16 +44,25 @@ static void	handle_cmd_error(t_cmd *cmd)
 
 static void	try_exec_binary(t_cmd *cmd, t_msh *sh)
 {
-	char	*full_path;
-	int		code;
+	char		*full_path;
+	struct stat	st;
+	int			code;
 
 	full_path = get_cmd_path(cmd->argv[0], sh->env);
 	if (!full_path)
 		handle_cmd_error(cmd);
+	if (stat(full_path, &st) == 0 && S_ISDIR(st.st_mode))
+	{
+		ft_putstr_fd("minishell: ", STDERR_FILENO);
+		ft_putstr_fd(full_path, STDERR_FILENO);
+		ft_putendl_fd(": Is a directory", STDERR_FILENO);
+		free(full_path);
+		exit(126);
+	}
 	reset_child_signals();
 	execve(full_path, cmd->argv, sh->env);
-	code = get_exec_error_code(full_path);
 	perror(full_path);
+	code = get_exec_error_code(full_path);
 	free(full_path);
 	exit(code);
 }

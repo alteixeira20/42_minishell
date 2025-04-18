@@ -101,15 +101,11 @@ yes | echo Hi
 # ========================
 wrongcmd
 /bin/doesnotexist
-echo hello |
 ls >
 |
-echo hello > missing.txt |
-rm -f missing.txt
 ./test_files
 $EMPTY
 $EMPTY echo hi
-
 
 # ========================
 # Permissions

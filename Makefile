@@ -6,7 +6,7 @@
 #    By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/03 02:10:25 by paalexan          #+#    #+#              #
-#    Updated: 2025/04/17 17:36:01 by paalexan         ###   ########.fr        #
+#    Updated: 2025/04/18 00:59:24 by paalexan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -59,6 +59,7 @@ SRC				= $(SRC_DIR)/main.c
 SRC				+= $(INIT_DIR)/init.c
 SRC				+= $(SIGNAL_DIR)/signals.c
 SRC				+= $(PARSER_DIR)/parser.c
+SRC				+= $(PARSER_DIR)/parser_syntax.c
 SRC				+= $(PARSER_DIR)/parser_utils.c
 SRC				+= $(PARSER_DIR)/parser_expansion.c
 SRC				+= $(TOKEN_DIR)/tokenizer.c

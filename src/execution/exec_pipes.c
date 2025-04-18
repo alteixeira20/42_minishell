@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 21:22:46 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/17 17:22:37 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/18 00:39:52 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,13 @@ int	fork_command(t_cmd *cmd, t_msh *sh, int *in_fd, int pipe_fd[2])
 	struct sigaction	old_int;
 	struct sigaction	old_quit;
 
-	surpress_parent_sig(&old_int, &old_quit);
+	surpress_par_sig(&old_int, &old_quit);
 	pid = fork();
 	if (pid == -1)
 		return (perror("fork"), FAILURE);
 	if (pid == 0)
 		exec_child(cmd, *in_fd, pipe_fd, sh);
-	restore_parent_sig(&old_int, &old_quit);
+	restore_par_sig(&old_int, &old_quit);
 	return (pid);
 }
 
@@ -52,7 +52,7 @@ void	handle_parent_cleanup(int *in_fd, int pipe_fd[2], int has_next)
 		close(pipe_fd[0]);
 }
 
-int	run_single_command(t_cmd **cmds, t_msh *sh, int *in_fd, pid_t *pid_out)
+int	run_single_cmd(t_cmd **cmds, t_msh *sh, int *in_fd, pid_t *pid_out)
 {
 	int		pipe_fd[2];
 	int		has_next;

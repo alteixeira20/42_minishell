@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 18:31:43 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/17 16:52:32 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/18 00:38:50 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	execute_all(t_cmd *cmds, t_msh *sh, int *in_fd, pid_t *pids)
 	has_error = 0;
 	while (cmds)
 	{
-		if (run_single_command(&cmds, sh, in_fd, &pids[i]) == FAILURE)
+		if (run_single_cmd(&cmds, sh, in_fd, &pids[i]) == FAILURE)
 		{
 			pids[i] = -1;
 			has_error = 1;
