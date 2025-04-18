@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 16:49:01 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/16 19:57:45 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/18 18:58:08 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ static void	export_assign(const char *arg, t_msh *sh)
 	free(val);
 }
 
-static void	print_exported_vars(char **env)
+static void	print_exported_vars(char **env, t_cmd *cmd)
 {
 	int		i;
 	char	*equal;
@@ -72,18 +72,18 @@ static void	print_exported_vars(char **env)
 			i++;
 			continue ;
 		}
-		ft_putstr_fd("declare -x ", STDOUT_FILENO);
+		ft_putstr_fd("declare -x ", cmd->output_fd);
 		equal = ft_strchr(env[i], '=');
 		if (equal)
 		{
 			write(STDOUT_FILENO, env[i], equal - env[i] + 1);
-			ft_putchar_fd('"', STDOUT_FILENO);
-			ft_putstr_fd(equal + 1, STDOUT_FILENO);
-			ft_putchar_fd('"', STDOUT_FILENO);
+			ft_putchar_fd('"', cmd->output_fd);
+			ft_putstr_fd(equal + 1, cmd->output_fd);
+			ft_putchar_fd('"', cmd->output_fd);
 		}
 		else
-			ft_putstr_fd(env[i], STDOUT_FILENO);
-		ft_putchar_fd('\n', STDOUT_FILENO);
+			ft_putstr_fd(env[i], cmd->output_fd);
+		ft_putchar_fd('\n', cmd->output_fd);
 		i++;
 	}
 }
@@ -97,7 +97,7 @@ int	cmd_export(t_cmd *cmd, t_msh *sh)
 	if (cmd->argc == 1)
 	{
 		sort_env(copy);
-		print_exported_vars(copy);
+		print_exported_vars(copy, cmd);
 		free_env_array(copy);
 		return (SUCCESS);
 	}

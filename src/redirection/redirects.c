@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 20:38:08 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/18 15:16:39 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/18 19:47:50 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,79 +31,14 @@ int	process_redirect(t_cmd *cmd, t_token *token, t_msh *sh)
 	return (SUCCESS);
 }
 
-static void	apply_input_redirect(t_cmd *cmd, t_msh *sh)
+static void	apply_pipe_redirect(t_cmd *cmd, int pipe_fd[2], t_msh *sh)
 {
-	if (cmd->input_file && cmd->input_fd == STDIN_FILENO)
+	if (cmd->next)
 	{
-		cmd->input_fd = open(cmd->input_file, O_RDONLY);
-		if (cmd->input_fd < 0)
-		{
-			if (!sh->error_printed)
-			{
-				perror(cmd->input_file);
-				sh->error_printed = true;
-			}
-			exit(FAILURE);
-		}
-	}
-	if (cmd->input_fd != STDIN_FILENO && cmd->input_fd != -1)
-	{
-		if (dup2(cmd->input_fd, STDIN_FILENO) == -1)
-		{
-			if (!sh->error_printed)
-			{
-				perror("dup2");
-				sh->error_printed = true;
-			}
-			close(cmd->input_fd);
-		}
-	}
-}
-
-static void	apply_output_redirect(t_cmd *cmd, t_msh *sh)
-{
-	int	fd;
-	int	flags;
-
-	if (!cmd->output_redirect || !cmd->output_file)
-		return ;
-	if (cmd->append_out)
-		flags = O_WRONLY | O_CREAT | O_APPEND;
-	else
-		flags = O_WRONLY | O_CREAT | O_TRUNC;
-	fd = open(cmd->output_file, flags, 0644);
-	if (fd < 0)
-	{
-		if (!sh->error_printed)
-		{
-			perror(cmd->output_file);
-			sh->error_printed = true;
-		}
-		exit(FAILURE);
-	}
-	if (dup2(fd, STDOUT_FILENO) == -1)
-	{
-		if (!sh->error_printed)
+		if (dup2(pipe_fd[1], STDOUT_FILENO) == -1 && !sh->error_printed)
 		{
 			perror("dup2");
 			sh->error_printed = true;
-		}
-		exit(FAILURE);
-	}
-	close(fd);
-}
-
-static void	apply_pipe_redirect(t_cmd *cmd, int pipe_fd[2], t_msh *sh)
-{
-	if (cmd->next && !cmd->output_redirect)
-	{
-		if (dup2(pipe_fd[1], STDOUT_FILENO) == -1)
-		{
-			if (!sh->error_printed)
-			{
-				perror("dup2");
-				sh->error_printed = true;
-			}
 		}
 	}
 	if (pipe_fd[0] != -1 && pipe_fd[0] != STDOUT_FILENO)
@@ -112,23 +47,22 @@ static void	apply_pipe_redirect(t_cmd *cmd, int pipe_fd[2], t_msh *sh)
 		close(pipe_fd[1]);
 }
 
+static void	apply_fd_redirect(int in_fd, t_msh *sh)
+{
+	if (dup2(in_fd, STDIN_FILENO) == -1 && !sh->error_printed)
+	{
+		perror("dup2");
+		sh->error_printed = true;
+	}
+	close(in_fd);
+}
+
 void	setup_redirections(t_cmd *cmd, t_msh *sh, int in_fd, int pipe_fd[2])
 {
 	if (cmd->input_fd == STDIN_FILENO && in_fd != STDIN_FILENO)
-	{
-		if (dup2(in_fd, STDIN_FILENO) == -1)
-		{
-			if (!sh->error_printed)
-			{
-				perror("dup2");
-				sh->error_printed = true;
-			}
-		}
-		close(in_fd);
-	}
+		apply_fd_redirect(in_fd, sh);
 	else if (in_fd != STDIN_FILENO)
 		close(in_fd);
-	apply_input_redirect(cmd, sh);
-	apply_output_redirect(cmd, sh);
+	apply_all_redirects(cmd, sh);
 	apply_pipe_redirect(cmd, pipe_fd, sh);
 }

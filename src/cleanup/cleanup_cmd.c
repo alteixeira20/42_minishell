@@ -1,37 +1,52 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin_env.c                                      :+:      :+:    :+:   */
+/*   cleanup_cmd.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/05 13:03:17 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/18 18:57:00 by paalexan         ###   ########.fr       */
+/*   Created: 2025/04/18 15:44:51 by paalexan          #+#    #+#             */
+/*   Updated: 2025/04/18 19:23:44 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	cmd_env(t_cmd *cmd, t_msh *sh)
+static void	free_redirections(t_redirect *redir)
+{
+	t_redirect	*tmp;
+
+	while (redir)
+	{
+		tmp = redir->next;
+		free(redir->filename);
+		free(redir);
+		redir = tmp;
+	}
+}
+
+static void	free_argv(char **argv)
 {
 	int	i;
 
-	if (!sh || !sh->env)
-		return (FAILURE);
-	if (cmd->argc > 1)
-	{
-		ft_putstr_fd("env: too many arguments\n", STDERR_FILENO);
-		return (FAILURE);
-	}
+	if (!argv)
+		return ;
 	i = 0;
-	while (sh->env[i])
+	while (argv[i])
+		free(argv[i++]);
+	free(argv);
+}
+
+void	free_cmd(t_cmd *cmd)
+{
+	t_cmd	*temp;
+
+	while (cmd)
 	{
-		if (ft_strchr(sh->env[i], '='))
-		{
-			ft_putstr_fd(sh->env[i], cmd->output_fd);
-			ft_putchar_fd('\n', cmd->output_fd);
-		}
-		i++;
+		temp = cmd->next;
+		free_argv(cmd->argv);
+		free_redirections(cmd->redirects);
+		free(cmd);
+		cmd = temp;
 	}
-	return (SUCCESS);
 }

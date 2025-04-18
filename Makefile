@@ -6,7 +6,7 @@
 #    By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/03 02:10:25 by paalexan          #+#    #+#              #
-#    Updated: 2025/04/18 00:59:24 by paalexan         ###   ########.fr        #
+#    Updated: 2025/04/18 19:46:53 by paalexan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,7 +46,7 @@ EXEC_DIR		= $(SRC_DIR)/execution
 BUILTINS_DIR	= $(SRC_DIR)/builtins
 REDIRECTS_DIR	= $(SRC_DIR)/redirection
 ERROR_DIR		= $(SRC_DIR)/error
-FREE_DIR		= $(SRC_DIR)/free
+CLEANUP_DIR		= $(SRC_DIR)/cleanup
 
 TEMP_DIR		= .temp
 OBJ_DIR			= .obj
@@ -83,11 +83,14 @@ SRC				+= $(BUILTINS_DIR)/builtins.c
 SRC				+= $(BUILTINS_DIR)/builtins_utils.c
 SRC				+= $(BUILTINS_DIR)/prompt_utils.c
 SRC				+= $(REDIRECTS_DIR)/redirects.c
+SRC				+= $(REDIRECTS_DIR)/redirects_apply.c
+SRC				+= $(REDIRECTS_DIR)/redirects_exec.c
 SRC				+= $(REDIRECTS_DIR)/redirects_utils.c
 SRC				+= $(REDIRECTS_DIR)/heredocs_utils.c
 SRC				+= $(REDIRECTS_DIR)/heredocs.c
 SRC				+= $(ERROR_DIR)/error.c
-SRC				+= $(FREE_DIR)/free_utils.c
+SRC				+= $(CLEANUP_DIR)/cleanup_general.c
+SRC				+= $(CLEANUP_DIR)/cleanup_cmd.c
 
 # **************************************************************************** #
 #                                   Targets                                    #

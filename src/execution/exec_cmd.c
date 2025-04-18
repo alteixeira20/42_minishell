@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 03:55:09 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/17 17:26:47 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/18 19:25:01 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,12 +46,11 @@ t_cmd	*cmd_new(void)
 	cmd = ft_calloc(1, sizeof(t_cmd));
 	if (!cmd)
 		return (NULL);
-	cmd->input_fd = STDIN_FILENO;
-	cmd->output_fd = STDOUT_FILENO;
-	cmd->input_file = NULL;
-	cmd->output_file = NULL;
 	cmd->argc = 0;
 	cmd->argv = NULL;
+	cmd->redirects = NULL;
+	cmd->input_fd = STDIN_FILENO;
+	cmd->output_fd = STDOUT_FILENO;
 	cmd->is_builtin = false;
 	cmd->next = NULL;
 	return (cmd);

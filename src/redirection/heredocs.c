@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 18:54:17 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/18 14:29:56 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/18 19:12:52 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,8 @@ int	handle_redirect_heredoc(t_cmd *cmd, t_msh *sh, t_token *file_tok)
 	}
 	tmp = write_heredoc_to_tmp(file_tok->value, sh->hd_cnt++);
 	if (!tmp)
-	{
-		cmd->input_fd = -1;
 		return (FAILURE);
-	}
-	free(cmd->input_file);
-	cmd->input_file = tmp;
-	cmd->input_redirect = true;
+	add_redirect(cmd, REDIR_HEREDOC, tmp);
+	free(tmp);
 	return (SUCCESS);
 }

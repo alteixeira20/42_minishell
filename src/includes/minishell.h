@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 16:54:50 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/18 15:00:28 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/18 19:51:10 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,21 @@ typedef enum e_syntax_status
 	SYNTAX_ERROR
 }	t_syntax;
 
+typedef enum e_redirect_type
+{
+	REDIR_IN,
+	REDIR_OUT,
+	REDIR_APPEND,
+	REDIR_HEREDOC
+}	t_redirect_type;
+
+typedef struct s_redirect
+{
+	t_redirect_type	type;
+	char			*filename;
+	struct s_redirect *next;
+}	t_redirect;
+
 typedef struct s_token
 {
 	char			*value;
@@ -73,11 +88,7 @@ typedef struct s_cmd
 	int				argc;
 	char			**argv;
 
-	char			*input_file;
-	char			*output_file;
-	bool			append_out;
-	bool			input_redirect;
-	bool			output_redirect;
+	t_redirect		*redirects;
 
 	int				input_fd;
 	int				output_fd;
@@ -222,6 +233,11 @@ int			handle_redirect_in(t_cmd *cmd, t_token *file_tok);
 int			handle_redirect_out(t_cmd *cmd, t_token *file_tok, bool append);
 int			handle_redirect_heredoc(t_cmd *cmd, t_msh *sh, t_token *file_tok);
 char		*write_heredoc_to_tmp(const char *delim, int index);
+void		add_redirect(t_cmd *cmd, t_redirect_type type, const char *filename);
+void		open_last_input(const char *last_in, t_msh *sh);
+void		open_last_output(const char *last_out, bool append, t_msh *sh);
+void		open_all_outputs(t_cmd *cmd, t_msh *sh, char **last_out, bool *append);
+void		apply_all_redirects(t_cmd *cmd, t_msh *sh);
 
 /* ************************************************************************** */
 /*                                ENVIRONMENT                                 */

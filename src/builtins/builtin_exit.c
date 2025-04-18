@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 02:22:28 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/16 19:57:34 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/18 18:57:15 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	cmd_exit(t_cmd *cmd, t_msh *sh)
 {
 	long	code;
 
-	ft_putstr_fd("exit\n", STDOUT_FILENO);
+	ft_putstr_fd("exit\n", cmd->output_fd);
 	if (cmd->argv[1])
 	{
 		if (cmd->argv[2])

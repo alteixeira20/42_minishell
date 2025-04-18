@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_utils.c                                       :+:      :+:    :+:   */
+/*   cleanup_general.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 17:31:36 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/17 15:43:54 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/18 15:46:54 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,30 +23,6 @@ void	free_split(char **split)
 		i++;
 	}
 	free(split);
-}
-
-void	free_cmd(t_cmd *cmd)
-{
-	t_cmd	*temp;
-	int		i;
-
-	while (cmd)
-	{
-		temp = cmd->next;
-		if (cmd->argv)
-		{
-			i = 0;
-			while (cmd->argv[i])
-				free(cmd->argv[i++]);
-			free(cmd->argv);
-		}
-		if (cmd->input_file)
-			free(cmd->input_file);
-		if (cmd->output_file)
-			free(cmd->output_file);
-		free(cmd);
-		cmd = temp;
-	}
 }
 
 void	free_token_list(t_token *token)
