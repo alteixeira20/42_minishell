@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 02:04:50 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/18 01:42:41 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/19 21:26:51 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ static char	*read_continuation_loop(char *line, t_msh *sh)
 		joined = ft_strjoin(line, next);
 		free(line);
 		free(next);
+		if (!joined)
+			break ;
 		line = joined;
 		tokens = parse_input(line, sh);
 		status = check_cmd_syntax(tokens, false);
@@ -65,7 +67,7 @@ static int	handle_input_line(t_msh *sh, char *line)
 	{
 		free_token_list(tokens);
 		free(line);
-		g_exit = 0;
+		g_exit = 1;
 		return (1);
 	}
 	if (check_cmd_syntax(tokens, true) == SYNTAX_ERROR)
@@ -74,7 +76,7 @@ static int	handle_input_line(t_msh *sh, char *line)
 		free(line);
 		return (1);
 	}
-	exec_ast(tokens, sh);
+	g_exit = exec_ast(tokens, sh);
 	free_token_list(tokens);
 	free(line);
 	return (1);

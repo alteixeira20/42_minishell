@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 18:31:43 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/18 14:39:28 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/20 00:53:03 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ int	exec_pipeline(t_cmd *cmds, t_msh *sh, int in_fd)
 {
 	int		cmd_count;
 	pid_t	*pids;
+	int		status;
 
 	if (!cmds)
 		return (FAILURE);
@@ -79,24 +80,26 @@ int	exec_pipeline(t_cmd *cmds, t_msh *sh, int in_fd)
 	if (!pids)
 		return (FAILURE);
 	execute_all(cmds, sh, &in_fd, pids);
-	wait_all_children(pids, cmd_count);
+	status = wait_all_children(pids, cmd_count);
 	free(pids);
 	if (in_fd != STDIN_FILENO)
 		close(in_fd);
-	return (SUCCESS);
+	return (status);
 }
 
 int	exec_ast(t_token *tokens, t_msh *sh)
 {
 	t_cmd	*cmds;
 	int		in_fd;
+	int		status;
 
 	sh->error_printed = false;
 	cmds = cmd_from_tokens(tokens, sh);
 	if (!cmds)
 		return (FAILURE);
 	in_fd = 0;
-	exec_pipeline(cmds, sh, in_fd);
+	status = exec_pipeline(cmds, sh, in_fd);
+	g_exit = status;
 	free_cmd(cmds);
-	return (SUCCESS);
+	return (status);
 }

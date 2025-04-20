@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 16:49:01 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/18 18:58:08 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/19 21:02:20 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,11 @@ static bool	is_valid_identifier(const char *str)
 {
 	int	i;
 
-	i = 0;
-	if (!str || (!ft_isalpha(str[0]) && str[0] != '_'))
+	if (!str || !str[0] || str[0] == '=')
 		return (false);
+	if (!ft_isalpha(str[0]) && str[0] != '_')
+		return (false);
+	i = 1;
 	while (str[i] && str[i] != '=')
 	{
 		if (!ft_isalnum(str[i]) && str[i] != '_')
@@ -30,7 +32,7 @@ static bool	is_valid_identifier(const char *str)
 
 static void	export_invalid_identifier(const char *arg)
 {
-	ft_putstr_fd("export: `", STDERR_FILENO);
+	ft_putstr_fd("minishell: export: `", STDERR_FILENO);
 	ft_putstr_fd((char *)arg, STDERR_FILENO);
 	ft_putstr_fd("': not a valid identifier\n", STDERR_FILENO);
 	g_exit = 1;
@@ -76,7 +78,7 @@ static void	print_exported_vars(char **env, t_cmd *cmd)
 		equal = ft_strchr(env[i], '=');
 		if (equal)
 		{
-			write(STDOUT_FILENO, env[i], equal - env[i] + 1);
+			write(cmd->output_fd, env[i], equal - env[i] + 1);
 			ft_putchar_fd('"', cmd->output_fd);
 			ft_putstr_fd(equal + 1, cmd->output_fd);
 			ft_putchar_fd('"', cmd->output_fd);
@@ -92,24 +94,30 @@ int	cmd_export(t_cmd *cmd, t_msh *sh)
 {
 	int		i;
 	char	**copy;
+	int		ret;
 
+	ret = SUCCESS;
 	copy = copy_env_array(sh->env);
 	if (cmd->argc == 1)
 	{
 		sort_env(copy);
 		print_exported_vars(copy, cmd);
 		free_env_array(copy);
-		return (SUCCESS);
+		return (ret);
 	}
 	i = 1;
 	while (i < cmd->argc)
 	{
 		if (!is_valid_identifier(cmd->argv[i]))
+		{
 			export_invalid_identifier(cmd->argv[i]);
+			ret = FAILURE;
+		}
 		else
 			export_assign(cmd->argv[i], sh);
 		i++;
 	}
+	g_exit = ret;
 	free_env_array(copy);
-	return (SUCCESS);
+	return (ret);
 }

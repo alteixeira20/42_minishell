@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 16:12:15 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/17 01:28:38 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/19 21:03:59 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,10 +55,13 @@ static char	*get_target_dir(t_cmd *cmd, t_msh *sh)
 
 static int	handle_cd_error(char *oldpwd, const char *target)
 {
-	perror(ft_strjoin("cd: ", target));
+	ft_putstr_fd("minishell: cd: ", STDERR_FILENO);
+	if (target)
+		perror(target);
+	else
+		ft_putendl_fd("target path is NULL", STDERR_FILENO);
 	free(oldpwd);
-	if (!target)
-		ft_putstr_fd("minishell: cd: target path is NULL\n", STDERR_FILENO);
+	g_exit = 1;
 	return (FAILURE);
 }
 
@@ -70,6 +73,7 @@ int	cmd_cd(t_cmd *cmd, t_msh *sh)
 	if (!cmd || !cmd->argv || cmd->argc > 2)
 	{
 		ft_putstr_fd("minishell: cd: too many arguments\n", STDERR_FILENO);
+		g_exit = 1;
 		return (FAILURE);
 	}
 	oldpwd = getcwd(NULL, 0);

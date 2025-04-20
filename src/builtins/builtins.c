@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 17:29:39 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/17 17:31:14 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/19 16:52:53 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ static bool	is_builtin_cmd(const char *cmd)
 		return (true);
 	if (ft_strcmp(cmd, "exit") == 0)
 		return (true);
+	if (ft_strcmp(cmd, "pwd") == 0)
+		return (true);
 	return (false);
 }
 
@@ -41,17 +43,22 @@ void	finalize_cmds(t_cmd *cmd)
 
 int	run_builtin(t_cmd *cmd, t_msh *sh)
 {
+	int	ret;
+
 	if (!cmd || !cmd->argv || !cmd->argv[0] || cmd->argv[0][0] == '\0')
 		return (FAILURE);
 	if (ft_strcmp(cmd->argv[0], "env") == 0)
-		return (cmd_env(cmd, sh));
+		ret = cmd_env(cmd, sh);
 	else if (ft_strcmp(cmd->argv[0], "echo") == 0)
-		return (cmd_echo(cmd));
+		ret = cmd_echo(cmd);
 	else if (ft_strcmp(cmd->argv[0], "export") == 0)
-		return (cmd_export(cmd, sh));
+		ret = cmd_export(cmd, sh);
 	else if (ft_strcmp(cmd->argv[0], "cd") == 0)
-		return (cmd_cd(cmd, sh));
+		ret = cmd_cd(cmd, sh);
 	else if (ft_strcmp(cmd->argv[0], "exit") == 0)
-		return (cmd_exit(cmd, sh));
-	return (FAILURE);
+		ret = cmd_exit(cmd, sh);
+	else if (ft_strcmp(cmd->argv[0], "pwd") == 0)
+		ret = cmd_pwd(cmd);
+	g_exit = ret;
+	return (ret);
 }

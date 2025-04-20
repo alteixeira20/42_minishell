@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 14:34:23 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/17 15:13:03 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/20 04:49:01 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static char	*get_var_value(const char *name, t_msh *sh)
 	char	*raw;
 
 	if (!ft_strcmp(name, "?"))
-		return (ft_itoa(sh->exit_status));
+		return (ft_itoa(g_exit));
 	raw = extract_var((char *)name, sh->env);
 	if (!raw)
 		return (NULL);
@@ -60,6 +60,8 @@ static char	*expand_core(const char *str, t_msh *sh)
 
 	i = 0;
 	res = ft_strdup("");
+	if (!res)
+		return (NULL);
 	while (str[i])
 	{
 		if (str[i] == '\'')

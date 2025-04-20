@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 21:22:46 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/18 00:39:52 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/20 00:51:16 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,16 +78,26 @@ int	run_single_cmd(t_cmd **cmds, t_msh *sh, int *in_fd, pid_t *pid_out)
 	return (SUCCESS);
 }
 
-void	wait_all_children(pid_t *pids, int count)
+int	wait_all_children(pid_t *pids, int count)
 {
 	int	i;
 	int	status;
+	int	last_status;
 
 	i = 0;
+	last_status = 0;
 	while (i < count)
 	{
-		if (waitpid(pids[i], &status, 0) > 0 && WIFEXITED(status))
-			g_exit = WEXITSTATUS(status);
+		if (pids[i] > 0)
+		{
+			waitpid(pids[i], &status, 0);
+			if (WIFEXITED(status))
+				last_status = WEXITSTATUS(status);
+			else if (WIFSIGNALED(status))
+				last_status = 128 + WTERMSIG(status);
+		}
 		i++;
 	}
+	g_exit = last_status;
+	return (last_status);
 }

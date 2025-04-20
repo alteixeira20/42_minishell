@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 01:01:14 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/17 15:12:09 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/19 17:53:55 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,10 @@ static int	fill_tokens(char **split, t_token **tokens, t_msh *sh)
 		type = get_token_type(split[i]);
 		new = token_new(split[i], type, sh);
 		if (!new)
+		{
+			free_split(split);
 			return (FAILURE);
+		}
 		token_add_back(tokens, new);
 		i++;
 	}

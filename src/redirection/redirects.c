@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 20:38:08 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/18 19:47:50 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/19 20:50:54 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,12 +57,18 @@ static void	apply_fd_redirect(int in_fd, t_msh *sh)
 	close(in_fd);
 }
 
-void	setup_redirections(t_cmd *cmd, t_msh *sh, int in_fd, int pipe_fd[2])
+int	setup_redirections(t_cmd *cmd, t_msh *sh, int in_fd, int pipe_fd[2])
 {
 	if (cmd->input_fd == STDIN_FILENO && in_fd != STDIN_FILENO)
 		apply_fd_redirect(in_fd, sh);
 	else if (in_fd != STDIN_FILENO)
 		close(in_fd);
-	apply_all_redirects(cmd, sh);
+	if (sh->error_printed)
+		return (FAILURE);
 	apply_pipe_redirect(cmd, pipe_fd, sh);
+	if (sh->error_printed)
+		return (FAILURE);
+	if (apply_all_redirects(cmd, sh) == FAILURE)
+		return (FAILURE);
+	return (SUCCESS);
 }

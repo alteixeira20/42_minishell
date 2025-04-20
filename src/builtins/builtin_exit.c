@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 02:22:28 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/18 18:57:15 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/19 21:29:56 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ static int	handle_not_numeric(char	*arg)
 int	cmd_exit(t_cmd *cmd, t_msh *sh)
 {
 	long	code;
+	int		exit_code;
 
 	ft_putstr_fd("exit\n", cmd->output_fd);
 	if (cmd->argv[1])
@@ -38,15 +39,16 @@ int	cmd_exit(t_cmd *cmd, t_msh *sh)
 			g_exit = 1;
 			return (FAILURE);
 		}
-		if (!handle_not_numeric(cmd->argv[1]))
+		if (handle_not_numeric(cmd->argv[1]))
 		{
 			free_minishell(sh);
-			exit(255);
+			exit(2);
 		}
 		code = ft_atol(cmd->argv[1]);
+		exit_code = (unsigned char)code;
 		free_minishell(sh);
-		exit((unsigned char)code);
+		exit(exit_code);
 	}
 	free_minishell(sh);
-	exit(0);
+	exit(g_exit);
 }

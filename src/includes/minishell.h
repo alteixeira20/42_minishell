@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 16:54:50 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/18 19:51:10 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/19 20:26:26 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,7 +192,7 @@ int			execute_all(t_cmd *cmds, t_msh *sh, int *in_fd, pid_t *pids);
 int			prepare_pipe(int pipe_fd[2], int has_next);
 int			fork_command(t_cmd *cmd, t_msh *sh, int *in_fd, int pipe_fd[2]);
 void		handle_parent_cleanup(int *in_fd, int pipe_fd[2], int has_next);
-void		wait_all_children(pid_t *pids, int count);
+int			wait_all_children(pid_t *pids, int count);
 
 /* ************************************************************************** */
 /*                               CHILD PROCESS                                */
@@ -212,6 +212,7 @@ int			cmd_echo(t_cmd *cmd);
 int			cmd_env(t_cmd *cmd, t_msh *sh);
 int			cmd_exit(t_cmd *cmd, t_msh *sh);
 int			cmd_export(t_cmd *cmd, t_msh *sh);
+int			cmd_pwd(t_cmd *cmd);
 
 /* ************************************************************************** */
 /*                            COMMAND CONSTRUCTION                            */
@@ -228,7 +229,7 @@ t_cmd		*reverse_cmd_list(t_cmd *cmd);
 /* ************************************************************************** */
 
 int			process_redirect(t_cmd *cmd, t_token *token, t_msh *sh);
-void		setup_redirections(t_cmd *cmds, t_msh *sh, int in_fd, int pipe_fd[2]);
+int			setup_redirections(t_cmd *cmds, t_msh *sh, int in_fd, int pipe_fd[2]);
 int			handle_redirect_in(t_cmd *cmd, t_token *file_tok);
 int			handle_redirect_out(t_cmd *cmd, t_token *file_tok, bool append);
 int			handle_redirect_heredoc(t_cmd *cmd, t_msh *sh, t_token *file_tok);
@@ -237,7 +238,7 @@ void		add_redirect(t_cmd *cmd, t_redirect_type type, const char *filename);
 void		open_last_input(const char *last_in, t_msh *sh);
 void		open_last_output(const char *last_out, bool append, t_msh *sh);
 void		open_all_outputs(t_cmd *cmd, t_msh *sh, char **last_out, bool *append);
-void		apply_all_redirects(t_cmd *cmd, t_msh *sh);
+int			apply_all_redirects(t_cmd *cmd, t_msh *sh);
 
 /* ************************************************************************** */
 /*                                ENVIRONMENT                                 */

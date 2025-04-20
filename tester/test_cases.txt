@@ -31,6 +31,8 @@ echo " | $"
 echo <missing <"./test_files/infile" <missing
 echo <123 <456 hi | echo 42
 echo hi >>./test_files/invalid_permission >./outfiles/outfile01 | echo bye
+echo -n "$INPUT"
+echo -n "$USER"
 
 # ========================
 # Redirection with files
@@ -83,6 +85,18 @@ ls -la
 /bin/cat /etc/passwd | head -n 2
 ls | wc
 ls >./outfiles/outfile01 >>./test_files/invalid_permission >>./outfiles/outfile02
+touch is_file
+cd is_file
+rm is_file
+mkdir -p is_folder
+cd is_folder
+cd ..
+ls | grep is_folder
+chmod 000 is_folder
+cd is_folder
+chmod 777 is_folder
+rm -rf is_folder
+cd doesntexit
 
 # ========================
 # Pipes & Execution
@@ -108,6 +122,12 @@ ls >
 ./test_files
 $EMPTY
 $EMPTY echo hi
+pwd 42
+pwd hi
+export A-
+export HELLO-=123
+export =
+export 123
 
 # ========================
 # Permissions
