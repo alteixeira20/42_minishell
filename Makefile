@@ -6,7 +6,7 @@
 #    By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/03 02:10:25 by paalexan          #+#    #+#              #
-#    Updated: 2025/04/24 11:11:18 by paalexan         ###   ########.fr        #
+#    Updated: 2025/04/24 13:06:14 by paalexan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -87,7 +87,8 @@ SRC				+= $(BUILTINS_DIR)/prompt_utils.c
 SRC				+= $(REDIRECTS_DIR)/redirects.c
 SRC				+= $(REDIRECTS_DIR)/redirects_apply.c
 SRC				+= $(REDIRECTS_DIR)/redirects_exec.c
-SRC				+= $(REDIRECTS_DIR)/redirects_utils.c
+SRC				+= $(REDIRECTS_DIR)/redirects_parser.c
+SRC				+= $(REDIRECTS_DIR)/redirects_check.c
 SRC				+= $(REDIRECTS_DIR)/heredocs_utils.c
 SRC				+= $(REDIRECTS_DIR)/heredocs.c
 SRC				+= $(ERROR_DIR)/error.c

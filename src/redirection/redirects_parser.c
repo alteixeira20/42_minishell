@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   redirects_utils.c                                  :+:      :+:    :+:   */
+/*   redirects_parser.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 21:08:18 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/18 19:46:35 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/24 13:05:42 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,5 +63,24 @@ int	handle_redirect_out(t_cmd *cmd, t_token *file_tok, bool append)
 		add_redirect(cmd, REDIR_APPEND, file_tok->value);
 	else
 		add_redirect(cmd, REDIR_OUT, file_tok->value);
+	return (SUCCESS);
+}
+
+int	process_redirect(t_cmd *cmd, t_token *token, t_msh *sh)
+{
+	if (!token || !token->next)
+	{
+		ft_putstr_fd("minishell: syntax error ", STDERR_FILENO);
+		ft_putstr_fd("near unexpected token `newline'\n", STDERR_FILENO);
+		return (FAILURE);
+	}
+	if (token->type == TOKEN_REDIRECT_IN)
+		return (handle_redirect_in(cmd, token->next));
+	if (token->type == TOKEN_REDIRECT_OUT)
+		return (handle_redirect_out(cmd, token->next, false));
+	if (token->type == TOKEN_APPEND)
+		return (handle_redirect_out(cmd, token->next, true));
+	if (token->type == TOKEN_HEREDOC)
+		return (handle_redirect_heredoc(cmd, sh, token->next));
 	return (SUCCESS);
 }

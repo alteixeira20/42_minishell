@@ -6,156 +6,43 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 19:44:18 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/20 04:52:59 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/24 12:58:17 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-static char	*get_directory(const char *filepath)
+static int	is_read_redirect(t_redirect_type type)
 {
-	int		len;
-	char	*dir;
-
-	len = ft_strlen(filepath);
-	while (len > 0 && filepath[len] != '/')
-		len--;
-	if (len == 0)
-		return (ft_strdup("."));
-	dir = ft_substr(filepath, 0, len);
-	return (dir);
+	return (type == REDIR_IN || type == REDIR_HEREDOC);
 }
 
-static int	check_file_permissions(t_redirect *redir, t_msh *sh)
+static int	is_write_redirect(t_redirect_type type)
 {
-	char	*dir;
+	return (type == REDIR_OUT || type == REDIR_APPEND);
+}
 
-	if (access(redir->filename, F_OK) == 0)
-	{
-		if (access(redir->filename, W_OK) == -1)
-		{
-			if (!sh->error_printed)
-			{
-				perror(redir->filename);
-				sh->error_printed = true;
-			}
-			g_exit = 1;
-			return (FAILURE);
-		}
-	}
-	else
-	{
-		dir = get_directory(redir->filename);
-		if (!dir)
-			return (FAILURE);
-		if (access(dir, W_OK) == -1)
-		{
-			if (!sh->error_printed)
-			{
-				perror(redir->filename);
-				sh->error_printed = true;
-			}
-			free(dir);
-			g_exit = 1;
-			return (FAILURE);
-		}
-		free(dir);
-	}
+static int	validate_redirect(t_redirect *redir, t_msh *sh)
+{
+	if (is_read_redirect(redir->type))
+		return (check_input_file(redir->filename, sh));
+	else if (is_write_redirect(redir->type))
+		return (check_output_permission(redir, sh));
 	return (SUCCESS);
 }
 
-static void	open_one_output(t_redirect *redir, t_msh *sh)
-{
-	int	fd;
-	int	flags;
-
-	if (check_file_permissions(redir, sh) == FAILURE)
-		return ;
-	if (redir->type == REDIR_APPEND)
-		flags = O_WRONLY | O_CREAT | O_APPEND;
-	else
-		flags = O_WRONLY | O_CREAT | O_TRUNC;
-	fd = open(redir->filename, flags, 0644);
-	if (fd >= 0)
-		close(fd);
-	else if (!sh->error_printed)
-	{
-		perror(redir->filename);
-		sh->error_printed = true;
-	}
-}
-
-void	open_all_outputs(t_cmd *cmd, t_msh *sh, char **last_out, bool *append)
+int	apply_all_redirects(t_cmd *cmd, t_msh *sh)
 {
 	t_redirect	*redir;
 
 	redir = cmd->redirects;
 	while (redir)
 	{
-		if (redir->type == REDIR_OUT || redir->type == REDIR_APPEND)
-		{
-			open_one_output(redir, sh);
-			*last_out = redir->filename;
-			if (redir->type == REDIR_APPEND)
-				*append = true;
-			else
-				*append = false;
-		}
+		if (validate_redirect(redir, sh) == FAILURE)
+			return (FAILURE);
+		if (apply_single_redirect(redir, sh) == FAILURE)
+			return (FAILURE);
 		redir = redir->next;
 	}
-}
-
-static void	collect_last_redirects(t_redirect *redir, char **last_in)
-{
-	while (redir)
-	{
-		if (redir->type == REDIR_IN || redir->type == REDIR_HEREDOC)
-			*last_in = redir->filename;
-		redir = redir->next;
-	}
-}
-
-static int	check_input_file(const char *filename, t_msh *sh)
-{
-	if (access(filename, F_OK) == -1)
-	{
-		if (!sh->error_printed)
-		{
-			perror(filename);
-			sh->error_printed = true;
-		}
-		g_exit = 1;
-		return (FAILURE);
-	}
-	if (access(filename, R_OK) == -1)
-	{
-		if (!sh->error_printed)
-		{
-			perror(filename);
-			sh->error_printed = true;
-		}
-		g_exit = 1;
-		return (FAILURE);
-	}
-	return (SUCCESS);
-}
-
-int	apply_all_redirects(t_cmd *cmd, t_msh *sh)
-{
-	char		*last_in;
-	char		*last_out;
-	bool		append;
-
-	last_in = NULL;
-	last_out = NULL;
-	append = false;
-	collect_last_redirects(cmd->redirects, &last_in);
-	open_all_outputs(cmd, sh, &last_out, &append);
-	if (last_in && check_input_file(last_in, sh) == SUCCESS)
-		open_last_input(last_in, sh);
-	if (last_out)
-		open_last_output(last_out, append, sh);
-	if (sh->error_printed)
-		return (FAILURE);
 	return (SUCCESS);
 }

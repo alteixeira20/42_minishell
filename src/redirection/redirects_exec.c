@@ -6,24 +6,13 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 19:35:00 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/19 20:46:39 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/24 12:54:07 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-static void	handle_open_failure(const char *filename, t_msh *sh)
-{
-	if (!sh->error_printed)
-	{
-		perror(filename);
-		sh->error_printed = true;
-	}
-	g_exit = 1;
-	exit(FAILURE);
-}
-
-static void	handle_dup2_failure(t_msh *sh)
+void	handle_dup2_failure(t_msh *sh)
 {
 	if (!sh->error_printed)
 	{
@@ -32,35 +21,46 @@ static void	handle_dup2_failure(t_msh *sh)
 	}
 }
 
-void	open_last_input(const char *last_in, t_msh *sh)
+int	redirect_and_close(int fd, int target_fd, t_msh *sh)
 {
-	int	fd;
-
-	if (access(last_in, F_OK) == 0 && access(last_in, R_OK) == -1)
-		handle_open_failure(last_in, sh);
-	fd = open(last_in, O_RDONLY);
-	if (fd < 0)
-		handle_open_failure(last_in, sh);
-	if (dup2(fd, STDIN_FILENO) == -1)
+	if (dup2(fd, target_fd) == -1)
+	{
 		handle_dup2_failure(sh);
+		close(fd);
+		g_exit = 1;
+		return (FAILURE);
+	}
 	close(fd);
+	return (SUCCESS);
 }
 
-void	open_last_output(const char *last_out, bool append, t_msh *sh)
+int	open_fd_for_redirect(t_redirect *redir)
 {
-	int	fd;
 	int	flags;
 
-	if (append)
+	if (redir->type == REDIR_IN || redir->type == REDIR_HEREDOC)
+		return (open(redir->filename, O_RDONLY));
+	if (redir->type == REDIR_APPEND)
 		flags = O_WRONLY | O_CREAT | O_APPEND;
 	else
 		flags = O_WRONLY | O_CREAT | O_TRUNC;
-	if (access(last_out, F_OK) == 0 && access(last_out, W_OK) == -1)
-		handle_open_failure(last_out, sh);
-	fd = open(last_out, flags, 0644);
+	return (open(redir->filename, flags, 0644));
+}
+
+int	apply_single_redirect(t_redirect *redir, t_msh *sh)
+{
+	int	fd;
+
+	fd = open_fd_for_redirect(redir);
 	if (fd < 0)
-		handle_open_failure(last_out, sh);
-	if (dup2(fd, STDOUT_FILENO) == -1)
-		handle_dup2_failure(sh);
-	close(fd);
+	{
+		perror(redir->filename);
+		sh->error_printed = true;
+		g_exit = 1;
+		return (FAILURE);
+	}
+	if (redir->type == REDIR_IN || redir->type == REDIR_HEREDOC)
+		return (redirect_and_close(fd, STDIN_FILENO, sh));
+	else
+		return (redirect_and_close(fd, STDOUT_FILENO, sh));
 }

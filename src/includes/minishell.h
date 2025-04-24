@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 16:54:50 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/24 11:10:56 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/24 13:05:26 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -229,17 +229,29 @@ t_cmd		*reverse_cmd_list(t_cmd *cmd);
 /*                          REDIRECTIONS & HEREDOCS                           */
 /* ************************************************************************** */
 
+// CORE
 int			process_redirect(t_cmd *cmd, t_token *token, t_msh *sh);
 int			setup_redirections(t_cmd *cmds, t_msh *sh, int in_fd, int pipe_fd[2]);
+
+// REDIRECT PARSING
+void		add_redirect(t_cmd *cmd, t_redirect_type type, const char *filename);
 int			handle_redirect_in(t_cmd *cmd, t_token *file_tok);
 int			handle_redirect_out(t_cmd *cmd, t_token *file_tok, bool append);
 int			handle_redirect_heredoc(t_cmd *cmd, t_msh *sh, t_token *file_tok);
-char		*write_heredoc_to_tmp(const char *delim, int index);
-void		add_redirect(t_cmd *cmd, t_redirect_type type, const char *filename);
-void		open_last_input(const char *last_in, t_msh *sh);
-void		open_last_output(const char *last_out, bool append, t_msh *sh);
-void		open_all_outputs(t_cmd *cmd, t_msh *sh, char **last_out, bool *append);
+
+// REDIRECT EXECUTION
 int			apply_all_redirects(t_cmd *cmd, t_msh *sh);
+int			apply_single_redirect(t_redirect *redir, t_msh *sh);
+int			open_fd_for_redirect(t_redirect *redir);
+int			redirect_and_close(int fd, int target_fd, t_msh *sh);
+void		handle_dup2_failure(t_msh *sh);
+
+// FILE PERMISSION CHECKS
+int			check_input_file(const char *filename, t_msh *sh);
+int			check_output_permission(t_redirect *redir, t_msh *sh);
+
+// HEREDOC UTIL
+char		*write_heredoc_to_tmp(const char *delim, int index);
 
 /* ************************************************************************** */
 /*                                ENVIRONMENT                                 */
