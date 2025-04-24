@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 01:28:43 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/18 14:19:00 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/24 14:53:51 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,25 @@ void	shlvl(t_msh *sh)
 	}
 	else
 		set_var("SHLVL", "1", &sh->env);
+}
+
+t_cmd	*cmd_new(void)
+{
+	t_cmd	*cmd;
+
+	cmd = ft_calloc(1, sizeof(t_cmd));
+	if (!cmd)
+		return (NULL);
+	cmd->argc = 0;
+	cmd->argv = NULL;
+	cmd->redirects = NULL;
+	cmd->redirect_failed = false;
+	cmd->redirect_failed_path = NULL;
+	cmd->input_fd = STDIN_FILENO;
+	cmd->output_fd = STDOUT_FILENO;
+	cmd->is_builtin = false;
+	cmd->next = NULL;
+	return (cmd);
 }
 
 int	init(t_msh *sh, char **env)

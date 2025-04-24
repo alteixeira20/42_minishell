@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 15:44:51 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/18 19:23:44 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/24 15:06:27 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ void	free_cmd(t_cmd *cmd)
 		temp = cmd->next;
 		free_argv(cmd->argv);
 		free_redirections(cmd->redirects);
+		if (cmd->redirect_failed_path)
+			free(cmd->redirect_failed_path);
 		free(cmd);
 		cmd = temp;
 	}

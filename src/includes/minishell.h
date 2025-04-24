@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 16:54:50 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/24 13:05:26 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/24 16:27:38 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,8 @@ typedef struct s_cmd
 	char			**argv;
 
 	t_redirect		*redirects;
+	bool			redirect_failed;
+	char			*redirect_failed_path;
 
 	int				input_fd;
 	int				output_fd;
@@ -241,14 +243,14 @@ int			handle_redirect_heredoc(t_cmd *cmd, t_msh *sh, t_token *file_tok);
 
 // REDIRECT EXECUTION
 int			apply_all_redirects(t_cmd *cmd, t_msh *sh);
-int			apply_single_redirect(t_redirect *redir, t_msh *sh);
+int			apply_single_redirect(t_cmd *cmd, t_redirect *redir, t_msh *sh);
 int			open_fd_for_redirect(t_redirect *redir);
 int			redirect_and_close(int fd, int target_fd, t_msh *sh);
 void		handle_dup2_failure(t_msh *sh);
 
 // FILE PERMISSION CHECKS
-int			check_input_file(const char *filename, t_msh *sh);
-int			check_output_permission(t_redirect *redir, t_msh *sh);
+int			check_input_file(t_cmd *cmd, const char *filename);
+int			check_output_permission(t_cmd *cmd, t_redirect *redir);
 
 // HEREDOC UTIL
 char		*write_heredoc_to_tmp(const char *delim, int index);
@@ -269,6 +271,7 @@ char		**copy_env_array(char **env);
 
 int			exit_error(char *msg, int status);
 void		print_heredoc_warning(const char *delim);
+void		print_redirect_error(t_cmd *cmds);
 
 /* ************************************************************************** */
 /*                                  CLEANUP                                   */

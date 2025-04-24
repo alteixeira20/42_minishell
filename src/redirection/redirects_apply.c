@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 19:44:18 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/24 12:58:17 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/24 16:27:15 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,12 @@ static int	is_write_redirect(t_redirect_type type)
 	return (type == REDIR_OUT || type == REDIR_APPEND);
 }
 
-static int	validate_redirect(t_redirect *redir, t_msh *sh)
+static int	validate_redirect(t_cmd *cmd, t_redirect *redir)
 {
 	if (is_read_redirect(redir->type))
-		return (check_input_file(redir->filename, sh));
+		return (check_input_file(cmd, redir->filename));
 	else if (is_write_redirect(redir->type))
-		return (check_output_permission(redir, sh));
+		return (check_output_permission(cmd, redir));
 	return (SUCCESS);
 }
 
@@ -38,10 +38,18 @@ int	apply_all_redirects(t_cmd *cmd, t_msh *sh)
 	redir = cmd->redirects;
 	while (redir)
 	{
-		if (validate_redirect(redir, sh) == FAILURE)
+		if (validate_redirect(cmd, redir) == FAILURE)
+		{
+			if (!cmd->redirect_failed_path)
+				cmd->redirect_failed_path = ft_strdup(redir->filename);
 			return (FAILURE);
-		if (apply_single_redirect(redir, sh) == FAILURE)
+		}
+		if (apply_single_redirect(cmd, redir, sh) == FAILURE)
+		{
+			if (!cmd->redirect_failed_path)
+				cmd->redirect_failed_path = ft_strdup(redir->filename);
 			return (FAILURE);
+		}
 		redir = redir->next;
 	}
 	return (SUCCESS);

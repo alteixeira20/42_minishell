@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 03:55:09 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/18 19:25:01 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/24 13:36:57 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,23 +37,6 @@ int	add_arg(t_cmd *cmd, char *value)
 	cmd->argv = new_argv;
 	cmd->argc++;
 	return (SUCCESS);
-}
-
-t_cmd	*cmd_new(void)
-{
-	t_cmd	*cmd;
-
-	cmd = ft_calloc(1, sizeof(t_cmd));
-	if (!cmd)
-		return (NULL);
-	cmd->argc = 0;
-	cmd->argv = NULL;
-	cmd->redirects = NULL;
-	cmd->input_fd = STDIN_FILENO;
-	cmd->output_fd = STDOUT_FILENO;
-	cmd->is_builtin = false;
-	cmd->next = NULL;
-	return (cmd);
 }
 
 t_cmd	*reverse_cmd_list(t_cmd *cmd)

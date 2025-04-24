@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 19:35:00 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/24 12:54:07 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/24 16:26:50 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,15 +47,19 @@ int	open_fd_for_redirect(t_redirect *redir)
 	return (open(redir->filename, flags, 0644));
 }
 
-int	apply_single_redirect(t_redirect *redir, t_msh *sh)
+int	apply_single_redirect(t_cmd *cmd, t_redirect *redir, t_msh *sh)
 {
 	int	fd;
 
 	fd = open_fd_for_redirect(redir);
 	if (fd < 0)
 	{
-		perror(redir->filename);
-		sh->error_printed = true;
+		if (!sh->error_printed)
+		{
+			sh->error_printed = true;
+			cmd->redirect_failed = true;
+			cmd->redirect_failed_path = ft_strdup(redir->filename);
+		}
 		g_exit = 1;
 		return (FAILURE);
 	}
