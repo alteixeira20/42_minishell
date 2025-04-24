@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 00:16:54 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/17 03:03:40 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/24 12:20:50 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,31 +28,11 @@ static bool	is_valid_n_flag(const char *arg)
 	return (true);
 }
 
-static char	*strip_outer_quotes(const char *s)
-{
-	size_t	len;
-
-	if (!s)
-		return (NULL);
-	len = ft_strlen(s);
-	if (len >= 2 && ((s[0] == '\'' && s[len - 1] == '\'')
-			|| (s[0] == '"' && s[len - 1] == '"')))
-		return (ft_substr(s, 1, len - 2));
-	return (ft_strdup(s));
-}
-
 static void	print_echo_args(t_cmd *cmd, int i)
 {
-	char	*stripped;
-
 	while (cmd->argv[i])
 	{
-		stripped = strip_outer_quotes(cmd->argv[i]);
-		if (stripped)
-		{
-			ft_putstr_fd(stripped, cmd->output_fd);
-			free(stripped);
-		}
+		ft_putstr_fd(cmd->argv[i], cmd->output_fd);
 		if (cmd->argv[i + 1])
 			ft_putchar_fd(' ', cmd->output_fd);
 		i++;

@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 04:36:27 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/16 19:30:43 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/24 11:47:37 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,10 @@ void	handle_dollar(const char *str, int *i, t_msh *sh, char **res)
 	char	*tmp;
 	char	*dol;
 
-	dol = ft_strchr(str, '$');
-	++dol;
+	dol = (char *)&str[*i + 1];
 	if (!ft_isprint(*dol) || (ft_isprint(*dol) && (*dol == '\"'
 				|| *dol == '\'' || *dol == ' ')))
 	{
-		(void)*val;
 		(*i)++;
 		tmp = ft_strjoin(*res, "$");
 		free(*res);

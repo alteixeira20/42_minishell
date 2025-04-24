@@ -29,10 +29,9 @@ echo "$"
 echo "aspas ->'"
 echo " | $"
 echo <missing <"./test_files/infile" <missing
+echo <123 <456 hi
 echo <123 <456 hi | echo 42
 echo hi >>./test_files/invalid_permission >./outfiles/outfile01 | echo bye
-echo -n "$INPUT"
-echo -n "$USER"
 
 # ========================
 # Redirection with files
@@ -146,8 +145,19 @@ echo $TEST2
 echo "$TEST2"
 
 # ========================
+# Unset
+# ========================
+export TEST3=43
+env | grep TEST3
+unset TEST3
+env | grep TEST3
+cd ..
+unset PATH
+ls
+/bin/ls
+
+# ========================
 # Exit Behavior
 # ========================
-cd ..
 exit 42
 echo still running

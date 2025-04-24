@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 17:29:39 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/19 16:52:53 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/24 11:25:24 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,8 @@ int	run_builtin(t_cmd *cmd, t_msh *sh)
 		ret = cmd_exit(cmd, sh);
 	else if (ft_strcmp(cmd->argv[0], "pwd") == 0)
 		ret = cmd_pwd(cmd);
+	else if (ft_strcmp(cmd->argv[0], "unset") == 0)
+		ret = cmd_unset(cmd, sh);
 	g_exit = ret;
 	return (ret);
 }
