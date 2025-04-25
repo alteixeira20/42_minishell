@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 16:54:50 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/24 16:27:38 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/25 00:52:46 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -213,9 +213,13 @@ int			cmd_cd(t_cmd *cmd, t_msh *sh);
 int			cmd_echo(t_cmd *cmd);
 int			cmd_env(t_cmd *cmd, t_msh *sh);
 int			cmd_exit(t_cmd *cmd, t_msh *sh);
-int			cmd_export(t_cmd *cmd, t_msh *sh);
 int			cmd_pwd(t_cmd *cmd);
 int			cmd_unset(t_cmd *cmd, t_msh *sh);
+
+// EXPORT
+void		export_invalid_identifier(const char *arg);
+void		export_assign(const char *arg, t_msh *sh);
+int			cmd_export(t_cmd *cmd, t_msh *sh);
 
 /* ************************************************************************** */
 /*                            COMMAND CONSTRUCTION                            */

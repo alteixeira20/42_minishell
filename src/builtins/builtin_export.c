@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 16:49:01 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/19 21:02:20 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/25 00:52:33 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static bool	is_valid_identifier(const char *str)
 	if (!ft_isalpha(str[0]) && str[0] != '_')
 		return (false);
 	i = 1;
-	while (str[i] && str[i] != '=')
+	while (str[i] && str[i] != '=' && !(str[i] == '+' && str[i + 1] == '='))
 	{
 		if (!ft_isalnum(str[i]) && str[i] != '_')
 			return (false);
@@ -30,35 +30,25 @@ static bool	is_valid_identifier(const char *str)
 	return (true);
 }
 
-static void	export_invalid_identifier(const char *arg)
+static int	handle_export_args(t_cmd *cmd, t_msh *sh)
 {
-	ft_putstr_fd("minishell: export: `", STDERR_FILENO);
-	ft_putstr_fd((char *)arg, STDERR_FILENO);
-	ft_putstr_fd("': not a valid identifier\n", STDERR_FILENO);
-	g_exit = 1;
-}
+	int	i;
+	int	ret;
 
-static void	export_assign(const char *arg, t_msh *sh)
-{
-	char	*equal;
-	char	*key;
-	char	*val;
-
-	equal = ft_strchr(arg, '=');
-	if (equal)
+	i = 1;
+	ret = SUCCESS;
+	while (i < cmd->argc)
 	{
-		key = ft_substr(arg, 0, equal - arg);
-		val = ft_strdup(equal + 1);
+		if (!is_valid_identifier(cmd->argv[i]))
+		{
+			export_invalid_identifier(cmd->argv[i]);
+			ret = FAILURE;
+		}
+		else
+			export_assign(cmd->argv[i], sh);
+		i++;
 	}
-	else
-	{
-		key = ft_strdup(arg);
-		val = NULL;
-	}
-	if (key)
-		set_var(key, val, &sh->env);
-	free(key);
-	free(val);
+	return (ret);
 }
 
 static void	print_exported_vars(char **env, t_cmd *cmd)
@@ -92,7 +82,6 @@ static void	print_exported_vars(char **env, t_cmd *cmd)
 
 int	cmd_export(t_cmd *cmd, t_msh *sh)
 {
-	int		i;
 	char	**copy;
 	int		ret;
 
@@ -102,22 +91,11 @@ int	cmd_export(t_cmd *cmd, t_msh *sh)
 	{
 		sort_env(copy);
 		print_exported_vars(copy, cmd);
-		free_env_array(copy);
 		return (ret);
 	}
-	i = 1;
-	while (i < cmd->argc)
-	{
-		if (!is_valid_identifier(cmd->argv[i]))
-		{
-			export_invalid_identifier(cmd->argv[i]);
-			ret = FAILURE;
-		}
-		else
-			export_assign(cmd->argv[i], sh);
-		i++;
-	}
-	g_exit = ret;
+	else
+		ret = handle_export_args(cmd, sh);
 	free_env_array(copy);
+	g_exit = ret;
 	return (ret);
 }

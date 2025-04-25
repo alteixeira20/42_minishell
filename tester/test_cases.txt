@@ -62,6 +62,7 @@ ls -l
 cat <"./test_files/small_file" | echo 42
 cat <"./test_files/big_file" | echo 42
 cat <missing | cat <"./test_files/small_file"
+"" cat ./Makefile
 
 # ========================
 # Environment
@@ -71,6 +72,7 @@ export VAR=42
 echo $VAR
 env
 env | grep VAR
+env | sort | grep -v SHLVL | grep -v ^_
 export PATH=/tmp
 echo $PATH
 
@@ -109,7 +111,7 @@ export PIPETEST=42 | env | grep PIPETEST
 cat export | grep PIPETEST
 cat <"./tester/test_files/small_file" | grep 42
 cat <"./tester/test_files/big_file" | grep oi
-yes | echo Hi
+#yes | echo Hi
 
 # ========================
 # Invalid Input & Syntax
@@ -143,6 +145,10 @@ echo "Start:$TEST1:End"
 export TEST2=
 echo $TEST2
 echo "$TEST2"
+export TEST1+=42
+env | grep TEST1
+export TEST1+=42
+echo $TEST1
 
 # ========================
 # Unset

@@ -6,7 +6,7 @@
 #    By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/03 02:10:25 by paalexan          #+#    #+#              #
-#    Updated: 2025/04/24 13:06:14 by paalexan         ###   ########.fr        #
+#    Updated: 2025/04/25 00:59:03 by paalexan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -76,6 +76,7 @@ SRC				+= $(ENV_DIR)/env_set.c
 SRC				+= $(ENV_DIR)/env_utils.c
 SRC				+= $(BUILTINS_DIR)/builtin_echo.c
 SRC				+= $(BUILTINS_DIR)/builtin_export.c
+SRC				+= $(BUILTINS_DIR)/builtin_export_utils.c
 SRC				+= $(BUILTINS_DIR)/builtin_env.c
 SRC				+= $(BUILTINS_DIR)/builtin_pwd.c
 SRC				+= $(BUILTINS_DIR)/builtin_cd.c
