@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 03:40:27 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/24 16:58:11 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/27 20:39:33 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,8 @@ static void	try_exec_binary(t_cmd *cmd, t_msh *sh)
 		free(full_path);
 		exit(126);
 	}
+	if (!cmd->is_valid)
+		handle_cmd_error(cmd, sh);
 	reset_child_signals();
 	execve(full_path, cmd->argv, sh->env);
 	perror(full_path);
@@ -79,22 +81,31 @@ static void	try_exec_binary(t_cmd *cmd, t_msh *sh)
 	exit(code);
 }
 
+static void	handle_redirection_failure(t_cmd *cmd)
+{
+	if (cmd->redirect_failed && cmd->redirect_failed_path)
+	{
+		usleep(1000);
+		print_redirect_error(cmd);
+	}
+	exit(1);
+}
+
 void	exec_child(t_cmd *cmd, int in_fd, int pipe_fd[2], t_msh *sh)
 {
 	if (setup_redirections(cmd, sh, in_fd, pipe_fd) == FAILURE)
+		handle_redirection_failure(cmd);
+	if (!cmd->argv || !cmd->argv[0])
 	{
-		if (cmd->redirect_failed && cmd->redirect_failed_path)
+		if (!cmd->next)
 		{
-			usleep(1000);
-			print_redirect_error(cmd);
+			ft_putstr_fd(": command not found\n", STDERR_FILENO);
+			exit(127);
 		}
-		exit(1);
+		exit(0);
 	}
-	if (!cmd->argv || !cmd->argv[0] || cmd->argv[0][0] == '\0')
+	if (cmd->argv[0][0] == '\0' || !cmd->is_valid)
 	{
-		if (cmd->input_fd != STDIN_FILENO || cmd->output_fd != STDOUT_FILENO)
-			exit(0);
-		ft_putstr_fd("minishell: ", STDERR_FILENO);
 		ft_putstr_fd(": command not found\n", STDERR_FILENO);
 		exit(127);
 	}

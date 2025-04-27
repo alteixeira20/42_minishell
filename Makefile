@@ -6,7 +6,7 @@
 #    By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/03 02:10:25 by paalexan          #+#    #+#              #
-#    Updated: 2025/04/25 00:59:03 by paalexan         ###   ########.fr        #
+#    Updated: 2025/04/27 18:59:56 by paalexan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -63,6 +63,7 @@ SRC				+= $(PARSER_DIR)/parser_syntax.c
 SRC				+= $(PARSER_DIR)/parser_utils.c
 SRC				+= $(PARSER_DIR)/parser_expansion.c
 SRC				+= $(TOKEN_DIR)/tokenizer.c
+SRC				+= $(TOKEN_DIR)/tokenizer_split.c
 SRC				+= $(TOKEN_DIR)/tokenizer_utils.c
 SRC				+= $(TOKEN_DIR)/tokenizer_lst.c
 SRC				+= $(EXEC_DIR)/exec.c

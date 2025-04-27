@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 16:54:50 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/25 00:52:46 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/27 19:36:40 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # include <sys/wait.h>
 # include <sys/stat.h>
 # include <stdint.h>
+# include <limits.h>
 
 /* ************************************************************************** */
 /*                                CUSTOM LIBS                                 */
@@ -80,6 +81,7 @@ typedef struct s_token
 {
 	char			*value;
 	t_token_type	type;
+	bool			expanded_empty;
 	struct s_token	*next;
 }	t_token;
 
@@ -95,7 +97,7 @@ typedef struct s_cmd
 	int				input_fd;
 	int				output_fd;
 	bool			is_builtin;
-
+	bool			is_valid;
 	struct s_cmd	*next;
 }	t_cmd;
 
@@ -146,8 +148,9 @@ extern int	g_exit;
 /*                               INITIALIZATION                               */
 /* ************************************************************************** */
 
-int			init(t_msh *sh, char **env);
+int			init_sh(t_msh *sh, char **env);
 char		**init_env(char **env);
+t_token		*init_token(void);
 
 /* ************************************************************************** */
 /*                                  SIGNALS                                   */
@@ -166,7 +169,7 @@ void		reset_child_signals(void);
 t_syntax	check_cmd_syntax(t_token *tokens, bool print);
 t_token		*parse_input(const char *line, t_msh *sh);
 char		*expand_one(const char *str, int *i, t_msh *sh);
-char		*expand_token_value(const char *value, t_msh *sh);
+char		*expand_token(const char *val, t_msh *sh, bool *quoted, bool *expanded);
 void		handle_single_quote(const char *str, int *i, char **res);
 void		handle_double_quote(const char *str, int *i, t_msh *sh, char **res);
 void		handle_dollar(const char *str, int *i, t_msh *sh, char **res);
@@ -175,7 +178,7 @@ void		handle_dollar(const char *str, int *i, t_msh *sh, char **res);
 /*                                 TOKENIZER                                  */
 /* ************************************************************************** */
 
-int			process_token(t_token **tokens, t_cmd **current, t_msh *sh);
+int			process_token(t_token **tokens, t_cmd **cur, t_msh *sh, bool *cmd_started);
 int			is_special_char(char c);
 char		*extract_special_char(const char *str, int *i);
 char		*unescape_token(const char *str);

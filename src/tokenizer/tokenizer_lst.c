@@ -6,32 +6,50 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 00:44:36 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/17 02:35:42 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/27 18:29:16 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
+static void	helper_tok(t_token *token, char *val, t_token_type type, t_msh *sh)
+{
+	bool	quoted;
+	bool	expanded;
+
+	if (type == TOKEN_WORD)
+	{
+		quoted = false;
+		expanded = false;
+		token->value = expand_token(val, sh, &quoted, &expanded);
+		if (!token->value)
+			return ;
+		if (token->value[0] == '\0' && expanded)
+			token->expanded_empty = true;
+		else
+			token->expanded_empty = false;
+	}
+	else
+	{
+		token->value = ft_strdup(val);
+		token->expanded_empty = false;
+	}
+}
+
 t_token	*token_new(char *value, t_token_type type, t_msh *sh)
 {
 	t_token	*token;
 
-	token = malloc(sizeof(t_token));
+	token = init_token();
 	if (!token)
 		return (NULL);
-	if (type == TOKEN_WORD)
-	{
-		token->value = expand_token_value(value, sh);
-		if (!token->value)
-		{
-			free(token);
-			return (NULL);
-		}
-	}
-	else
-		token->value = ft_strdup(value);
 	token->type = type;
-	token->next = NULL;
+	helper_tok(token, value, type, sh);
+	if (!token->value)
+	{
+		free(token);
+		return (NULL);
+	}
 	return (token);
 }
 
@@ -39,7 +57,9 @@ void	token_add_back(t_token **list, t_token *new_token)
 {
 	t_token	*temp;
 
-	if (!list || !new_token || ft_strlen(new_token->value) == 0)
+	if (!list || !new_token)
+		return ;
+	if (new_token->type != TOKEN_WORD && ft_strlen(new_token->value) == 0)
 		return ;
 	if (*list == NULL)
 	{

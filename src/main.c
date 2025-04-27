@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 02:04:50 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/19 21:26:51 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/27 19:05:23 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ int	main(int ac, char **av, char **env)
 	sh = ft_calloc(1, sizeof(t_msh));
 	if (sh == NULL)
 		return (exit_error(MALLOC_ERR, errno), EXIT_FAILURE);
-	if (init(sh, env) != SUCCESS)
+	if (init_sh(sh, env) != SUCCESS)
 		exit_error(INIT_ERR, errno);
 	set_interactive_signals();
 	loop(sh);

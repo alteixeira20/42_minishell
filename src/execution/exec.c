@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 18:31:43 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/24 17:07:55 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/27 20:36:28 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,11 @@ int	execute_all(t_cmd *cmds, t_msh *sh, int *in_fd, pid_t *pids)
 	i = 0;
 	while (cmds)
 	{
+		if ((!cmds->argv || !cmds->argv[0]) && !cmds->is_valid)
+		{
+			cmds = cmds->next;
+			continue ;
+		}
 		if (run_single_cmd(&cmds, sh, in_fd, &pids[i]) == FAILURE)
 		{
 			if (cmds && cmds->redirect_failed)
@@ -53,6 +58,14 @@ static int	run_single_builtin_in_parent(t_cmd *cmd, t_msh *sh)
 	int	saved_stdout;
 	int	dummy_pipe[2];
 
+	if (!cmd->argv || !cmd->argv[0])
+		return (0);
+	if (cmd->argv[0][0] == '\0' || !cmd->is_valid)
+	{
+		ft_putstr_fd(": command not found\n", STDERR_FILENO);
+		g_exit = 127;
+		return (127);
+	}
 	saved_stdin = dup(STDIN_FILENO);
 	saved_stdout = dup(STDOUT_FILENO);
 	dummy_pipe[0] = -1;
@@ -98,7 +111,10 @@ int	exec_ast(t_token *tokens, t_msh *sh)
 	sh->error_printed = false;
 	cmds = cmd_from_tokens(tokens, sh);
 	if (!cmds)
-		return (FAILURE);
+	{
+		g_exit = 0;
+		return (SUCCESS);
+	}
 	in_fd = 0;
 	status = exec_pipeline(cmds, sh, in_fd);
 	print_redirect_error(cmds);

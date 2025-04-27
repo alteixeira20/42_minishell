@@ -5,69 +5,78 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/03 01:28:43 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/19 18:16:57 by paalexan         ###   ########.fr       */
+/*   Created: 2025/04/27 18:37:47 by paalexan          #+#    #+#             */
+/*   Updated: 2025/04/27 20:31:09 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-static char	*extract_word(const char *str, int *i)
+static int	handle_word_token(t_token **tokens, t_cmd **cur, bool *cmd_started)
 {
-	int		start;
-	char	quote;
+	t_token	*tok;
 
-	start = *i;
-	quote = 0;
-	while (str[*i])
+	tok = *tokens;
+	if (!(*cmd_started))
 	{
-		if (!quote && (str[*i] == '\'' || str[*i] == '"'))
-			quote = str[(*i)++];
-		else if (quote && str[*i] == quote)
-		{
-			(*i)++;
-			quote = 0;
-		}
-		else if (!quote && (ft_isspace(str[*i])
-				|| (is_special_char(str[*i])
-					&& (*i == 0 || str[*i - 1] != '\\'))))
-			break ;
-		else
-			(*i)++;
+		if ((!tok->value || tok->value[0] == '\0')
+			&& tok->expanded_empty == false)
+			(*cur)->is_valid = false;
+		*cmd_started = true;
 	}
-	return (ft_substr(str, start, *i - start));
+	if (tok->value && add_arg(*cur, tok->value) == FAILURE)
+		return (FAILURE);
+	*tokens = tok->next;
+	return (SUCCESS);
 }
 
-static char	*get_next_token(const char *str, int *i)
+static int	handle_redirect_token(t_token *tokens, t_cmd *cmd, t_msh *sh)
 {
-	if (is_special_char(str[*i]))
-		return (extract_special_char(str, i));
-	return (extract_word(str, i));
+	if (tokens->type == TOKEN_REDIRECT_IN
+		|| tokens->type == TOKEN_REDIRECT_OUT
+		|| tokens->type == TOKEN_APPEND)
+	{
+		if (process_redirect(cmd, tokens, sh) == FAILURE)
+			return (FAILURE);
+		tokens = tokens->next;
+	}
+	else if (tokens->type == TOKEN_HEREDOC)
+	{
+		if (handle_redirect_heredoc(cmd, sh, tokens->next) == FAILURE)
+			return (FAILURE);
+		tokens = tokens->next;
+	}
+	return (0);
 }
 
-char	**split_input(const char *str)
+static int	process_redirects(t_token **tokens, t_cmd *cmd, t_msh *sh)
 {
-	char	**result;
-	int		i;
-	int		count;
-	char	*tmp;
+	t_token	*tok;
 
-	if (!str)
-		return (NULL);
-	result = ft_calloc(ft_strlen(str) + 1, sizeof(char *));
-	if (!result)
-		return (NULL);
-	i = 0;
-	count = 0;
-	while (str[i])
+	tok = *tokens;
+	if (handle_redirect_token(tok, cmd, sh) == FAILURE)
 	{
-		while (ft_isspace(str[i]))
-			i++;
-		if (!str[i])
-			break ;
-		tmp = get_next_token(str, &i);
-		result[count++] = unescape_token(tmp);
+		cmd->input_fd = -1;
+		return (FAILURE);
 	}
-	result[count] = NULL;
-	return (result);
+	if (tok->next)
+		*tokens = tok->next->next;
+	else
+		*tokens = NULL;
+	return (SUCCESS);
+}
+
+int	process_token(t_token **tokens, t_cmd **cmd, t_msh *sh, bool *cmd_started)
+{
+	t_token	*tok;
+
+	if (!tokens || !*tokens || !*cmd || !sh)
+		return (FAILURE);
+	tok = *tokens;
+	if (tok->type == TOKEN_WORD)
+		return (handle_word_token(tokens, cmd, cmd_started));
+	else if (tok->type == TOKEN_PIPE)
+		return (SUCCESS);
+	else
+		return (process_redirects(tokens, *cmd, sh));
 }

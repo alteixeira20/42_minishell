@@ -6,7 +6,7 @@
 /*   By: jopedro- <jopedro-@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 17:22:16 by jopedro-          #+#    #+#             */
-/*   Updated: 2025/04/24 12:21:29 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/27 19:09:25 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,9 +73,9 @@ int	cmd_unset(t_cmd *cmd, t_msh *sh)
 	int		i;
 
 	i = 0;
-	if (!cmd->argv[1] || !sh->env)
-		return (FAILURE);
-	if (cmd->argv[1][0] == '-' && cmd->argv[1][1] != '\0')
+	if (!sh->env)
+		return (SUCCESS);
+	if (cmd->argv[1] && cmd->argv[1][0] == '-' && cmd->argv[1][1] != '\0')
 		return (exit_error("flag error", 1));
 	while (cmd->argv[++i])
 	{

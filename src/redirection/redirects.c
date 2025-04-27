@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 20:38:08 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/24 16:36:41 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/25 17:11:33 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,8 @@ int	setup_redirections(t_cmd *cmd, t_msh *sh, int in_fd, int pipe_fd[2])
 		cmd->redirect_failed_path = ft_strdup("pipe");
 		return (FAILURE);
 	}
-	close_pipe_input(pipe_fd);
 	if (apply_all_redirects(cmd, sh) == FAILURE)
 		return (FAILURE);
+	close_pipe_input(pipe_fd);
 	return (SUCCESS);
 }

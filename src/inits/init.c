@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 01:28:43 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/24 14:53:51 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/27 19:05:46 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,11 +69,26 @@ t_cmd	*cmd_new(void)
 	cmd->input_fd = STDIN_FILENO;
 	cmd->output_fd = STDOUT_FILENO;
 	cmd->is_builtin = false;
+	cmd->is_valid = true;
 	cmd->next = NULL;
 	return (cmd);
 }
 
-int	init(t_msh *sh, char **env)
+t_token	*init_token(void)
+{
+	t_token	*token;
+
+	token = malloc(sizeof(t_token));
+	if (!token)
+		return (NULL);
+	token->value = NULL;
+	token->type = TOKEN_WORD;
+	token->expanded_empty = false;
+	token->next = NULL;
+	return (token);
+}
+
+int	init_sh(t_msh *sh, char **env)
 {
 	char	*pwd;
 

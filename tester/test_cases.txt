@@ -32,6 +32,8 @@ echo <missing <"./test_files/infile" <missing
 echo <123 <456 hi
 echo <123 <456 hi | echo 42
 echo hi >>./test_files/invalid_permission >./outfiles/outfile01 | echo bye
+echo | ""
+echo <"./test_files/infile" <missing <"./test_files/infile"
 
 # ========================
 # Redirection with files
@@ -61,7 +63,6 @@ cd tester/
 ls -l
 cat <"./test_files/small_file" | echo 42
 cat <"./test_files/big_file" | echo 42
-cat <missing | cat <"./test_files/small_file"
 "" cat ./Makefile
 
 # ========================
@@ -111,7 +112,7 @@ export PIPETEST=42 | env | grep PIPETEST
 cat export | grep PIPETEST
 cat <"./tester/test_files/small_file" | grep 42
 cat <"./tester/test_files/big_file" | grep oi
-#yes | echo Hi
+yes | echo Hi
 
 # ========================
 # Invalid Input & Syntax
@@ -129,6 +130,7 @@ export A-
 export HELLO-=123
 export =
 export 123
+"cat" | ""
 
 # ========================
 # Permissions

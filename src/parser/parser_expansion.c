@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 14:34:23 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/24 11:52:26 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/27 18:25:56 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ char	*expand_one(const char *str, int *i, t_msh *sh)
 	return (val);
 }
 
-static char	*expand_core(const char *str, t_msh *sh)
+static char	*expand_core(const char *str, t_msh *sh, bool *expanded)
 {
 	int		i;
 	char	*res;
@@ -69,21 +69,29 @@ static char	*expand_core(const char *str, t_msh *sh)
 		else if (str[i] == '"')
 			handle_double_quote(str, &i, sh, &res);
 		else if (str[i] == '$')
+		{
 			handle_dollar(str, &i, sh, &res);
+			*expanded = true;
+		}
 		else
 			ft_str_append_char(&res, str[i++]);
 	}
 	return (res);
 }
 
-char	*expand_token_value(const char *str, t_msh *sh)
+char	*expand_token(const char *val, t_msh *sh, bool *quoted, bool *expanded)
 {
 	size_t	len;
 
-	if (!str)
+	*quoted = false;
+	*expanded = false;
+	if (!val)
 		return (NULL);
-	len = ft_strlen(str);
-	if (len >= 2 && str[0] == '\'' && str[len - 1] == '\'')
-		return (ft_substr(str, 1, len - 2));
-	return (expand_core(str, sh));
+	len = ft_strlen(val);
+	if (len >= 2 && val[0] == '\'' && val[len - 1] == '\'')
+	{
+		*quoted = true;
+		return (ft_substr(val, 1, len - 2));
+	}
+	return (expand_core(val, sh, expanded));
 }
