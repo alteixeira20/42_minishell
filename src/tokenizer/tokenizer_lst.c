@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 00:44:36 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/27 18:29:16 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/29 20:19:16 by jopedro-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ static void	helper_tok(t_token *token, char *val, t_token_type type, t_msh *sh)
 	}
 	else
 	{
+		if (type == TOKEN_HEREDOC)
+			expand_token(val, sh, &quoted, &expanded);
 		token->value = ft_strdup(val);
 		token->expanded_empty = false;
 	}
