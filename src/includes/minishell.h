@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 16:54:50 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/29 18:19:18 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/29 19:36:19 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,7 @@ typedef struct s_minishell
 	int		pipe_cnt;
 	int		hd_cnt;
 
+	bool	heredoc_quoted;
 	bool	heredoc_interrupted;
 	bool	error_printed;
 }	t_msh;
@@ -266,8 +267,8 @@ int			check_input_file(t_cmd *cmd, const char *filename);
 int			check_output_permission(t_cmd *cmd, t_redirect *redir);
 
 // HEREDOC UTIL
-char		*write_heredoc_to_tmp(const char *delim, int index, t_cmd *cmd, t_msh *sh);
-char		*handle_expansion(char *line, t_cmd *cmd, t_msh *sh);
+char		*write_heredoc_to_tmp(const char *delim, int index, t_msh *sh);
+char		*handle_expansion(char *line, t_msh *sh);
 
 /* ************************************************************************** */
 /*                                ENVIRONMENT                                 */

@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 14:34:23 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/27 18:25:56 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/29 19:47:34 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ static char	*expand_core(const char *str, t_msh *sh, bool *expanded)
 char	*expand_token(const char *val, t_msh *sh, bool *quoted, bool *expanded)
 {
 	size_t	len;
+	int		i;
 
 	*quoted = false;
 	*expanded = false;
@@ -92,6 +93,16 @@ char	*expand_token(const char *val, t_msh *sh, bool *quoted, bool *expanded)
 	{
 		*quoted = true;
 		return (ft_substr(val, 1, len - 2));
+	}
+	i = 0;
+	while (val[i])
+	{
+		if (val[i] == '\'' || val[i] == '"')
+		{
+			sh->heredoc_quoted = true;
+			break ;
+		}
+		i++;
 	}
 	return (expand_core(val, sh, expanded));
 }
