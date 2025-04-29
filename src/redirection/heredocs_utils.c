@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 18:12:05 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/29 15:30:55 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/29 17:34:28 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,14 +39,28 @@ static void	write_heredoc_content(const char *delim, int fd, t_msh *sh)
 	while (1)
 	{
 		line = readline("> ");
-		if (!line || g_exit == 130
-			|| ft_strncmp(line, delim, ft_strlen(delim) + 1) == 0)
+		if (!line)
+		{
+			if (g_exit != 130)
+			{
+				ft_putstr_fd("minishell: warning: here-document delimited by end-of-file ", STDERR_FILENO);
+				ft_putstr_fd("(wanted `", STDERR_FILENO);
+				ft_putstr_fd((char *)delim, STDERR_FILENO);
+				ft_putendl_fd("')", STDERR_FILENO);
+			}
+			else
+				ft_putstr_fd("\n", STDOUT_FILENO);
 			break ;
+		}
+		if (ft_strcmp(line, delim) == 0)
+		{
+			free(line);
+			break ;
+		}
 		line = handle_expansion(line, sh);
 		ft_putendl_fd(line, fd);
 		free(line);
 	}
-	free(line);
 }
 
 static int	run_heredoc_child(const char *delim, int fd, t_msh *sh)

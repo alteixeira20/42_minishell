@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 16:54:50 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/29 16:22:16 by jopedro-         ###   ########.fr       */
+/*   Updated: 2025/04/29 17:32:55 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 
 # include <stdbool.h>
 # include <stdlib.h>
+# include <stddef.h>
 # include <unistd.h>
 # include <errno.h>
 # include <fcntl.h>
