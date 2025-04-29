@@ -1,0 +1,9 @@
+export LS="ls -la"
+cd ~/Desktop
+cd --
+demo=ola
+echo $demo		# Needs to return the content of demo but cant be assign to env
+cat << 'EOF'	# Should not expand $USER
+ls <<EOF		# Heredoc Input: -la ; EOF | should print ls without flag -la
+<< a" o"		# Needs to close with [a o] and not print command not found message
+<<$USER			# Needs to close with $USER and not the content of $USER
