@@ -32,7 +32,7 @@ static char	*heredoc_tmpname(int index)
 	return (res);
 }
 
-static void	write_heredoc_content(const char *delim, int fd)
+static void	write_heredoc_content(const char *delim, int fd, t_msh *sh)
 {
 	char	*line;
 
@@ -42,16 +42,17 @@ static void	write_heredoc_content(const char *delim, int fd)
 		if (!line || g_exit == 130
 			|| ft_strncmp(line, delim, ft_strlen(delim) + 1) == 0)
 			break ;
+		line = handle_expansion(line, sh);
 		ft_putendl_fd(line, fd);
 		free(line);
 	}
 	free(line);
 }
 
-static int	run_heredoc_child(const char *delim, int fd)
+static int	run_heredoc_child(const char *delim, int fd, t_msh *sh)
 {
 	setup_heredoc_signals();
-	write_heredoc_content(delim, fd);
+	write_heredoc_content(delim, fd, sh);
 	close(fd);
 	exit(0);
 }
@@ -68,7 +69,7 @@ static char	*handle_heredoc_status(int status, char *filename)
 	return (filename);
 }
 
-char	*write_heredoc_to_tmp(const char *delim, int index)
+char	*write_heredoc_to_tmp(const char *delim, int index, t_msh *sh)
 {
 	char	*filename;
 	int		fd;
@@ -87,7 +88,7 @@ char	*write_heredoc_to_tmp(const char *delim, int index)
 	}
 	pid = fork();
 	if (pid == 0)
-		run_heredoc_child(delim, fd);
+		run_heredoc_child(delim, fd, sh);
 	close(fd);
 	waitpid(pid, &status, 0);
 	return (handle_heredoc_status(status, filename));
