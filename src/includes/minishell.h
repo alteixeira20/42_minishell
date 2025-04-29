@@ -72,9 +72,9 @@ typedef enum e_redirect_type
 
 typedef struct s_redirect
 {
-	t_redirect_type	type;
-	char			*filename;
-	struct s_redirect *next;
+	t_redirect_type		type;
+	char				*filename;
+	struct s_redirect	*next;
 }	t_redirect;
 
 typedef struct s_token
@@ -169,7 +169,8 @@ void		reset_child_signals(void);
 t_syntax	check_cmd_syntax(t_token *tokens, bool print);
 t_token		*parse_input(const char *line, t_msh *sh);
 char		*expand_one(const char *str, int *i, t_msh *sh);
-char		*expand_token(const char *val, t_msh *sh, bool *quoted, bool *expanded);
+char		*expand_token(const char *val, t_msh *sh, bool *quoted,
+				bool *expanded);
 void		handle_single_quote(const char *str, int *i, char **res);
 void		handle_double_quote(const char *str, int *i, t_msh *sh, char **res);
 void		handle_dollar(const char *str, int *i, t_msh *sh, char **res);
@@ -178,7 +179,8 @@ void		handle_dollar(const char *str, int *i, t_msh *sh, char **res);
 /*                                 TOKENIZER                                  */
 /* ************************************************************************** */
 
-int			process_token(t_token **tokens, t_cmd **cur, t_msh *sh, bool *cmd_started);
+int			process_token(t_token **tokens, t_cmd **cur, t_msh *sh,
+				bool *cmd_started);
 int			is_special_char(char c);
 char		*extract_special_char(const char *str, int *i);
 char		*unescape_token(const char *str);
@@ -240,10 +242,12 @@ t_cmd		*reverse_cmd_list(t_cmd *cmd);
 
 // CORE
 int			process_redirect(t_cmd *cmd, t_token *token, t_msh *sh);
-int			setup_redirections(t_cmd *cmds, t_msh *sh, int in_fd, int pipe_fd[2]);
+int			setup_redirections(t_cmd *cmds, t_msh *sh, int in_fd,
+				int pipe_fd[2]);
 
 // REDIRECT PARSING
-void		add_redirect(t_cmd *cmd, t_redirect_type type, const char *filename);
+void		add_redirect(t_cmd *cmd, t_redirect_type type,
+				const char *filename);
 int			handle_redirect_in(t_cmd *cmd, t_token *file_tok);
 int			handle_redirect_out(t_cmd *cmd, t_token *file_tok, bool append);
 int			handle_redirect_heredoc(t_cmd *cmd, t_msh *sh, t_token *file_tok);

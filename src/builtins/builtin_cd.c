@@ -49,7 +49,8 @@ static char	*get_target_dir(t_cmd *cmd, t_msh *sh)
 
 	if (!cmd->argv[1])
 		dir = extract_var("HOME", sh->env);
-	dir = handle_special_targets(cmd->argv[1], sh);
+	else
+		dir = handle_special_targets(cmd->argv[1], sh);
 	return (dir);
 }
 
