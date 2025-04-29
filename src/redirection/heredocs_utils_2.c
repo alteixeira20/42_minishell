@@ -6,7 +6,7 @@
 /*   By: jopedro- <jopedro-@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 15:59:00 by jopedro-          #+#    #+#             */
-/*   Updated: 2025/04/29 17:52:49 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/29 18:18:01 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static char	*expand_heredoc_line(const char *line, t_msh *sh)
 	return (res);
 }
 
-char	*handle_expansion(char *line, t_msh *sh)
+char	*handle_expansion(char *line, t_cmd *cmds, t_msh *sh)
 {
 	bool	quoted;
 	int		i;
@@ -43,18 +43,18 @@ char	*handle_expansion(char *line, t_msh *sh)
 	if (!line)
 		return (NULL);
 	i = -1;
-	printf("sh->cmds->argv[0] = [%s]\n", sh->cmds->argv[0]);
-	while (sh->cmds->argv[++i])
+	while (cmds->argv[++i])
 	{
-		printf("sh->cmds->argv[%i] = [%s]\n", i, sh->cmds->argv[i]);
-		if (ft_strcmp(sh->cmds->argv[i], "<<") == 0)
+		if (ft_strcmp(cmds->argv[i], "<<") == 0)
 			break ;
 	}
-	i++;
 	j = 0;
-	while (sh->cmds->argv[i][j])
+	//printf("cmds->argv[%i][%i] = [%s]", i, j, cmds->argv[i][j]);
+	printf("cmds->argv[%i] = [%s]\n", i, cmds->argv[i]);
+	while (cmds->argv[i][j])
 	{
-		if (sh->cmds->argv[i][j] == '\'' || sh->cmds->argv[i][j] == '"')
+		printf("cmds->argv[%i] = [%s]\n", i, cmds->argv[i]);
+		if (cmds->argv[i][j] == '\'' || cmds->argv[i][j] == '"')
 		{
 			quoted = true;
 			break ;

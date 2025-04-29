@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 18:12:05 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/29 17:34:28 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/29 18:13:32 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static char	*heredoc_tmpname(int index)
 	return (res);
 }
 
-static void	write_heredoc_content(const char *delim, int fd, t_msh *sh)
+static void	write_heredoc_content(const char *delim, int fd, t_cmd *cmd, t_msh *sh)
 {
 	char	*line;
 
@@ -57,16 +57,16 @@ static void	write_heredoc_content(const char *delim, int fd, t_msh *sh)
 			free(line);
 			break ;
 		}
-		line = handle_expansion(line, sh);
+		line = handle_expansion(line, cmd, sh);
 		ft_putendl_fd(line, fd);
 		free(line);
 	}
 }
 
-static int	run_heredoc_child(const char *delim, int fd, t_msh *sh)
+static int	run_heredoc_child(const char *delim, int fd, t_cmd *cmd, t_msh *sh)
 {
 	setup_heredoc_signals();
-	write_heredoc_content(delim, fd, sh);
+	write_heredoc_content(delim, fd, cmd, sh);
 	close(fd);
 	exit(0);
 }
@@ -83,7 +83,7 @@ static char	*handle_heredoc_status(int status, char *filename)
 	return (filename);
 }
 
-char	*write_heredoc_to_tmp(const char *delim, int index, t_msh *sh)
+char	*write_heredoc_to_tmp(const char *delim, int index, t_cmd *cmd, t_msh *sh)
 {
 	char	*filename;
 	int		fd;
@@ -102,7 +102,7 @@ char	*write_heredoc_to_tmp(const char *delim, int index, t_msh *sh)
 	}
 	pid = fork();
 	if (pid == 0)
-		run_heredoc_child(delim, fd, sh);
+		run_heredoc_child(delim, fd, cmd, sh);
 	close(fd);
 	waitpid(pid, &status, 0);
 	return (handle_heredoc_status(status, filename));
