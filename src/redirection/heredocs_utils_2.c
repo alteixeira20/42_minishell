@@ -6,7 +6,7 @@
 /*   By: jopedro- <jopedro-@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 15:59:00 by jopedro-          #+#    #+#             */
-/*   Updated: 2025/04/29 19:38:18 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/29 20:06:34 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ char	*handle_expansion(char *line, t_msh *sh)
 {
 	if (!line)
 		return (NULL);
-	printf("line [%s] | heredoc_quoted = %b\n", line, sh->heredoc_quoted);
 	if (sh->heredoc_quoted)
 		return (ft_strdup(line));
 	else

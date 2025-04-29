@@ -6,16 +6,11 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 14:34:23 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/29 19:47:34 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/29 20:14:13 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-static bool	is_valid_var_char(char c)
-{
-	return (ft_isalnum(c) || c == '_');
-}
 
 static char	*get_var_value(const char *name, t_msh *sh)
 {
@@ -43,7 +38,7 @@ char	*expand_one(const char *str, int *i, t_msh *sh)
 		(*i)++;
 		return (ft_strdup(""));
 	}
-	while (str[*i] && is_valid_var_char(str[*i]))
+	while (str[*i] && (ft_isalnum(str[*i]) || str[*i] == '_'))
 		(*i)++;
 	name = ft_substr(str, start, *i - start);
 	val = get_var_value(name, sh);
@@ -79,10 +74,31 @@ static char	*expand_core(const char *str, t_msh *sh, bool *expanded)
 	return (res);
 }
 
+static void	setup_heredoc(const char *val, t_msh *sh)
+{
+	int	i;
+
+	i = 0;
+
+	while (val[i])
+	{
+		if (sh->heredoc_found && (val[i] == '\'' || val[i] == '"'))
+		{
+			sh->heredoc_found = false;
+			sh->heredoc_quoted = true;
+			break ;
+		}
+		i++;
+	}
+	if (sh->heredoc_found)
+		sh->heredoc_found = false;
+	if (!sh->heredoc_found && ft_strcmp(val, "<<") == 0)
+			sh->heredoc_found = true;
+}
+
 char	*expand_token(const char *val, t_msh *sh, bool *quoted, bool *expanded)
 {
 	size_t	len;
-	int		i;
 
 	*quoted = false;
 	*expanded = false;
@@ -94,15 +110,6 @@ char	*expand_token(const char *val, t_msh *sh, bool *quoted, bool *expanded)
 		*quoted = true;
 		return (ft_substr(val, 1, len - 2));
 	}
-	i = 0;
-	while (val[i])
-	{
-		if (val[i] == '\'' || val[i] == '"')
-		{
-			sh->heredoc_quoted = true;
-			break ;
-		}
-		i++;
-	}
+	setup_heredoc(val, sh);
 	return (expand_core(val, sh, expanded));
 }
