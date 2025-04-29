@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 17:12:52 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/26 17:11:08 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/29 15:17:51 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,13 @@ static void	ctrl_c_handler(int sig)
 	g_exit = 1;
 }
 
+static void	heredoc_sigint_handler(int sig)
+{
+	(void)sig;
+	g_exit = 130;
+	close(STDIN_FILENO);
+}
+
 void	set_interactive_signals(void)
 {
 	signal(SIGINT, ctrl_c_handler);
@@ -31,7 +38,7 @@ void	set_interactive_signals(void)
 
 void	setup_heredoc_signals(void)
 {
-	signal(SIGINT, SIG_DFL);
+	signal(SIGINT, heredoc_sigint_handler);
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGPIPE, SIG_DFL);
 }

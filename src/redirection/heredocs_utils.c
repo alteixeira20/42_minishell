@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 18:12:05 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/19 20:20:39 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/29 15:30:55 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,10 +48,32 @@ static void	write_heredoc_content(const char *delim, int fd)
 	free(line);
 }
 
+static int	run_heredoc_child(const char *delim, int fd)
+{
+	setup_heredoc_signals();
+	write_heredoc_content(delim, fd);
+	close(fd);
+	exit(0);
+}
+
+static char	*handle_heredoc_status(int status, char *filename)
+{
+	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
+	{
+		unlink(filename);
+		free(filename);
+		g_exit = 130;
+		return (NULL);
+	}
+	return (filename);
+}
+
 char	*write_heredoc_to_tmp(const char *delim, int index)
 {
 	char	*filename;
 	int		fd;
+	pid_t	pid;
+	int		status;
 
 	filename = heredoc_tmpname(index);
 	if (!filename)
@@ -63,8 +85,10 @@ char	*write_heredoc_to_tmp(const char *delim, int index)
 		g_exit = 1;
 		return (NULL);
 	}
-	setup_heredoc_signals();
-	write_heredoc_content(delim, fd);
+	pid = fork();
+	if (pid == 0)
+		run_heredoc_child(delim, fd);
 	close(fd);
-	return (filename);
+	waitpid(pid, &status, 0);
+	return (handle_heredoc_status(status, filename));
 }
