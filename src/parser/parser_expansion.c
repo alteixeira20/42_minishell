@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 14:34:23 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/30 18:30:02 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/30 19:29:02 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,6 @@ static char	*expand_core(const char *str, t_msh *sh, t_token *token, bool *expan
 static void	setup_heredoc(const char *val, t_msh *sh)
 {
 	int	i;
-
 
 	sh->heredoc_quoted = false;
 	i = 0;
