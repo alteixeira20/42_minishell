@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 14:34:23 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/29 20:14:13 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/30 01:10:21 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,9 @@ char	*expand_token(const char *val, t_msh *sh, bool *quoted, bool *expanded)
 	if (!val)
 		return (NULL);
 	len = ft_strlen(val);
-	if (len >= 2 && val[0] == '\'' && val[len - 1] == '\'')
+	if (len >= 2
+		&& val[0] == '\'' && val[len - 1] == '\''
+		&& val[0] == '"' && val[len - 1] == '"')
 	{
 		*quoted = true;
 		return (ft_substr(val, 1, len - 2));
