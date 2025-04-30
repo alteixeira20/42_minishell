@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 17:19:32 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/24 16:18:03 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/30 01:37:47 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	print_heredoc_warning(const char *delim)
 {
-	ft_putstr_fd("warning: here-document at line 1 ", STDERR_FILENO);
+	ft_putstr_fd("warning: here-document ", STDERR_FILENO);
 	ft_putstr_fd("delimited by end-of-file (wanted `", STDERR_FILENO);
 	ft_putstr_fd((char *)delim, STDERR_FILENO);
 	ft_putstr_fd("'=\n", STDERR_FILENO);

@@ -1,9 +1,14 @@
-export LS="ls -la"
-cd ~/Desktop
-cd --
+#export LS="ls -la" # FIXED
+	$LS				# FIXED # should print ls with -la flags
+	'$LS'			# FIXED # should print cmd not found
+#cd ~/Desktop		# FIXED
+#cd --				# FIXED
+#cat << 'EOF'		# FIXED # Should not expand $USER
+#ls <<EOF			# FIXED # Heredoc Input: -la ; EOF | should print ls without flag -la
+
+# To be Fixed
+<< a" o"			# Needs to close with [a o] and not print command not found message
+<<$USER				# Needs to close with $USER and not the content of $USER
 demo=ola
-echo $demo		# Needs to return the content of demo but cant be assign to env
-cat << 'EOF'	# Should not expand $USER
-ls <<EOF		# Heredoc Input: -la ; EOF | should print ls without flag -la
-<< a" o"		# Needs to close with [a o] and not print command not found message
-<<$USER			# Needs to close with $USER and not the content of $USER
+	echo $demo		# Needs to return the content of demo but cant be assign to env
+

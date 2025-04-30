@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 16:54:50 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/29 20:05:42 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/30 02:08:10 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ typedef struct s_token
 	char			*value;
 	t_token_type	type;
 	bool			expanded_empty;
+	bool			quoted;
 	struct s_token	*next;
 }	t_token;
 
@@ -173,7 +174,7 @@ void		reset_child_signals(void);
 t_syntax	check_cmd_syntax(t_token *tokens, bool print);
 t_token		*parse_input(const char *line, t_msh *sh);
 char		*expand_one(const char *str, int *i, t_msh *sh);
-char		*expand_token(const char *val, t_msh *sh, bool *quoted,
+char		*expand_token(const char *val, t_msh *sh, t_token *token,
 				bool *expanded);
 void		handle_single_quote(const char *str, int *i, char **res);
 void		handle_double_quote(const char *str, int *i, t_msh *sh, char **res);

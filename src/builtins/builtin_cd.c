@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 16:12:15 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/30 01:03:21 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/30 01:36:39 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static char	*handle_special_targets(char *arg, t_msh *sh)
 {
 	char	*home;
 	char	*expanded;
-	
+
 	if (arg[0] == '~')
 	{
 		home = extract_var("HOME", sh->env);

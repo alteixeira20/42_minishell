@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 14:34:23 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/30 01:10:21 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/30 02:12:06 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ char	*expand_one(const char *str, int *i, t_msh *sh)
 	return (val);
 }
 
-static char	*expand_core(const char *str, t_msh *sh, bool *expanded)
+static char	*expand_core(const char *str, t_msh *sh, t_token *token, bool *expanded)
 {
 	int		i;
 	char	*res;
@@ -60,9 +60,15 @@ static char	*expand_core(const char *str, t_msh *sh, bool *expanded)
 	while (str[i])
 	{
 		if (str[i] == '\'')
+		{
 			handle_single_quote(str, &i, &res);
+			token->quoted = true;
+		}
 		else if (str[i] == '"')
+		{
 			handle_double_quote(str, &i, sh, &res);
+			token->quoted = true;
+		}
 		else if (str[i] == '$')
 		{
 			handle_dollar(str, &i, sh, &res);
@@ -79,7 +85,6 @@ static void	setup_heredoc(const char *val, t_msh *sh)
 	int	i;
 
 	i = 0;
-
 	while (val[i])
 	{
 		if (sh->heredoc_found && (val[i] == '\'' || val[i] == '"'))
@@ -93,25 +98,15 @@ static void	setup_heredoc(const char *val, t_msh *sh)
 	if (sh->heredoc_found)
 		sh->heredoc_found = false;
 	if (!sh->heredoc_found && ft_strcmp(val, "<<") == 0)
-			sh->heredoc_found = true;
+		sh->heredoc_found = true;
 }
 
-char	*expand_token(const char *val, t_msh *sh, bool *quoted, bool *expanded)
+char	*expand_token(const char *val, t_msh *sh, t_token *token, bool *expanded)
 {
-	size_t	len;
-
-	*quoted = false;
+	token->quoted = false;
 	*expanded = false;
 	if (!val)
 		return (NULL);
-	len = ft_strlen(val);
-	if (len >= 2
-		&& val[0] == '\'' && val[len - 1] == '\''
-		&& val[0] == '"' && val[len - 1] == '"')
-	{
-		*quoted = true;
-		return (ft_substr(val, 1, len - 2));
-	}
 	setup_heredoc(val, sh);
-	return (expand_core(val, sh, expanded));
+	return (expand_core(val, sh, token, expanded));
 }

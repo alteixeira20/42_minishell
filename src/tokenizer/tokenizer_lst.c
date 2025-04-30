@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 00:44:36 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/29 20:19:16 by jopedro-         ###   ########.fr       */
+/*   Updated: 2025/04/30 02:08:35 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,13 @@
 
 static void	helper_tok(t_token *token, char *val, t_token_type type, t_msh *sh)
 {
-	bool	quoted;
 	bool	expanded;
 
 	if (type == TOKEN_WORD)
 	{
-		quoted = false;
+		token->quoted = false;
 		expanded = false;
-		token->value = expand_token(val, sh, &quoted, &expanded);
+		token->value = expand_token(val, sh, token, &expanded);
 		if (!token->value)
 			return ;
 		if (token->value[0] == '\0' && expanded)
@@ -32,7 +31,7 @@ static void	helper_tok(t_token *token, char *val, t_token_type type, t_msh *sh)
 	else
 	{
 		if (type == TOKEN_HEREDOC)
-			expand_token(val, sh, &quoted, &expanded);
+			expand_token(val, sh, token, &expanded);
 		token->value = ft_strdup(val);
 		token->expanded_empty = false;
 	}
