@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 17:29:39 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/27 20:17:21 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/30 14:10:39 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ int	run_builtin(t_cmd *cmd, t_msh *sh)
 {
 	int	ret;
 
+	ret = 0;
 	if (!cmd || !cmd->argv || !cmd->argv[0] || cmd->argv[0][0] == '\0')
 		return (FAILURE);
 	if (ft_strcmp(cmd->argv[0], "env") == 0)

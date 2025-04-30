@@ -23,7 +23,6 @@ echo "user is $USER and home is $HOME"
 echo $USER!
 echo ""$USER""
 echo "hello | world"
-echo hello\|world
 echo $
 echo "$"
 echo "aspas ->'"

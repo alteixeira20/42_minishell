@@ -6,7 +6,7 @@
 #    By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/03 02:10:25 by paalexan          #+#    #+#              #
-#    Updated: 2025/04/29 16:22:48 by jopedro-         ###   ########.fr        #
+#    Updated: 2025/04/30 14:17:23 by paalexan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -145,7 +145,7 @@ valgrind:
 		make --silent; \
 	fi
 	@echo "{\n readline leaks\n   Memcheck:Leak\n...\n   fun:readline\n}\n{\n   leak add_history\n   Memcheck:Leak\n...\n   fun:add_history\n}" > readline.supp
-	@valgrind --suppressions=readline.supp --leak-check=full -s --show-leak-kinds=all ./$(NAME)
+	@valgrind --suppressions=readline.supp --leak-check=full -s --show-leak-kinds=all --track-origin=yes --track-fds=yes ./$(NAME)
 	@rm -f readline.supp
 
 norm:

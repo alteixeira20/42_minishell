@@ -12,3 +12,5 @@
 demo=ola
 	echo $demo		# Needs to return the content of demo but cant be assign to env
 
+export a=a
+	export a # it shouldn't change the value
