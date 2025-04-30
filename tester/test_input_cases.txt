@@ -14,3 +14,10 @@ demo=ola
 
 export a=a
 	export a # it shouldn't change the value
+cat | cat | cat	# its duplicating the prompt and not quitting the process
+
+export b
+	unset b # needs to remove b from export
+
+unset OLDPWD
+	cd $OLDPWD # not printing the correct message
