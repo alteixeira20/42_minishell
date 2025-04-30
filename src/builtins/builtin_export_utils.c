@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 00:42:57 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/30 19:27:17 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/30 20:44:43 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,12 @@ static void	export_replace(const char *arg, t_msh *sh)
 		key = ft_substr(arg, 0, equal - arg);
 		val = ft_strdup(equal + 1);
 		set_var(key, val, &sh->env);
+	}
+	else
+	{
+		key = ft_strdup(arg);
+		if (!extract_var(key, sh->env))
+			set_var(key, NULL, &sh->env);
 	}
 	free(val);
 	free(key);
