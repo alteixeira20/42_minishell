@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 16:54:50 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/30 02:08:10 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/30 02:29:13 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,6 +192,7 @@ char		*unescape_token(const char *str);
 t_token		*token_new(char *value, t_token_type type, t_msh *sh);
 void		token_add_back(t_token **list, t_token *new_token);
 char		**split_input(const char *str);
+char		*get_next_segment(const char *str, int *i);
 
 /* ************************************************************************** */
 /*                                 EXECUTION                                  */

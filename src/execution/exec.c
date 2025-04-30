@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 18:31:43 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/27 20:36:28 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/30 02:38:16 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	execute_all(t_cmd *cmds, t_msh *sh, int *in_fd, pid_t *pids)
 	i = 0;
 	while (cmds)
 	{
-		if ((!cmds->argv || !cmds->argv[0]) && !cmds->is_valid)
+		if (!cmds->argv || !cmds->argv[0])
 		{
 			cmds = cmds->next;
 			continue ;
@@ -59,7 +59,11 @@ static int	run_single_builtin_in_parent(t_cmd *cmd, t_msh *sh)
 	int	dummy_pipe[2];
 
 	if (!cmd->argv || !cmd->argv[0])
-		return (0);
+	{
+		if (setup_redirections(cmd, sh, STDIN_FILENO, NULL) == FAILURE)
+			return (g_exit);
+		return (SUCCESS);
+	}
 	if (cmd->argv[0][0] == '\0' || !cmd->is_valid)
 	{
 		ft_putstr_fd(": command not found\n", STDERR_FILENO);

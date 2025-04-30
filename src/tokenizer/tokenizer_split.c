@@ -6,36 +6,53 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 01:28:43 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/19 18:16:57 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/30 02:30:21 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-static char	*extract_word(const char *str, int *i)
+static char	*ft_strjoin_split(char *s1, char *s2)
 {
-	int		start;
-	char	quote;
+	char	*joined;
+	size_t	len1;
+	size_t	len2;
 
-	start = *i;
-	quote = 0;
+	if (!s1 || !s2)
+		return (NULL);
+	len1 = ft_strlen(s1);
+	len2 = ft_strlen(s2);
+	joined = malloc(len1 + len2 + 1);
+	if (!joined)
+		return (NULL);
+	ft_memcpy(joined, s1, len1);
+	ft_memcpy(joined + len1, s2, len2);
+	joined[len1 + len2] = '\0';
+	free(s1);
+	free(s2);
+	return (joined);
+}
+
+char	*extract_word(const char *str, int *i)
+{
+	char	*segment;
+	char	*result;
+
+	result = ft_strdup("");
+	if (!result)
+		return (NULL);
 	while (str[*i])
 	{
-		if (!quote && (str[*i] == '\'' || str[*i] == '"'))
-			quote = str[(*i)++];
-		else if (quote && str[*i] == quote)
-		{
-			(*i)++;
-			quote = 0;
-		}
-		else if (!quote && (ft_isspace(str[*i])
-				|| (is_special_char(str[*i])
-					&& (*i == 0 || str[*i - 1] != '\\'))))
+		if (ft_isspace(str[*i]) || is_special_char(str[*i]))
 			break ;
-		else
-			(*i)++;
+		segment = get_next_segment(str, i);
+		if (!segment)
+			break ;
+		result = ft_strjoin_split(result, segment);
+		if (!result)
+			return (NULL);
 	}
-	return (ft_substr(str, start, *i - start));
+	return (result);
 }
 
 static char	*get_next_token(const char *str, int *i)

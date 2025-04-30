@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 01:07:31 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/27 20:33:22 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/30 02:30:16 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,5 +49,33 @@ char	*extract_special_char(const char *str, int *i)
 		(*i) += 2;
 	else
 		(*i) += 1;
+	return (ft_substr(str, start, *i - start));
+}
+
+char	*get_next_segment(const char *str, int *i)
+{
+	int		start;
+	char	quote;
+
+	if (!str[*i])
+		return (NULL);
+	start = *i;
+	if (str[*i] == '"' || str[*i] == '\'')
+	{
+		quote = str[(*i)++];
+		while (str[*i] && str[*i] != quote)
+			(*i)++;
+		if (str[*i] == quote)
+			(*i)++;
+	}
+	else
+	{
+		while (str[*i] && !ft_isspace(str[*i])
+			&& !is_special_char(str[*i])
+			&& str[*i] != '"' && str[*i] != '\'')
+			(*i)++;
+	}
+	if (*i == start)
+		return (NULL);
 	return (ft_substr(str, start, *i - start));
 }
