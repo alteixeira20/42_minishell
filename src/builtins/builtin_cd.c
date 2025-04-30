@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 16:12:15 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/19 21:03:59 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/04/30 01:03:21 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,27 +27,37 @@ static void	update_pwd(char *oldpwd, t_msh *sh)
 
 static char	*handle_special_targets(char *arg, t_msh *sh)
 {
-	char	*oldpwd;
-
-	if (arg[0] == '~' && arg[1] == '\0')
-		return (extract_var("HOME", sh->env));
+	char	*home;
+	char	*expanded;
+	
+	if (arg[0] == '~')
+	{
+		home = extract_var("HOME", sh->env);
+		if (!home)
+			return (ft_strdup(arg));
+		if (arg[1] == '\0')
+			return (home);
+		expanded = ft_strjoin(home, arg + 1);
+		free(home);
+		return (expanded);
+	}
 	if (arg[0] == '-' && arg[1] == '\0')
 	{
-		oldpwd = extract_var("OLDPWD", sh->env);
-		if (oldpwd)
-			printf("%s\n", oldpwd);
-		return (oldpwd);
+		home = extract_var("OLDPWD", sh->env);
+		if (home)
+			printf("%s\n", home);
+		return (home);
 	}
 	if (arg[0] == '\0')
-		return (".");
-	return (arg);
+		return (ft_strdup("."));
+	return (ft_strdup(arg));
 }
 
 static char	*get_target_dir(t_cmd *cmd, t_msh *sh)
 {
 	char	*dir;
 
-	if (!cmd->argv[1])
+	if (!cmd->argv[1] || ft_strcmp(cmd->argv[1], "--") == 0)
 		dir = extract_var("HOME", sh->env);
 	else
 		dir = handle_special_targets(cmd->argv[1], sh);
@@ -85,5 +95,6 @@ int	cmd_cd(t_cmd *cmd, t_msh *sh)
 		return (handle_cd_error(oldpwd, target));
 	update_pwd(oldpwd, sh);
 	free(oldpwd);
+	free(target);
 	return (SUCCESS);
 }
