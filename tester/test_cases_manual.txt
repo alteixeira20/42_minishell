@@ -1,0 +1,67 @@
+#########
+# Fixed #
+#########
+
+export LS="ls -la"
+	$LS				# Should print ls with -la flags
+	'$LS'			# Should print cmd not found
+
+export TEST
+	unset TEST		# Should remove TEST from export
+
+export TEST=42
+	export TEST		# Shouldn't change the value of TEST
+
+cd ~/Desktop		# Should go to HOME/Desktop
+cd --				# Should go to HOME
+
+cat << 'EOF'		# Heredoc Input: $USER ; EOF	| Should not expand $USER
+
+ls <<EOF			# Heredoc Input: -la ; EOF		| Should print ls without flag -la
+
+<< a" o"			# Should close with [a o] and not print command not found message
+
+###############
+# To be Fixed #
+###############
+
+<<$USER				# Should close with $USER and not the value of $USER
+
+demo=ola
+	echo $demo		# Should return the content of demo but cant be assign to env
+
+cat | cat | cat		# Its duplicating the prompt and not quitting the process
+
+unset OLDPWD
+	cd $OLDPWD		# (behaviour must be confirmed)
+
+##############################
+# To be Organized and Tested #
+##############################
+
+# ========================
+# Variable Expansion Logic
+# ========================
+export TEST1="ABC DEF"
+echo "$TEST1"
+echo $TEST1!
+echo "Start:$TEST1:End"
+export TEST2=
+echo $TEST2
+echo "$TEST2"
+export TEST1+=42
+env | grep TEST1
+export TEST1+=42
+echo $TEST1
+
+# ========================
+# Unset
+# ========================
+export TEST3=43
+env | grep TEST3
+unset TEST3
+env | grep TEST3
+cd ..
+unset PATH
+ls
+/bin/ls

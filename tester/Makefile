@@ -6,7 +6,7 @@
 #    By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/15 17:06:04 by paalexan          #+#    #+#              #
-#    Updated: 2025/04/26 17:59:50 by paalexan         ###   ########.fr        #
+#    Updated: 2025/04/30 21:27:06 by paalexan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,8 +44,8 @@ re: fclean all
 
 run:
 	@mkdir -p $(MINI_TMP) $(BASH_TMP) $(DIFF_DIR)
-	@$(RUN_MINISHELL) $(MINISHELL_EXEC) test_cases.txt $(MINI_TMP)
-	@$(RUN_BASH) test_cases.txt $(BASH_TMP)
+	@$(RUN_MINISHELL) $(MINISHELL_EXEC) test_cases_auto.txt $(MINI_TMP)
+	@$(RUN_BASH) test_cases_auto.txt $(BASH_TMP)
 
 diff:
 	@echo "$(MAG)$(PREFIX)$(RESET) $(BOLD)Comparing outputs of different $(ORANGE)commands$(RESET)..."
@@ -74,7 +74,7 @@ diff:
 			fail=$$((fail+1)); \
 		fi; \
 		test_idx=$$((test_idx+1)); \
-	done < test_cases.txt; \
+	done < test_cases_auto.txt; \
 	total=$$((pass+fail)); \
 	echo ""; \
 	if [ $$fail -eq 0 ]; then \

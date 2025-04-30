@@ -4,7 +4,7 @@ MINI_DIR = "results/minishell"
 BASH_DIR = "results/bash"
 DIFF_DIR = "results/diff"
 SUMMARY_FILE = "diff_summary.txt"
-TEST_CASES = "test_cases.txt"
+TEST_CASES = "test_cases_auto.txt"
 
 def read_test_command(index):
     with open(TEST_CASES) as f:
