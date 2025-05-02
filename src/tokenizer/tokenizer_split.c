@@ -84,6 +84,7 @@ char	**split_input(const char *str)
 			break ;
 		tmp = get_next_token(str, &i);
 		result[count++] = unescape_token(tmp);
+		free(tmp);
 	}
 	result[count] = NULL;
 	return (result);

@@ -126,6 +126,7 @@ int	exec_ast(t_token *tokens, t_msh *sh)
 		return (SUCCESS);
 	}
 	in_fd = 0;
+	free_token_list(tokens);
 	status = exec_pipeline(cmds, sh, in_fd);
 	print_redirect_error(cmds);
 	g_exit = status;

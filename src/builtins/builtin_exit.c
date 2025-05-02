@@ -98,6 +98,8 @@ int	cmd_exit(t_cmd *cmd, t_msh *sh)
 			return (FAILURE);
 		if (handle_not_numeric(cmd->argv[i], &code))
 		{
+			free_cmd(cmd);
+			free_env_array(sh->env);
 			free_minishell(sh);
 			exit(2);
 		}
@@ -106,6 +108,8 @@ int	cmd_exit(t_cmd *cmd, t_msh *sh)
 		free_minishell(sh);
 		exit(exit_code);
 	}
+	free_cmd(cmd);
+	free_env_array(sh->env);
 	free_minishell(sh);
 	exit(g_exit);
 }

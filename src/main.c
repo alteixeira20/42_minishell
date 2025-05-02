@@ -77,7 +77,6 @@ static int	handle_input_line(t_msh *sh, char *line)
 		return (1);
 	}
 	g_exit = exec_ast(tokens, sh);
-	free_token_list(tokens);
 	free(line);
 	return (1);
 }
