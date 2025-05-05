@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 18:31:43 by paalexan          #+#    #+#             */
-/*   Updated: 2025/05/05 18:02:11 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/05/06 00:44:26 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ static int	run_single_builtin_in_parent(t_cmd *cmd, t_msh *sh)
 	dummy_pipe[1] = -1;
 	if (setup_redirections(cmd, sh, STDIN_FILENO, dummy_pipe) == FAILURE)
 	{
+		print_redirect_error(cmd);
 		dup2(saved_stdin, STDIN_FILENO);
 		dup2(saved_stdout, STDOUT_FILENO);
 		close(saved_stdin);
@@ -121,6 +122,7 @@ int	exec_pipeline(t_cmd *cmds, t_msh *sh, int in_fd)
 	}
 	if (has_valid_cmd(cmds) == FAILURE)
 	{
+		print_redirect_error(cmds);
 		free_cmd(cmds);
 		return (SUCCESS);
 	}
@@ -133,6 +135,7 @@ int	exec_pipeline(t_cmd *cmds, t_msh *sh, int in_fd)
 	}
 	if (execute_all(cmds, sh, &in_fd, pids) == FAILURE)
 	{
+		print_redirect_error(cmds);
 		free(pids);
 		free_cmd(cmds);
 		return (FAILURE);

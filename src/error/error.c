@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 17:19:32 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/30 01:37:47 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/05/06 00:45:43 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ void	print_redirect_error(t_cmd *cmds)
 	{
 		if (tmp->redirect_failed && tmp->redirect_failed_path)
 		{
+			ft_putstr_fd("minishell: ", STDERR_FILENO);
 			perror(tmp->redirect_failed_path);
 			free(tmp->redirect_failed_path);
 			tmp->redirect_failed_path = NULL;
