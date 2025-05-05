@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 18:31:43 by paalexan          #+#    #+#             */
-/*   Updated: 2025/05/01 13:06:51 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/05/05 18:02:11 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,17 @@ static int	count_commands(t_cmd *cmd)
 
 int	execute_all(t_cmd *cmds, t_msh *sh, int *in_fd, pid_t *pids)
 {
-	int	i;
+	int		i;
+	t_cmd	*tmp;
 
 	i = 0;
 	while (cmds)
 	{
-		if (!cmds->argv || !cmds->argv[0])
+		if (!cmds->argv || !cmds->argv[0] || !cmds->is_valid)
 		{
+			tmp = cmds;
 			cmds = cmds->next;
+			free_one_cmd(tmp);
 			continue ;
 		}
 		if (run_single_cmd(&cmds, sh, in_fd, &pids[i]) == FAILURE)
@@ -90,23 +93,55 @@ static int	run_single_builtin_in_parent(t_cmd *cmd, t_msh *sh)
 	return (g_exit);
 }
 
+static int	has_valid_cmd(t_cmd *cmd)
+{
+	while (cmd)
+	{
+		if (cmd->argv && cmd->argv[0] && cmd->is_valid)
+			return (SUCCESS);
+		cmd = cmd->next;
+	}
+	return (FAILURE);
+}
+
 int	exec_pipeline(t_cmd *cmds, t_msh *sh, int in_fd)
 {
 	int		cmd_count;
 	pid_t	*pids;
 	int		status;
 
+	pids = NULL;
 	if (!cmds)
 		return (FAILURE);
 	if (!cmds->next && cmds->is_builtin)
-		return (run_single_builtin_in_parent(cmds, sh));
+	{
+		status = run_single_builtin_in_parent(cmds, sh);
+		free_cmd(cmds);
+		return (status);
+	}
+	if (has_valid_cmd(cmds) == FAILURE)
+	{
+		free_cmd(cmds);
+		return (SUCCESS);
+	}
 	cmd_count = count_commands(cmds);
 	pids = malloc(sizeof(pid_t) * cmd_count);
 	if (!pids)
+	{
+		free_cmd(cmds);
 		return (FAILURE);
-	execute_all(cmds, sh, &in_fd, pids);
+	}
+	if (execute_all(cmds, sh, &in_fd, pids) == FAILURE)
+	{
+		free(pids);
+		free_cmd(cmds);
+		return (FAILURE);
+	}
 	status = wait_all_children(pids, cmd_count);
+	print_redirect_error(cmds);
 	free(pids);
+	free_cmd(cmds);
+	cmds = NULL;
 	if (in_fd != STDIN_FILENO)
 		close(in_fd);
 	return (status);
@@ -128,8 +163,6 @@ int	exec_ast(t_token *tokens, t_msh *sh)
 	in_fd = 0;
 	free_token_list(tokens);
 	status = exec_pipeline(cmds, sh, in_fd);
-	print_redirect_error(cmds);
 	g_exit = status;
-	free_cmd(cmds);
 	return (status);
 }

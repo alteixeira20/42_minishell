@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 15:44:51 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/24 15:06:27 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/05/05 17:13:09 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,17 @@ static void	free_argv(char **argv)
 	while (argv[i])
 		free(argv[i++]);
 	free(argv);
+}
+
+void	free_one_cmd(t_cmd *cmd)
+{
+	if (!cmd)
+		return ;
+	free_argv(cmd->argv);
+	free_redirections(cmd->redirects);
+	if (cmd->redirect_failed_path)
+		free(cmd->redirect_failed_path);
+	free(cmd);
 }
 
 void	free_cmd(t_cmd *cmd)

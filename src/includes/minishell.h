@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 16:54:50 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/30 02:29:13 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/05/05 17:13:23 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -296,6 +296,7 @@ void		print_redirect_error(t_cmd *cmds);
 /* ************************************************************************** */
 
 void		free_split(char **split);
+void		free_one_cmd(t_cmd *cmd);
 void		free_cmd(t_cmd *cmd);
 void		free_token_list(t_token *token);
 void		free_env_array(char **env);
