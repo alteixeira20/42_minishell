@@ -6,7 +6,7 @@
 #    By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/15 17:06:04 by paalexan          #+#    #+#              #
-#    Updated: 2025/04/30 21:27:06 by paalexan         ###   ########.fr        #
+#    Updated: 2025/05/05 19:02:29 by paalexan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@
 # **************************************************************************** #
 
 # Executables
-MINISHELL_EXEC = $(abspath ../minishell)
+MINISHELL_EXEC			= $(abspath ../minishell)
 
 # Directories
 RESULTS_DIR				= results
@@ -31,11 +31,12 @@ TESTER_SCRIPT			= $(SCRIPTS_DIR)/set_script_env.sh
 SUMMARY_SCRIPT			= $(SCRIPTS_DIR)/generate_summary_diff.py
 RUN_MINISHELL			= $(SCRIPTS_DIR)/run_minishell.sh
 RUN_BASH				= $(SCRIPTS_DIR)/run_bash.sh
+RUN_VALGRIND			= $(SCRIPTS_DIR)/run_valgrind.sh
 
 # Rules
 .PHONY: all run diff summary clean fclean help re
 
-all: start_msg check_and_clean run diff summary
+all: start_msg check_and_clean run diff summary valgrind
 
 start_msg:
 	@echo "$(MAG)$(PREFIX)$(RESET) $(BOLD)Running Tests: $(ORANGE)$(BOLD)MiniShell$(RESET)$(BOLD) VS $(ORANGE)bash$(RESET)\n"
@@ -85,6 +86,15 @@ diff:
 
 summary:
 	@python3 $(SUMMARY_SCRIPT)
+
+valgrind:
+	@rm -f valgrind_*
+	@rm -rf valgrind_logs
+	@echo "$(MAG)$(PREFIX)$(RESET) Running tests with Valgrind..."
+	@$(RUN_VALGRIND) 
+	@echo "$(MAG)$(PREFIX)$(RESET) Valgrind test summary:\n"
+	@echo ""
+	@! grep -q "KO" results/valgrind_results.txt || (echo "$(RED)$(BOLD)❌ Memory leaks detected!$(RESET)" && exit 1)
 
 fclean: clean
 	@rm -rf $(RESULTS_DIR)
