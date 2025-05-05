@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 14:34:23 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/30 19:29:02 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/05/05 16:42:27 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static char	*get_var_value(const char *name, t_msh *sh)
 	raw = extract_var((char *)name, sh->env);
 	if (!raw)
 		return (NULL);
-	return (ft_strdup(raw));
+	return (raw);
 }
 
 char	*expand_one(const char *str, int *i, t_msh *sh)
