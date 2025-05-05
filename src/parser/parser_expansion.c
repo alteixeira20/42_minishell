@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 14:34:23 by paalexan          #+#    #+#             */
-/*   Updated: 2025/05/05 16:42:27 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/05/05 18:16:32 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,11 @@ static char	*expand_core(const char *str, t_msh *sh, t_token *token, bool *expan
 			*expanded = true;
 		}
 		else
+		{
 			ft_str_append_char(&res, str[i++]);
+			if (!res)
+				return (NULL);
+		}
 	}
 	return (res);
 }
