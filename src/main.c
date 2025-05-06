@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 02:04:50 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/27 19:05:23 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/05/06 13:53:44 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,9 +63,10 @@ static int	handle_input_line(t_msh *sh, char *line)
 	if (*line)
 		add_history(line);
 	tokens = parse_input(line, sh);
-	if (g_exit == 130)
+	if ((g_exit == 130 || g_exit == 1) && (!tokens || !tokens->value))
 	{
-		free_token_list(tokens);
+		if (tokens)
+			free_token_list(tokens);
 		free(line);
 		g_exit = 1;
 		return (1);
@@ -87,6 +88,7 @@ int	loop(t_msh *sh)
 
 	while (1)
 	{
+		set_interactive_signals();
 		line = read_multiline_input(sh);
 		if (!line)
 			break ;
@@ -107,7 +109,6 @@ int	main(int ac, char **av, char **env)
 		return (exit_error(MALLOC_ERR, errno), EXIT_FAILURE);
 	if (init_sh(sh, env) != SUCCESS)
 		exit_error(INIT_ERR, errno);
-	set_interactive_signals();
 	loop(sh);
 	free_env_array(sh->env);
 	free_minishell(sh);

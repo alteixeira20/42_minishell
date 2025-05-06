@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 16:54:50 by paalexan          #+#    #+#             */
-/*   Updated: 2025/05/05 17:13:23 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/05/06 13:59:12 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,6 +201,7 @@ char		*get_next_segment(const char *str, int *i);
 int			exec_ast(t_token *tokens, t_msh *sh);
 int			exec_pipeline(t_cmd *cmds, t_msh *sh, int in_fd);
 int			run_single_cmd(t_cmd **cmds, t_msh *sh, int *in_fd, pid_t *pid_out);
+int			run_builtin_in_parent(t_cmd *cmd, t_msh *sh);
 int			execute_all(t_cmd *cmds, t_msh *sh, int *in_fd, pid_t *pids);
 int			prepare_pipe(int pipe_fd[2], int has_next);
 int			fork_command(t_cmd *cmd, t_msh *sh, int *in_fd, int pipe_fd[2]);
@@ -296,6 +297,7 @@ void		print_redirect_error(t_cmd *cmds);
 /* ************************************************************************** */
 
 void		free_split(char **split);
+void		clean_fds(void);
 void		free_one_cmd(t_cmd *cmd);
 void		free_cmd(t_cmd *cmd);
 void		free_token_list(t_token *token);

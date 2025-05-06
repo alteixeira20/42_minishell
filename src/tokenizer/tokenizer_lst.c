@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 00:44:36 by paalexan          #+#    #+#             */
-/*   Updated: 2025/05/05 18:22:26 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/05/06 01:07:04 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,9 @@ void	token_add_back(t_token **list, t_token *new_token)
 
 	if (!list || !new_token)
 		return ;
-	if (new_token->type != TOKEN_WORD && ft_strlen(new_token->value) == 0)
+	if (new_token->type != TOKEN_WORD
+		&& ft_strlen(new_token->value) == 0
+		&& !new_token->quoted)
 	{
 		free(new_token->value);
 		free(new_token);
