@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 02:22:28 by paalexan          #+#    #+#             */
-/*   Updated: 2025/05/06 13:59:57 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/05/06 20:14:48 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,8 @@ int	cmd_exit(t_cmd *cmd, t_msh *sh)
 		code = ft_atol(cmd->argv[i]);
 		exit_code = (unsigned char)code;
 		clean_fds();
+		free_cmd(cmd);
+		free_env_array(sh->env);
 		free_minishell(sh);
 		exit(exit_code);
 	}

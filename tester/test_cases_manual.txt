@@ -21,6 +21,8 @@ ls <<EOF			# Heredoc Input: -la ; EOF		| Should print ls without flag -la
 
 << a" o"			# Should close with [a o] and not print command not found message
 
+"cat" | ""
+
 ###############
 # To be Fixed #
 ###############

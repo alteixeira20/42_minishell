@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 02:04:50 by paalexan          #+#    #+#             */
-/*   Updated: 2025/05/06 13:53:44 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/05/06 20:14:04 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,8 @@ static int	handle_input_line(t_msh *sh, char *line)
 	}
 	if (check_cmd_syntax(tokens, true) == SYNTAX_ERROR)
 	{
-		free_token_list(tokens);
+		if (tokens)
+			free_token_list(tokens);
 		free(line);
 		return (1);
 	}
@@ -111,6 +112,8 @@ int	main(int ac, char **av, char **env)
 		exit_error(INIT_ERR, errno);
 	loop(sh);
 	free_env_array(sh->env);
+	if (sh->cmds)
+		free_cmd(sh->cmds);
 	free_minishell(sh);
 	ft_putstr_fd("exit\n", STDOUT_FILENO);
 	return (EXIT_SUCCESS);
