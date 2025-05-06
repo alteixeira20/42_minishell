@@ -30,12 +30,15 @@ mapfile -t commands < <(grep -vE '^\s*#|^\s*$' "$TEST_FILE")
 for cmd in "${commands[@]}"; do
 	log_file="${LOG_DIR}/test_$i.log"
 
-	valgrind --leak-check=full --error-exitcode=42 \
+	{
+		echo "$cmd"
+		echo "exit"
+	} | valgrind --leak-check=full --error-exitcode=42 \
+		--track-origins=yes --show-leak-kinds=all \
 		--suppressions="$SUPPRESS" \
-		--log-file="$log_file" --quiet \
-		"$MINISHELL" <<< "$cmd"$'\nexit\n' > /dev/null 2>&1
-
-	if [ $? -eq 0 ]; then
+		--log-file="$log_file" \
+		"$MINISHELL" > /dev/null 2<&1
+	if grep -q "ERROR SUMMARY: 0 errors" "$log_file"; then
 		echo -e "${SPACING} ${ORANGE}Command[$i]:${RESET} [$cmd] - ${GREEN}${BOLD}OK${RESET}."
 		echo "[$i] OK  => $cmd" >> "$RESULT_FILE"
 		pass=$((pass + 1))
@@ -53,5 +56,5 @@ echo ""
 if [ $fail -eq 0 ]; then
 	echo -e "${MAG}${BOLD}[Tester]${RESET}${GREEN}${BOLD} $total Tests Passed!${RESET} 🎉"
 else
-	echo -e "${MAG}${BOLD}[Tester]${RESET}${RED}${BOLD} $fail/$total Tests Failed.${RESET} Check ${BOLD}$RESULT_FILE${RESET} for more info."
+	echo -e "${MAG}${BOLD}[Tester]${RESET}${RED}${BOLD} $fail/$total Tests Failed.${RESET} Check ${BOLD}$RESULT_FILE${RESET} and logs in ${BOLD}$LOG_DIR${RESET}."
 fi

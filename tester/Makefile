@@ -6,7 +6,7 @@
 #    By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/15 17:06:04 by paalexan          #+#    #+#              #
-#    Updated: 2025/05/05 21:00:03 by paalexan         ###   ########.fr        #
+#    Updated: 2025/05/06 17:45:53 by paalexan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -87,13 +87,8 @@ diff:
 summary:
 	@python3 $(SUMMARY_SCRIPT)
 
-valgrind:
-	@rm -f valgrind_*
-	@rm -rf valgrind_logs
+valgrind: check_and_clean
 	@$(RUN_VALGRIND) 
-	@echo "$(MAG)$(PREFIX)$(RESET) Valgrind test summary:\n"
-	@echo ""
-	@! grep -q "KO" results/valgrind_results.txt || (echo "$(RED)$(BOLD)❌ Memory leaks detected!$(RESET)")
 
 fclean: clean
 	@rm -rf $(RESULTS_DIR)
