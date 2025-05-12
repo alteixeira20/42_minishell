@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 16:12:15 by paalexan          #+#    #+#             */
-/*   Updated: 2025/05/06 18:01:02 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/05/12 19:01:29 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static char	*handle_special_targets(char *arg, t_msh *sh)
 	{
 		home = extract_var("HOME", sh->env);
 		if (!home)
-			return (ft_strdup(arg));
+			return (ft_strdup(sh->home));
 		if (arg[1] == '\0')
 			return (home);
 		expanded = ft_strjoin(home, arg + 1);

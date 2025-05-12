@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 02:04:50 by paalexan          #+#    #+#             */
-/*   Updated: 2025/05/06 20:14:04 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/05/12 19:19:54 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ static char	*read_continuation_loop(char *line, t_msh *sh)
 	status = check_cmd_syntax(tokens, false);
 	while (status == SYNTAX_INCOMPLETE)
 	{
-		free_token_list(tokens);
+		if (tokens)
+			free_token_list(tokens);
 		next = readline("> ");
 		if (!next)
 			break ;

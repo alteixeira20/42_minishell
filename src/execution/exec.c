@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 18:31:43 by paalexan          #+#    #+#             */
-/*   Updated: 2025/05/12 17:48:08 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/05/12 18:47:07 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,6 @@ static int	has_valid_cmd(t_cmd *cmd)
 		if (cmd->argv[0][0] == '\0')
 		{
 			ft_putstr_fd("Command '' not found\n", STDERR_FILENO);
-			g_exit = 127;
 			return (FAILURE);
 		}
 		cmd = cmd->next;
@@ -100,6 +99,7 @@ int	exec_pipeline(t_cmd *cmds, t_msh *sh, int in_fd)
 	t_cmd	*cmds_head;
 
 	pids = NULL;
+	sh->is_heredoc = false;
 	if (!cmds)
 		return (FAILURE);
 	if (!cmds->next && cmds->is_builtin)
@@ -112,7 +112,7 @@ int	exec_pipeline(t_cmd *cmds, t_msh *sh, int in_fd)
 	{
 		print_redirect_error(cmds);
 		free_cmd(cmds);
-		return (SUCCESS);
+		return (127);
 	}
 	cmds_head = cmds;
 	cmd_count = count_commands(cmds);
