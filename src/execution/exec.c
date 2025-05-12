@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 18:31:43 by paalexan          #+#    #+#             */
-/*   Updated: 2025/05/06 14:01:20 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/05/12 17:48:08 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,10 +75,18 @@ int	execute_all(t_cmd *cmds, t_msh *sh, int *in_fd, pid_t *pids)
 
 static int	has_valid_cmd(t_cmd *cmd)
 {
+	if (!cmd->argv)
+		return (FAILURE);
 	while (cmd)
 	{
 		if (cmd->argv && cmd->argv[0] && cmd->is_valid)
 			return (SUCCESS);
+		if (cmd->argv[0][0] == '\0')
+		{
+			ft_putstr_fd("Command '' not found\n", STDERR_FILENO);
+			g_exit = 127;
+			return (FAILURE);
+		}
 		cmd = cmd->next;
 	}
 	return (FAILURE);

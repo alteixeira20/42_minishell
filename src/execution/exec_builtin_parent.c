@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 13:09:21 by paalexan          #+#    #+#             */
-/*   Updated: 2025/05/06 14:00:49 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/05/07 00:21:52 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ int	run_builtin_in_parent(t_cmd *cmd, t_msh *sh)
 	int	stdin_backup;
 	int	stdout_backup;
 	int	dummy_pipe[2];
-
 
 	if (!cmd->argv || !cmd->argv[0])
 		return (handle_empty_builtin(cmd, sh));

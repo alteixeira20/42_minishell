@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 16:54:50 by paalexan          #+#    #+#             */
-/*   Updated: 2025/05/06 13:59:12 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/05/12 17:58:55 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,7 @@ typedef struct s_minishell
 
 	bool	heredoc_quoted;
 	bool	heredoc_found;
+	bool	is_heredoc;
 	bool	heredoc_interrupted;
 	bool	error_printed;
 }	t_msh;

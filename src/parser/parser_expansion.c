@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 14:34:23 by paalexan          #+#    #+#             */
-/*   Updated: 2025/05/05 18:16:32 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/05/12 18:00:28 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ static char	*expand_core(const char *str, t_msh *sh, t_token *token, bool *expan
 			handle_double_quote(str, &i, sh, &res);
 			token->quoted = true;
 		}
-		else if (str[i] == '$')
+		else if (str[i] == '$' && !sh->is_heredoc)
 		{
 			handle_dollar(str, &i, sh, &res);
 			*expanded = true;
@@ -103,7 +103,10 @@ static void	setup_heredoc(const char *val, t_msh *sh)
 	if (sh->heredoc_found)
 		sh->heredoc_found = false;
 	if (!sh->heredoc_found && ft_strcmp(val, "<<") == 0)
+	{
 		sh->heredoc_found = true;
+		sh->is_heredoc = true;
+	}
 }
 
 char	*expand_token(const char *val, t_msh *sh, t_token *token, bool *expanded)

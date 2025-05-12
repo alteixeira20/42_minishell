@@ -6,7 +6,7 @@
 /*   By: jopedro- <jopedro-@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 17:22:16 by jopedro-          #+#    #+#             */
-/*   Updated: 2025/04/27 19:09:25 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/05/12 18:07:59 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static int	var_index(char *key, char **env)
 	i = 0;
 	while (env[i])
 	{
-		if (ft_strncmp(env[i], key, len) == 0 && env[i][len] == '=')
+		if (ft_strncmp(env[i], key, len) == 0 && (env[i][len] == '=' || env[i][len] == '\0'))
 			return (i);
 		i++;
 	}

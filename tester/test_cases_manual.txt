@@ -41,6 +41,7 @@ unset OLDPWD
 # To be Organized and Tested #
 ##############################
 
+"" cat ./Makefile
 # ========================
 # Variable Expansion Logic
 # ========================

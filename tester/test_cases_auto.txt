@@ -60,7 +60,6 @@ cd tester/
 ls -l
 cat <"./test_files/small_file" | echo 42
 cat <"./test_files/big_file" | echo 42
-"" cat ./Makefile
 
 # ========================
 # Environment
