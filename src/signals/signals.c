@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 17:12:52 by paalexan          #+#    #+#             */
-/*   Updated: 2025/05/13 12:20:47 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/05/13 17:31:28 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,10 @@
 static void	ctrl_c_handler(int sig)
 {
 	(void)sig;
-	g_exit = 1;
 	rl_replace_line("", 0);
-	write(STDOUT_FILENO, "\n", 1);
-	rl_on_new_line();
 	rl_redisplay();
+	write(STDOUT_FILENO, "\n", 1);
+	g_exit = 1;
 }
 
 static void	heredoc_sigint_handler(int sig)
