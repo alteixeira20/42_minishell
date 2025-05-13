@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 18:31:43 by paalexan          #+#    #+#             */
-/*   Updated: 2025/05/12 18:47:07 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/05/13 17:18:04 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,8 @@ int	exec_pipeline(t_cmd *cmds, t_msh *sh, int in_fd)
 	if (!cmds->next && cmds->is_builtin)
 	{
 		status = run_builtin_in_parent(cmds, sh);
-		free_cmd(cmds);
+		if (cmds)
+			free_cmd(cmds);
 		return (status);
 	}
 	if (has_valid_cmd(cmds) == FAILURE)

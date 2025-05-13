@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 02:04:50 by paalexan          #+#    #+#             */
-/*   Updated: 2025/05/12 19:19:54 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/05/13 17:20:10 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,8 +113,6 @@ int	main(int ac, char **av, char **env)
 		exit_error(INIT_ERR, errno);
 	loop(sh);
 	free_env_array(sh->env);
-	if (sh->cmds)
-		free_cmd(sh->cmds);
 	free_minishell(sh);
 	ft_putstr_fd("exit\n", STDOUT_FILENO);
 	return (EXIT_SUCCESS);
