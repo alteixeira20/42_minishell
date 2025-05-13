@@ -38,7 +38,10 @@ for cmd in "${commands[@]}"; do
 		--suppressions="$SUPPRESS" \
 		--log-file="$log_file" \
 		"$MINISHELL" > /dev/null 2<&1
-	if grep -q "ERROR SUMMARY: 0 errors" "$log_file"; then
+	if grep -q "definitely lost: 0 bytes in 0 blocks" "$log_file" &&
+	   grep -q "indirectly lost: 0 bytes in 0 blocks" "$log_file" &&
+	   grep -q "possibly lost: 0 bytes in 0 blocks" "$log_file" &&
+	   grep -q "still reachable: 0 bytes in 0 blocks" "$log_file"; then
 		echo -e "${SPACING} ${ORANGE}Command[$i]:${RESET} [$cmd] - ${GREEN}${BOLD}OK${RESET}."
 		echo "[$i] OK  => $cmd" >> "$RESULT_FILE"
 		pass=$((pass + 1))
