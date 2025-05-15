@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 18:12:05 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/30 01:38:46 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/05/15 19:28:04 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,9 @@ static int	run_heredoc_child(const char *delim, int fd, t_msh *sh)
 {
 	setup_heredoc_signals();
 	write_heredoc_content(delim, fd, sh);
-	close(fd);
+	clean_fds();
+	free_env_array(sh->env);
+	free_minishell(sh);
 	exit(0);
 }
 

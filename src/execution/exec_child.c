@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 03:40:27 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/27 20:39:33 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/05/15 19:21:14 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,9 @@ static void	handle_cmd_error(t_cmd *cmd, t_msh *sh)
 		ft_putstr_fd(": command not found\n", STDERR_FILENO);
 		code = 127;
 	}
+	free_cmd(cmd);
+	free_env_array(sh->env);
+	free_minishell(sh);
 	exit(code);
 }
 
