@@ -146,7 +146,7 @@ valgrind:
 		make --silent; \
 	fi
 	@echo "{\n readline leaks\n   Memcheck:Leak\n...\n   fun:readline\n}\n{\n   leak add_history\n   Memcheck:Leak\n...\n   fun:add_history\n}" > readline.supp
-	@valgrind --suppressions=readline.supp --leak-check=full -s --show-leak-kinds=all --track-origins=yes --track-fds=yes ./$(NAME)
+	@valgrind --suppressions=readline.supp --leak-check=full -s --show-leak-kinds=all --track-origins=yes --track-fds=yes --trace-children=yes	--child-silent-after-fork=no ./$(NAME)
 	@rm -f readline.supp
 
 norm:
