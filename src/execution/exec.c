@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 18:31:43 by paalexan          #+#    #+#             */
-/*   Updated: 2025/05/16 14:21:27 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/05/16 15:11:13 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,16 +80,7 @@ static int	has_valid_cmd(t_cmd *cmd)
 	while (cmd)
 	{
 		if (cmd->argv && cmd->argv[0] && cmd->is_valid)
-		{
-			if (cmd->is_builtin)
-				return (SUCCESS);
-			else
-			{
-				ft_putstr_fd(cmd->argv[0], STDERR_FILENO);
-				ft_putstr_fd(": command not found\n", STDERR_FILENO);
-				return (FAILURE);
-			}
-		}
+			return (SUCCESS);
 		if (cmd->argv[0][0] == '\0')
 		{
 			ft_putstr_fd("Command '' not found\n", STDERR_FILENO);
