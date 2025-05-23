@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 02:04:50 by paalexan          #+#    #+#             */
-/*   Updated: 2025/05/23 11:53:39 by jopedro-         ###   ########.fr       */
+/*   Updated: 2025/05/23 17:10:03 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,14 @@ static char	*read_continuation_loop(char *line, t_msh *sh)
 	t_syntax	status;
 
 	tokens = parse_input(line, sh);
-	status = check_cmd_syntax(tokens, false);
-	while (status == SYNTAX_INCOMPLETE)
+	status = check_cmd_syntax(tokens, true);
+	if (status == SYNTAX_INCOMPLETE)
+	{
+		free_token_list(tokens);
+		free(line);
+		return (ft_strdup(""));
+	}	
+	while (status != SYNTAX_OK)
 	{
 		if (tokens)
 			free_token_list(tokens);
@@ -37,7 +43,7 @@ static char	*read_continuation_loop(char *line, t_msh *sh)
 			break ;
 		line = joined;
 		tokens = parse_input(line, sh);
-		status = check_cmd_syntax(tokens, false);
+		status = check_cmd_syntax(tokens, true);
 	}
 	free_token_list(tokens);
 	return (line);
@@ -72,7 +78,7 @@ static int	handle_input_line(t_msh *sh, char *line)
 		g_exit = 1;
 		return (1);
 	}
-	if (check_cmd_syntax(tokens, true) == SYNTAX_ERROR)
+	if (check_cmd_syntax(tokens, true) != SYNTAX_OK)
 	{
 		if (tokens)
 			free_token_list(tokens);

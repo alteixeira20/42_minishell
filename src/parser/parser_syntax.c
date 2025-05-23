@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 00:46:26 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/25 16:30:37 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/05/23 17:11:51 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,17 +22,25 @@ static bool	is_redirect(t_token_type type)
 
 static t_syntax	check_pipe_syntax(t_token *token, bool print)
 {
-	if (!token->next)
+	t_token	*cur;
+
+	cur = token;
+	while (cur)
 	{
-		if (print)
-			ft_putendl_fd("syntax error: unexpected end of file", 2);
-		return (SYNTAX_INCOMPLETE);
-	}
-	if (token->next->type == TOKEN_PIPE)
-	{
-		if (print)
-			ft_putendl_fd("syntax error near unexpected token `|'", 2);
-		return (SYNTAX_ERROR);
+		if (cur->type == TOKEN_PIPE)
+		{
+			if (!cur->next)
+			{
+				print_syntax_error("|", print);
+				return (SYNTAX_INCOMPLETE);
+			}
+			if (cur->next->type == TOKEN_PIPE)
+			{
+				print_syntax_error("|", print);
+				return (SYNTAX_ERROR);
+			}
+		}
+		cur = cur->next;
 	}
 	return (SYNTAX_OK);
 }
@@ -79,8 +87,7 @@ t_syntax	check_cmd_syntax(t_token *tokens, bool print)
 		return (SYNTAX_OK);
 	if (tokens->type == TOKEN_PIPE)
 	{
-		if (print)
-			ft_putendl_fd("syntax error near unexpected token `|'", 2);
+		print_syntax_error("|", print);
 		return (SYNTAX_ERROR);
 	}
 	return (check_token_sequence(tokens, print));

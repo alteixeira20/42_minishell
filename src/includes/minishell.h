@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 16:54:50 by paalexan          #+#    #+#             */
-/*   Updated: 2025/05/23 11:52:16 by jopedro-         ###   ########.fr       */
+/*   Updated: 2025/05/23 16:19:01 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -293,6 +293,8 @@ char		**copy_env_array(char **env);
 int			exit_error(char *msg, int status);
 void		print_heredoc_warning(const char *delim);
 void		print_redirect_error(t_cmd *cmds);
+void		print_syntax_error(const char *token, bool print);
+void		print_syntax_error_eof(bool print);
 
 /* ************************************************************************** */
 /*                                  CLEANUP                                   */
