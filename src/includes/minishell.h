@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 16:54:50 by paalexan          #+#    #+#             */
-/*   Updated: 2025/05/23 16:19:01 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/05/23 18:28:57 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,12 @@ typedef struct s_redirect
 	struct s_redirect	*next;
 }	t_redirect;
 
+typedef struct s_hdoc_tmpfile
+{
+	char					*path;
+	struct s_hdoc_tmpfile	*next;
+}	t_hdoc_tmpfile;
+
 typedef struct s_token
 {
 	char			*value;
@@ -96,7 +102,6 @@ typedef struct s_cmd
 	t_redirect		*redirects;
 	bool			redirect_failed;
 	char			*redirect_failed_path;
-
 	int				input_fd;
 	int				output_fd;
 	bool			is_builtin;
@@ -121,6 +126,7 @@ typedef struct s_minishell
 	int		pipe_cnt;
 	int		hd_cnt;
 
+	t_hdoc_tmpfile	*heredoc_tmpfiles;
 	bool	heredoc_quoted;
 	bool	heredoc_found;
 	bool	is_heredoc;
@@ -273,7 +279,7 @@ int			check_input_file(t_cmd *cmd, const char *filename);
 int			check_output_permission(t_cmd *cmd, t_redirect *redir);
 
 // HEREDOC UTIL
-char		*write_heredoc_to_tmp(const char *delim, int index, t_msh *sh);
+char		*write_heredoc_to_tmp(const char *delim, int index, t_msh *sh, t_token *tokens);
 char		*handle_expansion(char *line, t_msh *sh);
 
 /* ************************************************************************** */

@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 18:31:43 by paalexan          #+#    #+#             */
-/*   Updated: 2025/05/16 15:11:13 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/05/23 17:50:42 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,10 +150,13 @@ int	exec_ast(t_token *tokens, t_msh *sh)
 	if (!cmds)
 	{
 		g_exit = 0;
+		sh->cmds = NULL;
 		return (SUCCESS);
 	}
+	sh->cmds = cmds;
 	in_fd = 0;
 	status = exec_pipeline(cmds, sh, in_fd);
+	sh->cmds = NULL;
 	g_exit = status;
 	return (status);
 }

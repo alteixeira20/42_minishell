@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 17:19:32 by paalexan          #+#    #+#             */
-/*   Updated: 2025/05/23 16:58:14 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/05/23 18:08:31 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,6 @@ void	print_redirect_error(t_cmd *cmds)
 		{
 			ft_putstr_fd("minishell: ", STDERR_FILENO);
 			perror(tmp->redirect_failed_path);
-			free(tmp->redirect_failed_path);
-			tmp->redirect_failed_path = NULL;
 			break ;
 		}
 		tmp = tmp->next;
