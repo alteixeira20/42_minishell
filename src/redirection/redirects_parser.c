@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 21:08:18 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/24 13:05:42 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/05/23 18:39:54 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,6 @@ int	process_redirect(t_cmd *cmd, t_token *token, t_msh *sh)
 	if (token->type == TOKEN_APPEND)
 		return (handle_redirect_out(cmd, token->next, true));
 	if (token->type == TOKEN_HEREDOC)
-		return (handle_redirect_heredoc(cmd, sh, token->next));
+		return (handle_redirect_heredoc(cmd, sh, token->next, token));
 	return (SUCCESS);
 }

@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 16:54:50 by paalexan          #+#    #+#             */
-/*   Updated: 2025/05/23 18:28:57 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/05/23 18:44:00 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -265,7 +265,7 @@ void		add_redirect(t_cmd *cmd, t_redirect_type type,
 				const char *filename);
 int			handle_redirect_in(t_cmd *cmd, t_token *file_tok);
 int			handle_redirect_out(t_cmd *cmd, t_token *file_tok, bool append);
-int			handle_redirect_heredoc(t_cmd *cmd, t_msh *sh, t_token *file_tok);
+int			handle_redirect_heredoc(t_cmd *cmd, t_msh *sh, t_token *file_tok, t_token *tokens);
 
 // REDIRECT EXECUTION
 int			apply_all_redirects(t_cmd *cmd, t_msh *sh);
@@ -315,6 +315,7 @@ void		free_env_array(char **env);
 void		free_minishell(t_msh *sh);
 void		free_hc_minishell(t_msh *sh);
 void		free_hc_tokens(t_token *token);
+void		free_heredoc_tmpfiles(t_hdoc_tmpfile *tmp);
 
 /* ************************************************************************** */
 /*                                   UTILS                                    */
