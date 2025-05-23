@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 02:04:50 by paalexan          #+#    #+#             */
-/*   Updated: 2025/05/23 17:10:03 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/05/23 17:27:15 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,34 +16,16 @@ int	g_exit = 0;
 
 static char	*read_continuation_loop(char *line, t_msh *sh)
 {
-	char		*next;
-	char		*joined;
 	t_token		*tokens;
 	t_syntax	status;
 
 	tokens = parse_input(line, sh);
 	status = check_cmd_syntax(tokens, true);
-	if (status == SYNTAX_INCOMPLETE)
+	if (status != SYNTAX_OK)
 	{
 		free_token_list(tokens);
 		free(line);
 		return (ft_strdup(""));
-	}	
-	while (status != SYNTAX_OK)
-	{
-		if (tokens)
-			free_token_list(tokens);
-		next = readline("> ");
-		if (!next)
-			break ;
-		joined = ft_strjoin(line, next);
-		free(line);
-		free(next);
-		if (!joined)
-			break ;
-		line = joined;
-		tokens = parse_input(line, sh);
-		status = check_cmd_syntax(tokens, true);
 	}
 	free_token_list(tokens);
 	return (line);
