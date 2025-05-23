@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 17:31:36 by paalexan          #+#    #+#             */
-/*   Updated: 2025/05/23 18:46:27 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/05/23 21:11:56 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,4 +71,6 @@ void	free_minishell(t_msh *sh)
 		free(sh->user);
 	if (sh->hostname)
 		free(sh->hostname);
+	if (sh->heredoc_tmpfiles)
+		free_heredoc_tmpfiles(sh->heredoc_tmpfiles);
 }
