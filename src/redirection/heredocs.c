@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 18:54:17 by paalexan          #+#    #+#             */
-/*   Updated: 2025/05/23 18:40:34 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/05/23 20:41:10 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ int	handle_redirect_heredoc(t_cmd *cmd, t_msh *sh, t_token *file_tok, t_token *t
 		ft_putstr_fd("near unexpected token `newline'\n", STDERR_FILENO);
 		return (FAILURE);
 	}
-	tmp = write_heredoc_to_tmp(file_tok->value, sh->hd_cnt++, sh, tokens);
 	sh->cmds = cmd;
+	tmp = write_heredoc_to_tmp(file_tok->value, sh->hd_cnt++, sh, tokens);
 	if (!tmp)
 		return (FAILURE);
 	add_redirect(cmd, REDIR_HEREDOC, tmp);
