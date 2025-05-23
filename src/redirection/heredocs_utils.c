@@ -64,7 +64,7 @@ static int	run_heredoc_child(const char *delim, int fd, t_msh *sh)
 	write_heredoc_content(delim, fd, sh);
 	clean_fds();
 	free_env_array(sh->env);
-	free_minishell(sh);
+//	free_minishell(sh);
 	exit(0);
 }
 

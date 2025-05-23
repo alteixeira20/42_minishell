@@ -23,6 +23,7 @@ int	handle_redirect_heredoc(t_cmd *cmd, t_msh *sh, t_token *file_tok)
 		return (FAILURE);
 	}
 	tmp = write_heredoc_to_tmp(file_tok->value, sh->hd_cnt++, sh);
+	sh->cmds = cmd;
 	if (!tmp)
 		return (FAILURE);
 	add_redirect(cmd, REDIR_HEREDOC, tmp);

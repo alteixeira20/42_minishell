@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 16:54:50 by paalexan          #+#    #+#             */
-/*   Updated: 2025/05/12 17:58:55 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/05/23 11:52:16 by jopedro-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,6 +157,7 @@ extern int	g_exit;
 int			init_sh(t_msh *sh, char **env);
 char		**init_env(char **env);
 t_token		*init_token(void);
+t_msh		*get_shell(void);
 
 /* ************************************************************************** */
 /*                                  SIGNALS                                   */
@@ -304,6 +305,8 @@ void		free_cmd(t_cmd *cmd);
 void		free_token_list(t_token *token);
 void		free_env_array(char **env);
 void		free_minishell(t_msh *sh);
+void		free_hc_minishell(t_msh *sh);
+void		free_hc_tokens(t_token *token);
 
 /* ************************************************************************** */
 /*                                   UTILS                                    */

@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 17:12:52 by paalexan          #+#    #+#             */
-/*   Updated: 2025/05/13 17:31:28 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/05/23 11:56:31 by jopedro-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,15 @@
 
 static void	ctrl_c_handler(int sig)
 {
+	t_msh	*sh;
+
+	sh = get_shell();
 	(void)sig;
 	rl_replace_line("", 0);
 	rl_redisplay();
+	free_env_array(sh->env);
+	free_cmd(sh->cmds);
+	free_hc_minishell(sh);
 	write(STDOUT_FILENO, "\n", 1);
 	g_exit = 1;
 }

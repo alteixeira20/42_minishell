@@ -1,43 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cleanup_general.c                                  :+:      :+:    :+:   */
+/*   cleanup_heredoc.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: jopedro- <jopedro-@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/03 17:31:36 by paalexan          #+#    #+#             */
-/*   Updated: 2025/05/23 12:09:51 by jopedro-         ###   ########.fr       */
+/*   Created: 2025/05/23 12:10:29 by jopedro-          #+#    #+#             */
+/*   Updated: 2025/05/23 12:21:55 by jopedro-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	free_split(char **split)
-{
-	int	i;
-
-	i = 0;
-	while (split[i])
-	{
-		free(split[i]);
-		i++;
-	}
-	free(split);
-}
-
-void	clean_fds(void)
-{
-	int	fd;
-
-	fd = 3;
-	while (fd < 1024)
-	{
-		close(fd);
-		fd++;
-	}
-}
-
-void	free_token_list(t_token *token)
+void	free_hc_tokens(t_token *token)
 {
 	t_token	*next;
 
@@ -52,18 +27,7 @@ void	free_token_list(t_token *token)
 	}
 }
 
-void	free_env_array(char **env)
-{
-	int	i;
-
-	i = 0;
-	while (env && env[i])
-		free(env[i++]);
-	if (env)
-		free(env);
-}
-
-void	free_minishell(t_msh *sh)
+void	free_hc_minishell(t_msh *sh)
 {
 	if (sh->home)
 		free(sh->home);
@@ -71,6 +35,4 @@ void	free_minishell(t_msh *sh)
 		free(sh->user);
 	if (sh->hostname)
 		free(sh->hostname);
-	if (sh)
-		free(sh);
 }

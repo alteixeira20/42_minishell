@@ -6,7 +6,7 @@
 #    By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/03 02:10:25 by paalexan          #+#    #+#              #
-#    Updated: 2025/05/06 17:03:49 by paalexan         ###   ########.fr        #
+#    Updated: 2025/05/23 11:52:30 by jopedro-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -57,6 +57,7 @@ OBJ_DIR			= .obj
 
 SRC				= $(SRC_DIR)/main.c
 SRC				+= $(INIT_DIR)/init.c
+SRC				+= $(INIT_DIR)/init_2.c
 SRC				+= $(SIGNAL_DIR)/signals.c
 SRC				+= $(PARSER_DIR)/parser.c
 SRC				+= $(PARSER_DIR)/parser_syntax.c
@@ -98,6 +99,7 @@ SRC				+= $(REDIRECTS_DIR)/heredocs.c
 SRC				+= $(ERROR_DIR)/error.c
 SRC				+= $(CLEANUP_DIR)/cleanup_general.c
 SRC				+= $(CLEANUP_DIR)/cleanup_cmd.c
+SRC				+= $(CLEANUP_DIR)/cleanup_heredoc.c
 
 # **************************************************************************** #
 #                                   Targets                                    #
