@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 14:34:23 by paalexan          #+#    #+#             */
-/*   Updated: 2025/05/12 18:33:42 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/05/26 15:37:31 by jopedro-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ static char	*expand_core(const char *str, t_msh *sh,
 {
 	int		i;
 	char	*res;
+	int		handle;
 
 	i = 0;
 	res = ft_strdup("");
@@ -60,24 +61,15 @@ static char	*expand_core(const char *str, t_msh *sh,
 		return (NULL);
 	while (str[i])
 	{
-		if (str[i] == '\'')
-		{
-			handle_single_quote(str, &i, &res);
+		handle = handle_all(str, &i, sh, res);
+		if (handle == 1)
 			token->quoted = true;
-		}
-		else if (str[i] == '"')
-		{
-			handle_double_quote(str, &i, sh, &res);
+		else if (handle == 2)
 			token->quoted = true;
-		}
-		else if (str[i] == '$' && !sh->is_heredoc)
-		{
-			handle_dollar(str, &i, sh, &res);
+		else if (handle == 3)
 			*expanded = true;
-		}
 		else
 		{
-			ft_str_append_char(&res, str[i++]);
 			if (!res)
 				return (NULL);
 		}
