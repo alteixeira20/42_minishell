@@ -7,3 +7,4 @@ tester/diff_summary.txt
 tester/results/
 .obj/
 libft/
+readline.supp
