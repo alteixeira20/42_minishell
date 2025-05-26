@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 16:54:50 by paalexan          #+#    #+#             */
-/*   Updated: 2025/05/26 15:37:38 by jopedro-         ###   ########.fr       */
+/*   Updated: 2025/05/26 16:12:14 by jopedro-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,7 +187,7 @@ char		*expand_token(const char *val, t_msh *sh, t_token *token,
 void		handle_single_quote(const char *str, int *i, char **res);
 void		handle_double_quote(const char *str, int *i, t_msh *sh, char **res);
 void		handle_dollar(const char *str, int *i, t_msh *sh, char **res);
-int			handle_all(const char *str, int *i, t_msh *sh, char *res);
+int			handle_all(const char *str, int *i, t_msh *sh, char **res);
 
 /* ************************************************************************** */
 /*                                 TOKENIZER                                  */

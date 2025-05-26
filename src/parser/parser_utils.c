@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 04:36:27 by paalexan          #+#    #+#             */
-/*   Updated: 2025/05/26 15:38:32 by jopedro-         ###   ########.fr       */
+/*   Updated: 2025/05/26 16:12:42 by jopedro-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,26 +72,26 @@ void	handle_double_quote(const char *s, int *i, t_msh *sh, char **res)
 		(*i)++;
 }
 
-int	handle_all(const char *str, int *i, t_msh *sh, char *res)
+int	handle_all(const char *str, int *i, t_msh *sh, char **res)
 {
 	if (str[*i] == '\'')
 	{
-		handle_single_quote(str, &(*i), &res);
+		handle_single_quote(str, &(*i), &(*res));
 		return (1);
 	}
 	else if (str[*i] == '"')
 	{
-		handle_double_quote(str, &(*i), sh, &res);
+		handle_double_quote(str, &(*i), sh, &(*res));
 		return (2);
 	}
 	else if (str[*i] == '$' && !sh->is_heredoc)
 	{
-		handle_dollar(str, &(*i), sh, &res);
+		handle_dollar(str, &(*i), sh, &(*res));
 		return (3);
 	}
 	else
 	{
-		ft_str_append_char(&res, str[(*i)++]);
+		ft_str_append_char(&(*res), str[(*i)++]);
 		return (4);
 	}
 }

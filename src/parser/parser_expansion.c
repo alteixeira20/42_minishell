@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 14:34:23 by paalexan          #+#    #+#             */
-/*   Updated: 2025/05/26 15:37:31 by jopedro-         ###   ########.fr       */
+/*   Updated: 2025/05/26 16:11:09 by jopedro-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ static char	*expand_core(const char *str, t_msh *sh,
 		return (NULL);
 	while (str[i])
 	{
-		handle = handle_all(str, &i, sh, res);
+		handle = handle_all(str, &i, sh, &res);
 		if (handle == 1)
 			token->quoted = true;
 		else if (handle == 2)
