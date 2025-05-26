@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 18:31:43 by paalexan          #+#    #+#             */
-/*   Updated: 2025/05/23 20:50:49 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/05/23 21:29:40 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,11 +120,11 @@ int	exec_pipeline(t_cmd *cmds, t_msh *sh, int in_fd)
 	if (execute_all(cmds, sh, &in_fd, pids) == FAILURE)
 	{
 		free(pids);
+		pids = NULL;
 		return (FAILURE);
 	}
 	status = wait_all_children(pids, cmd_count);
 	print_redirect_error(cmds_head);
-	free(pids);
 	cmds = NULL;
 	if (in_fd != STDIN_FILENO)
 		close(in_fd);
