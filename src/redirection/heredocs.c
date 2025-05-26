@@ -12,7 +12,8 @@
 
 #include "../includes/minishell.h"
 
-int	handle_redirect_heredoc(t_cmd *cmd, t_msh *sh, t_token *file_tok, t_token *tokens)
+int	handle_redirect_heredoc(t_cmd *cmd, t_msh *sh,
+							t_token *file_tok, t_token *tokens)
 {
 	char	*tmp;
 

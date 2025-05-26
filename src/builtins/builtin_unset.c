@@ -33,7 +33,8 @@ static int	var_index(char *key, char **env)
 	i = 0;
 	while (env[i])
 	{
-		if (ft_strncmp(env[i], key, len) == 0 && (env[i][len] == '=' || env[i][len] == '\0'))
+		if (ft_strncmp(env[i], key, len) == 0
+			&& (env[i][len] == '=' || env[i][len] == '\0'))
 			return (i);
 		i++;
 	}

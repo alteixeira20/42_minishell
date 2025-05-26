@@ -65,7 +65,8 @@ static void	write_heredoc_content(const char *delim, int fd, t_msh *sh)
 	}
 }
 
-static int	run_heredoc_child(const char *delim, int fd, t_msh *sh, t_token *tokens)
+static int	run_heredoc_child(const char *delim, int fd,
+							t_msh *sh, t_token *tokens)
 {
 	setup_heredoc_signals();
 	write_heredoc_content(delim, fd, sh);
@@ -94,7 +95,8 @@ static char	*handle_heredoc_status(int status, char *filename)
 	return (filename);
 }
 
-char	*write_heredoc_to_tmp(const char *delim, int index, t_msh *sh, t_token *tokens)
+char	*write_heredoc_to_tmp(const char *delim, int index,
+							t_msh *sh, t_token *tokens)
 {
 	char			*filename;
 	int				fd;

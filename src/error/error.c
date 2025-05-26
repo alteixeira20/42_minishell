@@ -41,17 +41,18 @@ void	print_syntax_error(const char *token, bool print)
 {
 	if (print)
 	{
-		ft_putstr_fd("minishell: syntax error near unexpected token `", STDERR_FILENO);
+		ft_putstr_fd("minishell: syntax error near unexpected token `",
+			STDERR_FILENO);
 		ft_putstr_fd((char *)token, STDERR_FILENO);
 		ft_putendl_fd("'", STDERR_FILENO);
 	}
 }
 
-
 void	print_syntax_error_eof(bool print)
 {
 	if (print)
-		ft_putendl_fd("minishell: syntax error: unexpected end of file", STDERR_FILENO);
+		ft_putendl_fd("minishell: syntax error: unexpected end of file",
+			STDERR_FILENO);
 }
 
 int	exit_error(char *msg, int status)

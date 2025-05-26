@@ -48,7 +48,8 @@ char	*expand_one(const char *str, int *i, t_msh *sh)
 	return (val);
 }
 
-static char	*expand_core(const char *str, t_msh *sh, t_token *token, bool *expanded)
+static char	*expand_core(const char *str, t_msh *sh,
+						t_token *token, bool *expanded)
 {
 	int		i;
 	char	*res;
@@ -109,7 +110,8 @@ static void	setup_heredoc(const char *val, t_msh *sh)
 	}
 }
 
-char	*expand_token(const char *val, t_msh *sh, t_token *token, bool *expanded)
+char	*expand_token(const char *val, t_msh *sh,
+					t_token *token, bool *expanded)
 {
 	token->quoted = false;
 	*expanded = false;
