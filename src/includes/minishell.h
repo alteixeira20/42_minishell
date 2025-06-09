@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 16:54:50 by paalexan          #+#    #+#             */
-/*   Updated: 2025/05/26 16:12:14 by jopedro-         ###   ########.fr       */
+/*   Updated: 2025/06/09 16:08:27 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,7 @@ typedef struct s_minishell
 	int		**pipes;
 	int		pipe_cnt;
 	int		hd_cnt;
+	pid_t	*pids;
 
 	t_hdoc_tmpfile	*heredoc_tmpfiles;
 	bool	heredoc_quoted;

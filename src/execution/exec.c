@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 18:31:43 by paalexan          #+#    #+#             */
-/*   Updated: 2025/05/23 21:29:40 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/06/09 16:22:56 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,11 +94,9 @@ static int	has_valid_cmd(t_cmd *cmd)
 int	exec_pipeline(t_cmd *cmds, t_msh *sh, int in_fd)
 {
 	int		cmd_count;
-	pid_t	*pids;
 	int		status;
 	t_cmd	*cmds_head;
 
-	pids = NULL;
 	sh->is_heredoc = false;
 	if (!cmds)
 		return (FAILURE);
@@ -114,16 +112,12 @@ int	exec_pipeline(t_cmd *cmds, t_msh *sh, int in_fd)
 	}
 	cmds_head = cmds;
 	cmd_count = count_commands(cmds);
-	pids = ft_calloc(cmd_count, sizeof(pid_t));
-	if (!pids)
+	sh->pids = ft_calloc(cmd_count, sizeof(pid_t));
+	if (!sh->pids)
 		return (FAILURE);
-	if (execute_all(cmds, sh, &in_fd, pids) == FAILURE)
-	{
-		free(pids);
-		pids = NULL;
+	if (execute_all(cmds, sh, &in_fd, sh->pids) == FAILURE)
 		return (FAILURE);
-	}
-	status = wait_all_children(pids, cmd_count);
+	status = wait_all_children(sh->pids, cmd_count);
 	print_redirect_error(cmds_head);
 	cmds = NULL;
 	if (in_fd != STDIN_FILENO)

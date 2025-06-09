@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 21:08:18 by paalexan          #+#    #+#             */
-/*   Updated: 2025/05/23 18:39:54 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/06/09 16:16:09 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ int	handle_redirect_in(t_cmd *cmd, t_token *file_tok)
 	{
 		ft_putstr_fd("minishell: syntax error ", STDERR_FILENO);
 		ft_putstr_fd("near unexpected token `newline'\n", STDERR_FILENO);
+		g_exit = 2;
 		return (FAILURE);
 	}
 	add_redirect(cmd, REDIR_IN, file_tok->value);
@@ -57,6 +58,7 @@ int	handle_redirect_out(t_cmd *cmd, t_token *file_tok, bool append)
 	{
 		ft_putstr_fd("minishell: syntax error ", STDERR_FILENO);
 		ft_putstr_fd("near unexpected token `newline'\n", STDERR_FILENO);
+		g_exit = 2;
 		return (FAILURE);
 	}
 	if (append)
@@ -72,6 +74,7 @@ int	process_redirect(t_cmd *cmd, t_token *token, t_msh *sh)
 	{
 		ft_putstr_fd("minishell: syntax error ", STDERR_FILENO);
 		ft_putstr_fd("near unexpected token `newline'\n", STDERR_FILENO);
+		g_exit = 2;
 		return (FAILURE);
 	}
 	if (token->type == TOKEN_REDIRECT_IN)
