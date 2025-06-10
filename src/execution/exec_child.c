@@ -124,5 +124,5 @@ void	exec_child(t_cmd *cmd, int in_fd, int pipe_fd[2], t_msh *sh)
 		exit(run_builtin(cmd, sh));
 	}
 	try_exec_binary(cmd, sh);
-	return(127);
+	exit(127);
 }

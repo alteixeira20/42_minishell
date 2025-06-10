@@ -54,6 +54,8 @@ char	*get_cmd_path(char *cmd, char **env)
 
 	if (!cmd || !env)
 		return (NULL);
+	if (ft_strncmp(cmd, "minishell", 9) == 0)
+		return (ft_strdup(cmd));
 	if (ft_strchr(cmd, '/'))
 		return (ft_strdup(cmd));
 	path_env = extract_var("PATH", env);
