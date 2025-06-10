@@ -68,11 +68,9 @@ static char	*expand_core(const char *str, t_msh *sh,
 			token->quoted = true;
 		else if (handle == 3)
 			*expanded = true;
-		else
-		{
+		else if (handle == 4)
 			if (!res)
 				return (NULL);
-		}
 	}
 	return (res);
 }

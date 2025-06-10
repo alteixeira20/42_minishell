@@ -12,6 +12,31 @@
 
 #include "../includes/minishell.h"
 
+void	handle_dollar_quote(const char *str, int *i, char **res)
+{
+	int		j;
+	char	*val;
+	char	*tmp;
+
+	j = *i;
+	while (str[j] != '\'' && str[j] != '\"')
+		j++;
+	val = malloc(sizeof(char) * (j - *i + 1));
+	if (!val)
+		return ;
+	ft_bzero(val, ((j - *i) + 1));
+	while (*i < j)
+	{
+		val[*i - 2] = str[*i];
+		(*i)++;
+	}
+	val[*i - 2] = '\0';
+	tmp = ft_strjoin(*res, val);
+	free(*res);
+	free(val);
+	*res = tmp;
+}
+
 void	handle_dollar(const char *str, int *i, t_msh *sh, char **res)
 {
 	char	*val;
@@ -86,6 +111,12 @@ int	handle_all(const char *str, int *i, t_msh *sh, char **res)
 	}
 	else if (str[*i] == '$' && !sh->is_heredoc)
 	{
+		if (str[*i + 1] == '\'' || str[*i + 1] == '\"')
+		{
+			(*i) += 2;
+			handle_dollar_quote(str, &(*i), &(*res));
+			return (5);
+		}
 		handle_dollar(str, &(*i), sh, &(*res));
 		return (3);
 	}
