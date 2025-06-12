@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 18:12:05 by paalexan          #+#    #+#             */
-/*   Updated: 2025/06/12 14:06:42 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/06/12 14:21:57 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,10 @@ static char	*handle_heredoc_status(int status, char *filename)
 		free(filename);
 		g_exit = 130;
 		return (NULL);
+	}
+	else if (WIFEXITED(status))
+	{
+		g_exit = WEXITSTATUS(status);
 	}
 	return (filename);
 }
