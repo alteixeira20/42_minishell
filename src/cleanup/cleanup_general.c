@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 17:31:36 by paalexan          #+#    #+#             */
-/*   Updated: 2025/06/09 16:09:25 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/06/12 14:04:21 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,10 @@ void	free_token_list(t_token *token)
 	while (token)
 	{
 		next = token->next;
-		free(token->value);
-		free(token);
+		if (token->value)
+			free(token->value);
+		if (token)
+			free(token);
 		token = next;
 	}
 }
@@ -72,7 +74,7 @@ void	free_minishell(t_msh *sh)
 	if (sh->hostname)
 		free(sh->hostname);
 	if (sh->heredoc_tmpfiles)
-		free_heredoc_tmpfiles(sh->heredoc_tmpfiles);
+			free_heredoc_tmpfiles(sh->heredoc_tmpfiles);
 	if (sh->pids)
 		free(sh->pids);
 }

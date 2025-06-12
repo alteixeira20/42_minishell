@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 18:12:05 by paalexan          #+#    #+#             */
-/*   Updated: 2025/05/23 21:00:12 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/06/12 14:06:42 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,5 +118,7 @@ char	*write_heredoc_to_tmp(const char *delim, int index,
 		run_heredoc_child(delim, fd, sh, tokens);
 	close(fd);
 	waitpid(pid, &status, 0);
+	if (access(filename, F_OK) != 0)
+		return (NULL);
 	return (handle_heredoc_status(status, filename));
 }
