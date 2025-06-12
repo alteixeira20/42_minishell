@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 01:28:43 by paalexan          #+#    #+#             */
-/*   Updated: 2025/05/12 18:26:19 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/06/12 19:30:07 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ t_token	*init_token(void)
 	token->type = TOKEN_WORD;
 	token->expanded_empty = false;
 	token->next = NULL;
+	token->prev = NULL;
 	return (token);
 }
 

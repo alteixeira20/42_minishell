@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 18:12:05 by paalexan          #+#    #+#             */
-/*   Updated: 2025/05/23 18:32:19 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/06/12 19:36:28 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,14 +65,47 @@ static void	write_heredoc_content(const char *delim, int fd, t_msh *sh)
 	}
 }
 
+const char	*token_type_str(t_token_type type)
+{
+	if (type == TOKEN_WORD)
+		return "WORD";
+	if (type == TOKEN_PIPE)
+		return "PIPE";
+	if (type == TOKEN_REDIRECT_IN)
+		return "REDIRECT_IN";
+	if (type == TOKEN_REDIRECT_OUT)
+		return "REDIRECT_OUT";
+	if (type == TOKEN_APPEND)
+		return "APPEND";
+	if (type == TOKEN_HEREDOC)
+		return "HEREDOC";
+	return "UNKNOWN";
+}
+
+void	print_tokens(t_token *tokens)
+{
+	int i = 0;
+
+	printf("Tokens:\n");
+	while (tokens)
+	{
+		printf("[%d] Type: %s | Value: '%s'%s\n",
+			i++,
+			token_type_str(tokens->type),
+			tokens->value ? tokens->value : "(null)",
+			tokens->expanded_empty ? " | (was expanded to empty)" : "");
+		tokens = tokens->next;
+	}
+}
+
 static int	run_heredoc_child(const char *delim, int fd, t_msh *sh, t_token *tokens)
 {
 	setup_heredoc_signals();
 	write_heredoc_content(delim, fd, sh);
 	clean_fds();
-	free_env_array(sh->env);
 	free_token_list(tokens);
 	free_cmd(sh->cmds);
+	free_env_array(sh->env);
 	free_minishell(sh);
 	exit(0);
 }

@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 17:31:36 by paalexan          #+#    #+#             */
-/*   Updated: 2025/05/23 17:17:12 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/06/12 19:31:48 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ void	free_token_list(t_token *token)
 
 	if (!token)
 		return ;
+	while (token->prev)
+		token = token->prev;
 	while (token)
 	{
 		next = token->next;

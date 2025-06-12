@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 16:54:50 by paalexan          #+#    #+#             */
-/*   Updated: 2025/05/23 18:28:57 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/06/12 19:20:47 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,7 @@ typedef struct s_token
 	bool			expanded_empty;
 	bool			quoted;
 	struct s_token	*next;
+	struct s_token	*prev;
 }	t_token;
 
 typedef struct s_cmd
@@ -102,6 +103,8 @@ typedef struct s_cmd
 	t_redirect		*redirects;
 	bool			redirect_failed;
 	char			*redirect_failed_path;
+
+
 	int				input_fd;
 	int				output_fd;
 	bool			is_builtin;
@@ -120,6 +123,8 @@ typedef struct s_minishell
 	char	*hostname;
 	char	*user;
 	char	*home;
+
+	pid_t			*pids;
 
 	int		exit_status;
 	int		**pipes;
@@ -207,7 +212,7 @@ char		*get_next_segment(const char *str, int *i);
 /* ************************************************************************** */
 
 int			exec_ast(t_token *tokens, t_msh *sh);
-int			exec_pipeline(t_cmd *cmds, t_msh *sh, int in_fd);
+int			exec_pipeline(t_cmd *cmds, t_msh *sh, int in_fd, t_token *tokens);
 int			run_single_cmd(t_cmd **cmds, t_msh *sh, int *in_fd, pid_t *pid_out);
 int			run_builtin_in_parent(t_cmd *cmd, t_msh *sh);
 int			execute_all(t_cmd *cmds, t_msh *sh, int *in_fd, pid_t *pids);
@@ -315,6 +320,7 @@ void		free_env_array(char **env);
 void		free_minishell(t_msh *sh);
 void		free_hc_minishell(t_msh *sh);
 void		free_hc_tokens(t_token *token);
+void		free_heredoc_tmpfiles(t_hdoc_tmpfile *tmp);
 
 /* ************************************************************************** */
 /*                                   UTILS                                    */
