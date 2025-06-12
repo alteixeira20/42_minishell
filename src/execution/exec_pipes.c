@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 21:22:46 by paalexan          #+#    #+#             */
-/*   Updated: 2025/05/23 21:28:47 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/06/12 12:04:31 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,8 +98,6 @@ int	wait_all_children(pid_t *pids, int count)
 		}
 		i++;
 	}
-	free(pids);
-	pids = NULL;
 	g_exit = last_status;
 	return (last_status);
 }
