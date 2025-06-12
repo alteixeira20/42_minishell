@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 18:12:05 by paalexan          #+#    #+#             */
-/*   Updated: 2025/06/12 19:36:28 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/06/12 23:28:03 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,45 +65,12 @@ static void	write_heredoc_content(const char *delim, int fd, t_msh *sh)
 	}
 }
 
-const char	*token_type_str(t_token_type type)
-{
-	if (type == TOKEN_WORD)
-		return "WORD";
-	if (type == TOKEN_PIPE)
-		return "PIPE";
-	if (type == TOKEN_REDIRECT_IN)
-		return "REDIRECT_IN";
-	if (type == TOKEN_REDIRECT_OUT)
-		return "REDIRECT_OUT";
-	if (type == TOKEN_APPEND)
-		return "APPEND";
-	if (type == TOKEN_HEREDOC)
-		return "HEREDOC";
-	return "UNKNOWN";
-}
 
-void	print_tokens(t_token *tokens)
-{
-	int i = 0;
-
-	printf("Tokens:\n");
-	while (tokens)
-	{
-		printf("[%d] Type: %s | Value: '%s'%s\n",
-			i++,
-			token_type_str(tokens->type),
-			tokens->value ? tokens->value : "(null)",
-			tokens->expanded_empty ? " | (was expanded to empty)" : "");
-		tokens = tokens->next;
-	}
-}
-
-static int	run_heredoc_child(const char *delim, int fd, t_msh *sh, t_token *tokens)
+static int	run_heredoc_child(const char *delim, int fd, t_msh *sh)
 {
 	setup_heredoc_signals();
 	write_heredoc_content(delim, fd, sh);
 	clean_fds();
-	free_token_list(tokens);
 	free_cmd(sh->cmds);
 	free_env_array(sh->env);
 	free_minishell(sh);
@@ -115,14 +82,13 @@ static char	*handle_heredoc_status(int status, char *filename)
 	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
 	{
 		unlink(filename);
-		free(filename);
 		g_exit = 130;
 		return (NULL);
 	}
 	return (filename);
 }
 
-char	*write_heredoc_to_tmp(const char *delim, int index, t_msh *sh, t_token *tokens)
+char	*write_heredoc_to_tmp(const char *delim, int index, t_msh *sh)
 {
 	char			*filename;
 	int				fd;
@@ -141,7 +107,7 @@ char	*write_heredoc_to_tmp(const char *delim, int index, t_msh *sh, t_token *tok
 	}
 	pid = fork();
 	if (pid == 0)
-		run_heredoc_child(delim, fd, sh, tokens);
+		run_heredoc_child(delim, fd, sh);
 	close(fd);
 	waitpid(pid, &status, 0);
 	return (handle_heredoc_status(status, filename));

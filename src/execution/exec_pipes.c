@@ -5,100 +5,93 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/14 21:22:46 by paalexan          #+#    #+#             */
-/*   Updated: 2025/06/12 17:42:08 by paalexan         ###   ########.fr       */
+/*   Created: 2025/06/12 22:39:18 by paalexan          #+#    #+#             */
+/*   Updated: 2025/06/12 23:22:02 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	prepare_pipe(int pipe_fd[2], int has_next)
+static int	count_commands(t_cmd *cmd)
 {
-	pipe_fd[0] = -1;
-	pipe_fd[1] = -1;
-	if (has_next && pipe(pipe_fd) == -1)
+	int	count = 0;
+	while (cmd)
 	{
-		perror("pipe");
-		return (FAILURE);
+		count++;
+		cmd = cmd->next;
 	}
-	return (SUCCESS);
+	return (count);
 }
 
-int	fork_command(t_cmd *cmd, t_msh *sh, int *in_fd, int pipe_fd[2])
+static int	has_valid_cmd(t_cmd *cmd)
 {
-	pid_t				pid;
-	struct sigaction	old_int;
-	struct sigaction	old_quit;
-
-	surpress_par_sig(&old_int, &old_quit);
-	pid = fork();
-	if (pid == -1)
-		return (perror("fork"), FAILURE);
-	if (pid == 0)
-		exec_child(cmd, *in_fd, pipe_fd, sh);
-	restore_par_sig(&old_int, &old_quit);
-	return (pid);
-}
-
-void	handle_parent_cleanup(int *in_fd, int pipe_fd[2], int has_next)
-{
-	if (*in_fd != STDIN_FILENO)
-		close(*in_fd);
-	if (pipe_fd[1] != -1)
-		close(pipe_fd[1]);
-	if (has_next)
-		*in_fd = pipe_fd[0];
-	else if (pipe_fd[0] != -1)
-		close(pipe_fd[0]);
-}
-
-int	run_single_cmd(t_cmd **cmds, t_msh *sh, int *in_fd, pid_t *pid_out)
-{
-	int		pipe_fd[2];
-	int		has_next;
-
-	has_next = (*cmds)->next != NULL;
-	if (prepare_pipe(pipe_fd, has_next) == FAILURE)
-	{
-		*pid_out = -1;
-		handle_parent_cleanup(in_fd, pipe_fd, has_next);
-		*cmds = (*cmds)->next;
+	if (!cmd || !cmd->argv)
 		return (FAILURE);
-	}
-	*pid_out = fork_command(*cmds, sh, in_fd, pipe_fd);
-	if (*pid_out == FAILURE)
+	while (cmd)
 	{
-		*pid_out = -1;
-		handle_parent_cleanup(in_fd, pipe_fd, has_next);
-		*cmds = (*cmds)->next;
-		return (FAILURE);
-	}
-	handle_parent_cleanup(in_fd, pipe_fd, has_next);
-	*cmds = (*cmds)->next;
-	return (SUCCESS);
-}
-
-int	wait_all_children(pid_t *pids, int count)
-{
-	int	i;
-	int	status;
-	int	last_status;
-
-	i = 0;
-	last_status = 0;
-	while (i < count)
-	{
-		if (pids[i] > 0)
+		if (cmd->argv && cmd->argv[0] && cmd->is_valid)
+			return (SUCCESS);
+		if (cmd->argv && cmd->argv[0] && cmd->argv[0][0] == '\0')
 		{
-			waitpid(pids[i], &status, 0);
-			if (WIFEXITED(status))
-				last_status = WEXITSTATUS(status);
-			else if (WIFSIGNALED(status))
-				last_status = 128 + WTERMSIG(status);
+			ft_putstr_fd("Command '' not found\n", STDERR_FILENO);
+			return (FAILURE);
 		}
-		i++;
+		cmd = cmd->next;
 	}
-	free(pids);
-	g_exit = last_status;
-	return (last_status);
+	return (FAILURE);
+}
+
+static int	exec_single_builtin(t_cmd *cmds, t_msh *sh)
+{
+	int	status;
+
+	status = run_builtin_in_parent(cmds, sh);
+	free_cmd(cmds);
+	return (status);
+}
+
+static int	exec_prepare_pids(t_cmd *cmds, t_msh *sh, int *cmd_count)
+{
+	*cmd_count = count_commands(cmds);
+	sh->pids = ft_calloc(*cmd_count, sizeof(pid_t));
+	if (!sh->pids)
+	{
+		free_cmd(cmds);
+		return (FAILURE);
+	}
+	return (SUCCESS);
+}
+
+int	exec_pipeline(t_cmd *cmds, t_msh *sh, int in_fd)
+{
+	int		cmd_count;
+	int		status;
+	t_cmd	*cmds_head;
+
+	sh->pids = NULL;
+	sh->is_heredoc = false;
+	if (!cmds)
+		return (FAILURE);
+	cmds_head = cmds;
+	if (!cmds->next && cmds->is_builtin)
+		return (exec_single_builtin(cmds, sh));
+	if (has_valid_cmd(cmds_head) == FAILURE)
+	{
+		print_redirect_error(cmds_head);
+		free_cmd(cmds_head);
+		return (127);
+	}
+	if (exec_prepare_pids(cmds_head, sh, &cmd_count) == FAILURE)
+		return (FAILURE);
+	if (execute_all(cmds, sh, &in_fd, sh->pids) == FAILURE)
+	{
+		free(sh->pids);
+		return (FAILURE);
+	}
+	status = wait_all_children(sh->pids, cmd_count);
+	print_redirect_error(cmds_head);
+	if (in_fd != STDIN_FILENO)
+		close(in_fd);
+	free_cmd(cmds_head);
+	return (status);
 }

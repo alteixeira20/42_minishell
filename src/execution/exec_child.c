@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 03:40:27 by paalexan          #+#    #+#             */
-/*   Updated: 2025/06/12 18:48:21 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/06/12 23:12:27 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,9 @@ void	exec_child(t_cmd *cmd, int in_fd, int pipe_fd[2], t_msh *sh)
 			ft_putstr_fd(": command not found\n", STDERR_FILENO);
 			exit(127);
 		}
+		free_cmd(cmd);
+		free_env_array(sh->env);
+		free_minishell(sh);
 		exit(0);
 	}
 	if (cmd->argv[0][0] == '\0' || !cmd->is_valid)

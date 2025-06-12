@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 01:28:43 by paalexan          #+#    #+#             */
-/*   Updated: 2025/06/12 19:30:07 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/06/12 23:13:56 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,7 @@ int	init_sh(t_msh *sh, char **env)
 		free(pwd);
 	}
 	sh->cmds = NULL;
+	sh->tokens = NULL;
 	sh->cmd_cnt = 0;
 	sh->pipes = NULL;
 	sh->pipe_cnt = 0;

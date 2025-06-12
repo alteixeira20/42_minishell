@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 02:04:50 by paalexan          #+#    #+#             */
-/*   Updated: 2025/06/12 19:26:38 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/06/12 23:14:56 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ static int	handle_input_line(t_msh *sh, char *line)
 		free(line);
 		return (1);
 	}
+	sh->tokens = tokens;
 	g_exit = exec_ast(tokens, sh);
 	free(line);
 	return (1);
@@ -98,6 +99,7 @@ int	main(int ac, char **av, char **env)
 	if (init_sh(sh, env) != SUCCESS)
 		exit_error(INIT_ERR, errno);
 	loop(sh);
+    free_cmd(sh->cmds);
 	free_env_array(sh->env);
 	free_minishell(sh);
 	ft_putstr_fd("exit\n", STDOUT_FILENO);

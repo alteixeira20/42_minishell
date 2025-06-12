@@ -6,7 +6,7 @@
 #    By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/03 02:10:25 by paalexan          #+#    #+#              #
-#    Updated: 2025/05/26 15:02:04 by jopedro-         ###   ########.fr        #
+#    Updated: 2025/06/12 22:40:42 by paalexan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -71,6 +71,7 @@ SRC				+= $(EXEC_DIR)/exec.c
 SRC				+= $(EXEC_DIR)/exec_builtin_parent.c
 SRC				+= $(EXEC_DIR)/exec_pipes.c
 SRC				+= $(EXEC_DIR)/exec_child.c
+SRC				+= $(EXEC_DIR)/exec_child_utils.c
 SRC				+= $(EXEC_DIR)/exec_cmd.c
 SRC				+= $(EXEC_DIR)/exec_signals.c
 SRC				+= $(EXEC_DIR)/exec_utils.c

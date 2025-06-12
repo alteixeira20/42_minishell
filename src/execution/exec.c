@@ -6,23 +6,46 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 18:31:43 by paalexan          #+#    #+#             */
-/*   Updated: 2025/06/12 19:28:08 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/06/12 23:21:48 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-static int	count_commands(t_cmd *cmd)
+static void	exec_handle_invalid_cmd(t_cmd **cmds, int *in_fd)
 {
-	int	count;
-
-	count = 0;
-	while (cmd)
+	if (*in_fd != STDIN_FILENO)
 	{
-		count++;
-		cmd = cmd->next;
+		close(*in_fd);
+		*in_fd = STDIN_FILENO;
 	}
-	return (count);
+	if ((*cmds)->argv && (*cmds)->argv[0])
+	{
+		ft_putstr_fd("minishell: ", STDERR_FILENO);
+		ft_putstr_fd((*cmds)->argv[0], STDERR_FILENO);
+		ft_putstr_fd(": command not found\n", STDERR_FILENO);
+	}
+	else
+		ft_putstr_fd("minishell: : command not found\n", STDERR_FILENO);
+	g_exit = 127;
+	*cmds = (*cmds)->next;
+}
+
+static int	exec_handle_failed_redirect(t_cmd **cmds, pid_t *pids, int *i)
+{
+	if (*cmds && (*cmds)->redirect_failed)
+	{
+		pids[*i] = -1;
+		(*i)++;
+		return (1);
+	}
+	return (0);
+}
+
+static void	exec_reset_in_fd_if_needed(t_cmd *cmds, int *in_fd)
+{
+	if (!cmds)
+		*in_fd = STDIN_FILENO;
 }
 
 int	execute_all(t_cmd *cmds, t_msh *sh, int *in_fd, pid_t *pids)
@@ -34,35 +57,16 @@ int	execute_all(t_cmd *cmds, t_msh *sh, int *in_fd, pid_t *pids)
 	{
 		if (!cmds->argv || !cmds->argv[0] || !cmds->is_valid)
 		{
-			if (*in_fd != STDIN_FILENO)
-			{
-				close(*in_fd);
-				*in_fd = STDIN_FILENO;
-			}
-			if (cmds->argv && cmds->argv[0])
-			{
-				ft_putstr_fd("minishell: ", STDERR_FILENO);
-				ft_putstr_fd(cmds->argv[0], STDERR_FILENO);
-				ft_putstr_fd(": command not found\n", STDERR_FILENO);
-			}
-			else
-				ft_putstr_fd("minishell: : command not found\n", STDERR_FILENO);
-			g_exit = 127;
-			cmds = cmds->next;
+			exec_handle_invalid_cmd(&cmds, in_fd);
 			continue ;
 		}
 		if (run_single_cmd(&cmds, sh, in_fd, &pids[i]) == FAILURE)
 		{
-			if (cmds && cmds->redirect_failed)
-			{
-				pids[i] = -1;
-				i++;
+			if (exec_handle_failed_redirect(&cmds, pids, &i))
 				continue ;
-			}
 			return (FAILURE);
 		}
-		if (!cmds)
-			*in_fd = STDIN_FILENO;
+		exec_reset_in_fd_if_needed(cmds, in_fd);
 		i++;
 	}
 	if (*in_fd != STDIN_FILENO)
@@ -71,73 +75,6 @@ int	execute_all(t_cmd *cmds, t_msh *sh, int *in_fd, pid_t *pids)
 		*in_fd = STDIN_FILENO;
 	}
 	return (SUCCESS);
-}
-
-static int	has_valid_cmd(t_cmd *cmd)
-{
-	if (!cmd->argv)
-		return (FAILURE);
-	while (cmd)
-	{
-		if (cmd->argv && cmd->argv[0] && cmd->is_valid)
-			return (SUCCESS);
-		if (cmd->argv[0][0] == '\0')
-		{
-			ft_putstr_fd("Command '' not found\n", STDERR_FILENO);
-			return (FAILURE);
-		}
-		cmd = cmd->next;
-	}
-	return (FAILURE);
-}
-
-int	exec_pipeline(t_cmd *cmds, t_msh *sh, int in_fd, t_token *tokens)
-{
-	int		cmd_count;
-	int		status;
-	t_cmd	*cmds_head;
-
-	sh->pids = NULL;
-	sh->is_heredoc = false;
-	if (!cmds)
-		return (FAILURE);
-	cmds_head = cmds;
-	if (!cmds->next && cmds->is_builtin)
-	{
-		status = run_builtin_in_parent(cmds, sh);
-		if (cmds)
-			free_cmd(cmds);
-		free_token_list(tokens);
-		return (status);
-	}
-	if (has_valid_cmd(cmds) == FAILURE)
-	{
-		print_redirect_error(cmds);
-		free_cmd(cmds);
-		free_token_list(tokens);
-		return (127);
-	}
-	cmd_count = count_commands(cmds);
-	sh->pids = ft_calloc(cmd_count, sizeof(pid_t));
-	if (!sh->pids)
-	{
-		free_cmd(cmds_head);
-		free_token_list(tokens);
-		return (FAILURE);
-	}
-	if (execute_all(cmds, sh, &in_fd, sh->pids) == FAILURE)
-	{
-		free(sh->pids);
-		free_token_list(tokens);
-		return (FAILURE);
-	}
-	status = wait_all_children(sh->pids, cmd_count);
-	print_redirect_error(cmds_head);
-	if (in_fd != STDIN_FILENO)
-		close(in_fd);
-	free_cmd(cmds_head);
-	free_token_list(tokens);
-	return (status);
 }
 
 int	exec_ast(t_token *tokens, t_msh *sh)
@@ -150,13 +87,17 @@ int	exec_ast(t_token *tokens, t_msh *sh)
 	cmds = cmd_from_tokens(tokens, sh);
 	if (!cmds)
 	{
+		if (sh->cmds)
+		{
+			free_cmd(sh->cmds);
+			sh->cmds = NULL;
+		}
 		g_exit = 0;
-		sh->cmds = NULL;
 		return (SUCCESS);
 	}
 	sh->cmds = cmds;
 	in_fd = 0;
-	status = exec_pipeline(cmds, sh, in_fd, tokens);
+	status = exec_pipeline(cmds, sh, in_fd);
 	g_exit = status;
 	return (status);
 }

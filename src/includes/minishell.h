@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 16:54:50 by paalexan          #+#    #+#             */
-/*   Updated: 2025/06/12 19:20:47 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/06/12 23:20:34 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,7 @@ typedef struct s_minishell
 	t_cmd	*cmds;
 	int		cmd_cnt;
 
+	t_token	*tokens;
 	char	**env;
 	char	**path;
 
@@ -212,7 +213,7 @@ char		*get_next_segment(const char *str, int *i);
 /* ************************************************************************** */
 
 int			exec_ast(t_token *tokens, t_msh *sh);
-int			exec_pipeline(t_cmd *cmds, t_msh *sh, int in_fd, t_token *tokens);
+int			exec_pipeline(t_cmd *cmds, t_msh *sh, int in_fd);
 int			run_single_cmd(t_cmd **cmds, t_msh *sh, int *in_fd, pid_t *pid_out);
 int			run_builtin_in_parent(t_cmd *cmd, t_msh *sh);
 int			execute_all(t_cmd *cmds, t_msh *sh, int *in_fd, pid_t *pids);
@@ -284,7 +285,7 @@ int			check_input_file(t_cmd *cmd, const char *filename);
 int			check_output_permission(t_cmd *cmd, t_redirect *redir);
 
 // HEREDOC UTIL
-char		*write_heredoc_to_tmp(const char *delim, int index, t_msh *sh, t_token *tokens);
+char		*write_heredoc_to_tmp(const char *delim, int index, t_msh *sh);
 char		*handle_expansion(char *line, t_msh *sh);
 
 /* ************************************************************************** */
