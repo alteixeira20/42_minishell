@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 14:34:23 by paalexan          #+#    #+#             */
-/*   Updated: 2025/05/26 16:11:09 by jopedro-         ###   ########.fr       */
+/*   Updated: 2025/05/12 18:33:42 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,12 +48,10 @@ char	*expand_one(const char *str, int *i, t_msh *sh)
 	return (val);
 }
 
-static char	*expand_core(const char *str, t_msh *sh,
-						t_token *token, bool *expanded)
+static char	*expand_core(const char *str, t_msh *sh, t_token *token, bool *expanded)
 {
 	int		i;
 	char	*res;
-	int		handle;
 
 	i = 0;
 	res = ft_strdup("");
@@ -61,16 +59,27 @@ static char	*expand_core(const char *str, t_msh *sh,
 		return (NULL);
 	while (str[i])
 	{
-		handle = handle_all(str, &i, sh, &res);
-		if (handle == 1)
+		if (str[i] == '\'')
+		{
+			handle_single_quote(str, &i, &res);
 			token->quoted = true;
-		else if (handle == 2)
+		}
+		else if (str[i] == '"')
+		{
+			handle_double_quote(str, &i, sh, &res);
 			token->quoted = true;
-		else if (handle == 3)
+		}
+		else if (str[i] == '$' && !sh->is_heredoc)
+		{
+			handle_dollar(str, &i, sh, &res);
 			*expanded = true;
-		else if (handle == 4)
+		}
+		else
+		{
+			ft_str_append_char(&res, str[i++]);
 			if (!res)
 				return (NULL);
+		}
 	}
 	return (res);
 }
@@ -100,8 +109,7 @@ static void	setup_heredoc(const char *val, t_msh *sh)
 	}
 }
 
-char	*expand_token(const char *val, t_msh *sh,
-					t_token *token, bool *expanded)
+char	*expand_token(const char *val, t_msh *sh, t_token *token, bool *expanded)
 {
 	token->quoted = false;
 	*expanded = false;

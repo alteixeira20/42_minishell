@@ -6,7 +6,7 @@
 /*   By: jopedro- <jopedro-@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 12:10:29 by jopedro-          #+#    #+#             */
-/*   Updated: 2025/05/23 21:02:48 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/05/23 18:09:38 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,10 @@ void	free_hc_tokens(t_token *token)
 	}
 }
 
-void	free_heredoc_tmpfiles(t_hdoc_tmpfile *tmp)
+static void	free_heredoc_tmpfiles(t_hdoc_tmpfile *tmp)
 {
 	t_hdoc_tmpfile	*next;
 
-	if (!tmp)
-		return ;
 	while (tmp)
 	{
 		next = tmp->next;
@@ -54,4 +52,6 @@ void	free_hc_minishell(t_msh *sh)
 		free(sh->user);
 	if (sh->hostname)
 		free(sh->hostname);
+	if (sh->heredoc_tmpfiles)
+		free_heredoc_tmpfiles(sh->heredoc_tmpfiles);
 }

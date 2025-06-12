@@ -1,0 +1,92 @@
+Breakpoint 1 at 0x175b: file src/main.c, line 97.
+Starting program: /home/quilhos/Desktop/42porto/42_minishell/minishell 
+
+This GDB supports auto-downloading debuginfo from the following URLs:
+  <https://debuginfod.ubuntu.com>
+Debuginfod has been disabled.
+To make this setting permanent, add 'set debuginfod enabled off' to .gdbinit.
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+warning: could not find '.gnu_debugaltlink' file for /lib/x86_64-linux-gnu/libtinfo.so.6
+
+Breakpoint 1, main (ac=1, av=0x7fffffffe168, env=0x7fffffffe178) at src/main.c:97
+[Attaching after Thread 0x7ffff7f14b80 (LWP 281394) fork to child process 281589]
+[New inferior 2 (process 281589)]
+[Detaching after fork from parent process 281394]
+[Inferior 1 (process 281394) detached]
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+[Inferior 2 (process 281589) exited normally]
+The program is not being run.
+The program is not being run.
+Breakpoint 1 at 0x8797: file src/redirection/heredocs.c, line 20.
+Starting program: /home/quilhos/Desktop/42porto/42_minishell/minishell 
+
+This GDB supports auto-downloading debuginfo from the following URLs:
+  <https://debuginfod.ubuntu.com>
+Debuginfod has been disabled.
+To make this setting permanent, add 'set debuginfod enabled off' to .gdbinit.
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+warning: could not find '.gnu_debugaltlink' file for /lib/x86_64-linux-gnu/libtinfo.so.6
+
+Breakpoint 1, handle_redirect_heredoc (cmd=0x5555555a3100, sh=0x555555563040 <sh>, file_tok=0x5555555a30a0, tokens=0x5555555a20a0) at src/redirection/heredocs.c:20
+write_heredoc_to_tmp (delim=0x5555555a30e0 "EOF", index=0, sh=0x555555563040 <sh>, tokens=0x5555555a20a0) at src/redirection/heredocs_utils.c:104
+heredoc_tmpname (index=0, sh=0x555555563040 <sh>) at src/redirection/heredocs_utils.c:22
+ft_strdup (s=0x55555555f333 "/tmp/.minishell_heredoc_") at libft/ft_strdup.c:22
+ft_strlen (str=0x55555555f333 "/tmp/.minishell_heredoc_") at libft/ft_strlen.c:19
+ft_strdup (s=0x55555555f333 "/tmp/.minishell_heredoc_") at libft/ft_strdup.c:23
+0x00007ffff7cad664 in __GI___libc_malloc (bytes=25) at ./malloc/malloc.c:3301
+checked_request2size (req=25) at ./malloc/malloc.c:1326
+tcache_get (tc_idx=<optimized out>) at ./malloc/malloc.c:3199
+__GI___libc_malloc (bytes=25) at ./malloc/malloc.c:3321
+ft_strdup (s=0x55555555f333 "/tmp/.minishell_heredoc_") at libft/ft_strdup.c:24
+Undefined command: "nn".  Try "help".
+heredoc_tmpname (index=0, sh=0x555555563040 <sh>) at src/redirection/heredocs_utils.c:23
+write_heredoc_to_tmp (delim=0x5555555a30e0 "EOF", index=0, sh=0x555555563040 <sh>, tokens=0x5555555a20a0) at src/redirection/heredocs_utils.c:111
+[Attaching after Thread 0x7ffff7f14b80 (LWP 286765) fork to child process 289626]
+[New inferior 2 (process 289626)]
+[Detaching after fork from parent process 286765]
+[Inferior 1 (process 286765) detached]
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+[Switching to Thread 0x7ffff7f14b80 (LWP 289626)]
+write_heredoc_to_tmp (delim=0x5555555a30e0 "EOF", index=0, sh=0x555555563040 <sh>, tokens=0x5555555a20a0) at src/redirection/heredocs_utils.c:121
+[Inferior 2 (process 289626) exited normally]
+The program is not being run.
+Breakpoint 2 at 0x8432: run_heredoc_child. (2 locations)
+Starting program: /home/quilhos/Desktop/42porto/42_minishell/minishell 
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+warning: could not find '.gnu_debugaltlink' file for /lib/x86_64-linux-gnu/libtinfo.so.6
+
+Breakpoint 1, handle_redirect_heredoc (cmd=0x5555555a3140, sh=0x555555563040 <sh>, file_tok=0x5555555a30e0, tokens=0x5555555a20e0) at src/redirection/heredocs.c:20
+Continuing.
+[Attaching after Thread 0x7ffff7f14b80 (LWP 290424) fork to child process 290690]
+[New inferior 3 (process 290690)]
+[Detaching after fork from parent process 290424]
+[Inferior 2 (process 290424) detached]
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+[Switching to Thread 0x7ffff7f14b80 (LWP 290690)]
+
+Thread 3.1 "minishell" hit Breakpoint 2.2, run_heredoc_child (delim=0x5555555a3120 "end", fd=3, sh=0x555555563040 <sh>, tokens=0x5555555a20e0) at src/redirection/heredocs_utils.c:71
+setup_heredoc_signals () at src/signals/signals.c:41
+__bsd_signal (sig=2, handler=0x555555555c2c <heredoc_sigint_handler>) at ../sysdeps/posix/signal.c:30
+is_internal_signal (sig=<optimized out>) at ../sysdeps/unix/sysv/linux/internal-signals.h:53
+__sigaddset (sig=<optimized out>, set=<optimized out>) at ../sysdeps/posix/signal.c:41
+__bsd_signal (sig=2, handler=0x555555555c2c <heredoc_sigint_handler>) at ../sysdeps/unix/sysv/linux/sigsetops.h:102
+setup_heredoc_signals () at src/signals/signals.c:42
+run_heredoc_child (delim=0x5555555a3120 "end", fd=3, sh=0x555555563040 <sh>, tokens=0x5555555a20e0) at src/redirection/heredocs_utils.c:72
+write_heredoc_content (delim=0x5555555a3120 "end", fd=3, sh=0x555555563040 <sh>) at src/redirection/heredocs_utils.c:48
+ft_strcmp (s1=0x555555586f70 "EOF", s2=0x5555555a3120 "end") at libft/ft_strcmp.c:17
+write_heredoc_content (delim=0x5555555a3120 "end", fd=3, sh=0x555555563040 <sh>) at src/redirection/heredocs_utils.c:62
+handle_expansion (line=0x555555586f70 "EOF", sh=0x555555563040 <sh>) at src/redirection/heredocs_utils_2.c:38
+expand_heredoc_line (line=0x555555586f70 "EOF", sh=0x555555563040 <sh>) at src/redirection/heredocs_utils_2.c:16
+ft_strdup (s=0x55555555f351 "") at libft/ft_strdup.c:22
+ft_strlen (str=0x55555555f351 "") at libft/ft_strlen.c:19
+ft_strdup (s=0x55555555f351 "") at libft/ft_strdup.c:23
+expand_heredoc_line (line=0x555555586f70 "EOF", sh=0x555555563040 <sh>) at src/redirection/heredocs_utils_2.c:24
+handle_expansion (line=0x555555586f70 "EOF", sh=0x555555563040 <sh>) at src/redirection/heredocs_utils_2.c:44
+write_heredoc_content (delim=0x5555555a3120 "end", fd=3, sh=0x555555563040 <sh>) at src/redirection/heredocs_utils.c:63
+Undefined command: "nn".  Try "help".

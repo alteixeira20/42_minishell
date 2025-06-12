@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 16:54:50 by paalexan          #+#    #+#             */
-/*   Updated: 2025/06/09 16:08:27 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/05/23 18:28:57 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,6 @@ typedef struct s_minishell
 	int		**pipes;
 	int		pipe_cnt;
 	int		hd_cnt;
-	pid_t	*pids;
 
 	t_hdoc_tmpfile	*heredoc_tmpfiles;
 	bool	heredoc_quoted;
@@ -188,7 +187,6 @@ char		*expand_token(const char *val, t_msh *sh, t_token *token,
 void		handle_single_quote(const char *str, int *i, char **res);
 void		handle_double_quote(const char *str, int *i, t_msh *sh, char **res);
 void		handle_dollar(const char *str, int *i, t_msh *sh, char **res);
-int			handle_all(const char *str, int *i, t_msh *sh, char **res);
 
 /* ************************************************************************** */
 /*                                 TOKENIZER                                  */
@@ -235,7 +233,6 @@ int			cmd_cd(t_cmd *cmd, t_msh *sh);
 int			cmd_echo(t_cmd *cmd);
 int			cmd_env(t_cmd *cmd, t_msh *sh);
 int			cmd_exit(t_cmd *cmd, t_msh *sh);
-int			check_valid_long(const char *str, long *code);
 int			cmd_pwd(t_cmd *cmd);
 int			cmd_unset(t_cmd *cmd, t_msh *sh);
 
@@ -268,7 +265,7 @@ void		add_redirect(t_cmd *cmd, t_redirect_type type,
 				const char *filename);
 int			handle_redirect_in(t_cmd *cmd, t_token *file_tok);
 int			handle_redirect_out(t_cmd *cmd, t_token *file_tok, bool append);
-int			handle_redirect_heredoc(t_cmd *cmd, t_msh *sh, t_token *file_tok, t_token *tokens);
+int			handle_redirect_heredoc(t_cmd *cmd, t_msh *sh, t_token *file_tok);
 
 // REDIRECT EXECUTION
 int			apply_all_redirects(t_cmd *cmd, t_msh *sh);
@@ -318,7 +315,6 @@ void		free_env_array(char **env);
 void		free_minishell(t_msh *sh);
 void		free_hc_minishell(t_msh *sh);
 void		free_hc_tokens(t_token *token);
-void		free_heredoc_tmpfiles(t_hdoc_tmpfile *tmp);
 
 /* ************************************************************************** */
 /*                                   UTILS                                    */

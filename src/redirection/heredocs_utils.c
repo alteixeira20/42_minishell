@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 18:12:05 by paalexan          #+#    #+#             */
-/*   Updated: 2025/06/12 16:43:50 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/05/23 18:32:19 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,7 @@ static void	write_heredoc_content(const char *delim, int fd, t_msh *sh)
 	}
 }
 
-static int	run_heredoc_child(const char *delim, int fd,
-							t_msh *sh, t_token *tokens)
+static int	run_heredoc_child(const char *delim, int fd, t_msh *sh, t_token *tokens)
 {
 	setup_heredoc_signals();
 	write_heredoc_content(delim, fd, sh);
@@ -74,11 +73,6 @@ static int	run_heredoc_child(const char *delim, int fd,
 	free_env_array(sh->env);
 	free_token_list(tokens);
 	free_cmd(sh->cmds);
-	if (sh->heredoc_tmpfiles)
-	{
-		free_heredoc_tmpfiles(sh->heredoc_tmpfiles);
-		sh->heredoc_tmpfiles = NULL;
-	}
 	free_minishell(sh);
 	exit(0);
 }
@@ -92,15 +86,10 @@ static char	*handle_heredoc_status(int status, char *filename)
 		g_exit = 130;
 		return (NULL);
 	}
-	else if (WIFEXITED(status))
-	{
-		g_exit = WEXITSTATUS(status);
-	}
 	return (filename);
 }
 
-char	*write_heredoc_to_tmp(const char *delim, int index,
-							t_msh *sh, t_token *tokens)
+char	*write_heredoc_to_tmp(const char *delim, int index, t_msh *sh, t_token *tokens)
 {
 	char			*filename;
 	int				fd;
@@ -122,10 +111,5 @@ char	*write_heredoc_to_tmp(const char *delim, int index,
 		run_heredoc_child(delim, fd, sh, tokens);
 	close(fd);
 	waitpid(pid, &status, 0);
-	if (access(filename, F_OK) != 0)
-	{
-		printf("Error creating the tmp heredoc file\n");
-		return (NULL);
-	}
 	return (handle_heredoc_status(status, filename));
 }

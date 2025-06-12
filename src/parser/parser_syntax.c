@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 00:46:26 by paalexan          #+#    #+#             */
-/*   Updated: 2025/06/12 14:26:50 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/05/23 17:11:51 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,12 +88,6 @@ t_syntax	check_cmd_syntax(t_token *tokens, bool print)
 	if (tokens->type == TOKEN_PIPE)
 	{
 		print_syntax_error("|", print);
-		return (SYNTAX_ERROR);
-	}
-	if (tokens->type == TOKEN_HEREDOC)
-	{
-		if (print)
-			ft_putendl_fd("syntax error near unexpected token `newline'", STDERR_FILENO);
 		return (SYNTAX_ERROR);
 	}
 	return (check_token_sequence(tokens, print));
