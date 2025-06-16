@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 22:39:18 by paalexan          #+#    #+#             */
-/*   Updated: 2025/06/12 23:22:02 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/06/16 15:30:25 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ static int	exec_prepare_pids(t_cmd *cmds, t_msh *sh, int *cmd_count)
 	sh->pids = ft_calloc(*cmd_count, sizeof(pid_t));
 	if (!sh->pids)
 	{
-		free_cmd(cmds);
+		free(sh->pids);
 		return (FAILURE);
 	}
 	return (SUCCESS);

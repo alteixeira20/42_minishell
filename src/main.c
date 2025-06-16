@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 02:04:50 by paalexan          #+#    #+#             */
-/*   Updated: 2025/06/12 23:14:56 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/06/16 15:58:35 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ static int	handle_input_line(t_msh *sh, char *line)
 	}
 	sh->tokens = tokens;
 	g_exit = exec_ast(tokens, sh);
+	free_token_list(sh->tokens);
 	free(line);
 	return (1);
 }
