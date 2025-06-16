@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 19:24:08 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/16 19:03:51 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/06/16 15:26:22 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ char	*get_cmd_path(char *cmd, char **env)
 	if (!cmd || !env)
 		return (NULL);
 	if (ft_strchr(cmd, '/'))
+		return (ft_strdup(cmd));
+	if (ft_strncmp(cmd, "minishell", 9) == 0)
 		return (ft_strdup(cmd));
 	path_env = extract_var("PATH", env);
 	if (!path_env)
