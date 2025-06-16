@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 18:12:05 by paalexan          #+#    #+#             */
-/*   Updated: 2025/06/12 23:28:03 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/06/16 15:04:17 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ static void	write_heredoc_content(const char *delim, int fd, t_msh *sh)
 			free(line);
 			break ;
 		}
+		printf("write_heredoc_content: %s\n", line);
 		line = handle_expansion(line, sh);
 		ft_putendl_fd(line, fd);
 		free(line);
