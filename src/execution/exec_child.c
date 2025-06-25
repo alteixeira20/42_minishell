@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 03:40:27 by paalexan          #+#    #+#             */
-/*   Updated: 2025/06/25 18:27:52 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/06/25 18:44:20 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ static void	handle_cmd_error(t_cmd *cmd, t_msh *sh)
 	}
 	else
 	{
+		free(sh->pids);
 		ft_putstr_fd(cmd->argv[0], STDERR_FILENO);
 		ft_putstr_fd(": command not found\n", STDERR_FILENO);
 		code = 127;
@@ -72,9 +73,10 @@ static void	try_exec_binary(t_cmd *cmd, t_msh *sh)
 		ft_putstr_fd(full_path, STDERR_FILENO);
 		ft_putendl_fd(": Is a directory", STDERR_FILENO);
 		free(full_path);
+		free(sh->pids);
 		free_cmd(cmd);
 		free_env_array(sh->env);
-		free_minishell(sh);
+		free_hc_minishell(sh);
 		exit(126);
 	}
 	if (!cmd->is_valid)

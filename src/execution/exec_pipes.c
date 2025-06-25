@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 22:39:18 by paalexan          #+#    #+#             */
-/*   Updated: 2025/06/25 17:14:09 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/06/25 18:31:40 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,10 @@ int	exec_pipeline(t_cmd *cmds, t_msh *sh, int in_fd)
 		return (127);
 	}
 	if (exec_prepare_pids(cmds_head, sh, &cmd_count) == FAILURE)
+	{
+		free(sh->pids);
 		return (FAILURE);
+	}
 	if (execute_all(cmds, sh, &in_fd, sh->pids) == FAILURE)
 	{
 		free(sh->pids);
