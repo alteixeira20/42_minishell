@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 01:07:31 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/30 02:30:16 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/06/25 19:22:49 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,8 @@ char	*extract_special_char(const char *str, int *i)
 	int	start;
 
 	start = *i;
-	if ((str[*i] == '>' || str[*i] == '<') && str[*i] == str[*i + 1])
-		(*i) += 2;
-	else
-		(*i) += 1;
+	while (str[*i] == str[start])
+		(*i)++;
 	return (ft_substr(str, start, *i - start));
 }
 
