@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 03:40:27 by paalexan          #+#    #+#             */
-/*   Updated: 2025/06/16 16:33:11 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/06/25 18:27:52 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ static void	handle_cmd_error(t_cmd *cmd, t_msh *sh)
 	}
 	free_cmd(cmd);
 	free_env_array(sh->env);
-	free_minishell(sh);
+	free_hc_minishell(sh);
 	exit(code);
 }
 
