@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 16:54:50 by paalexan          #+#    #+#             */
-/*   Updated: 2025/06/25 18:21:34 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/06/25 18:54:53 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -327,6 +327,7 @@ void		free_minishell(t_msh *sh);
 void		free_hc_minishell(t_msh *sh);
 void		free_hc_tokens(t_token *token);
 void		free_heredoc_tmpfiles(t_hdoc_tmpfile *tmp);
+void		free_final_minishell(t_msh *sh);
 
 /* ************************************************************************** */
 /*                                   UTILS                                    */
