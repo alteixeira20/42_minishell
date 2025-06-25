@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 22:39:18 by paalexan          #+#    #+#             */
-/*   Updated: 2025/06/16 15:30:25 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/06/25 17:14:09 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ static int	exec_single_builtin(t_cmd *cmds, t_msh *sh)
 	int	status;
 
 	status = run_builtin_in_parent(cmds, sh);
-	free_cmd(cmds);
 	return (status);
 }
 
@@ -78,7 +77,6 @@ int	exec_pipeline(t_cmd *cmds, t_msh *sh, int in_fd)
 	if (has_valid_cmd(cmds_head) == FAILURE)
 	{
 		print_redirect_error(cmds_head);
-		free_cmd(cmds_head);
 		return (127);
 	}
 	if (exec_prepare_pids(cmds_head, sh, &cmd_count) == FAILURE)
@@ -92,6 +90,5 @@ int	exec_pipeline(t_cmd *cmds, t_msh *sh, int in_fd)
 	print_redirect_error(cmds_head);
 	if (in_fd != STDIN_FILENO)
 		close(in_fd);
-	free_cmd(cmds_head);
 	return (status);
 }
