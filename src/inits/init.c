@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 01:28:43 by paalexan          #+#    #+#             */
-/*   Updated: 2025/06/12 23:13:56 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/06/25 13:31:37 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ t_cmd	*cmd_new(void)
 	cmd = ft_calloc(1, sizeof(t_cmd));
 	if (!cmd)
 		return (NULL);
+	fprintf(stderr, "[cmd_new] Created cmd at %p\n", (void *)cmd);
 	cmd->argc = 0;
 	cmd->argv = NULL;
 	cmd->redirects = NULL;
@@ -71,6 +72,7 @@ t_cmd	*cmd_new(void)
 	cmd->is_builtin = false;
 	cmd->is_valid = true;
 	cmd->next = NULL;
+	cmd->prev = NULL;
 	return (cmd);
 }
 
@@ -115,6 +117,7 @@ int	init_sh(t_msh *sh, char **env)
 	sh->path = NULL;
 	sh->exit_status = 0;
 	sh->heredoc_interrupted = false;
+	sh->heredoc_tmpfiles = NULL;
 	sh->is_heredoc = false;
 	sh->error_printed = false;
 	return (SUCCESS);

@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 16:54:50 by paalexan          #+#    #+#             */
-/*   Updated: 2025/06/16 14:52:12 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/06/25 13:43:09 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ typedef struct s_hdoc_tmpfile
 {
 	char					*path;
 	struct s_hdoc_tmpfile	*next;
+	struct s_hdoc_tmpfile	*prev;
 }	t_hdoc_tmpfile;
 
 typedef struct s_token
@@ -110,6 +111,7 @@ typedef struct s_cmd
 	bool			is_builtin;
 	bool			is_valid;
 	struct s_cmd	*next;
+	struct s_cmd	*prev;
 }	t_cmd;
 
 typedef struct s_minishell

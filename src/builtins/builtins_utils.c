@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 02:39:09 by paalexan          #+#    #+#             */
-/*   Updated: 2025/06/12 22:53:10 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/06/16 16:56:28 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static t_cmd	*init_command_skip_empty(t_token **tokens)
 		*tokens = (*tokens)->next;
 	if (!*tokens || (*tokens)->type == TOKEN_PIPE)
 	{
-		free_cmd(cmd);
+		free_one_cmd(cmd);
 		return (NULL);
 	}
 	return (cmd);
@@ -87,12 +87,10 @@ static t_cmd	*process_command_node(t_token **tokens, t_msh *sh)
 
 t_cmd	*build_cmd_list(t_token *tokens, t_msh *sh)
 {
-	t_cmd	*first;
-	t_cmd	*last;
+	t_cmd	*first = NULL;
+	t_cmd	*last = NULL;
 	t_cmd	*new_cmd;
 
-	first = NULL;
-	last = NULL;
 	while (tokens)
 	{
 		new_cmd = process_command_node(&tokens, sh);
@@ -104,8 +102,12 @@ t_cmd	*build_cmd_list(t_token *tokens, t_msh *sh)
 		if (!first)
 			first = new_cmd;
 		else
+		{
 			last->next = new_cmd;
+			new_cmd->prev = last;
+		}
 		last = new_cmd;
 	}
 	return (first);
 }
+

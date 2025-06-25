@@ -6,11 +6,20 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 18:12:05 by paalexan          #+#    #+#             */
-/*   Updated: 2025/06/16 15:04:17 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/06/25 14:17:08 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+static void	add_heredoc_tmpfile(t_hdoc_tmpfile *new_node, t_msh *sh)
+{
+	new_node->next = sh->heredoc_tmpfiles;
+	new_node->prev = NULL;
+	if (sh->heredoc_tmpfiles)
+		sh->heredoc_tmpfiles->prev = new_node;
+	sh->heredoc_tmpfiles = new_node;
+}
 
 static char	*heredoc_tmpname(int index, t_msh *sh)
 {
@@ -22,11 +31,7 @@ static char	*heredoc_tmpname(int index, t_msh *sh)
 	base = ft_strdup("/tmp/.minishell_heredoc_");
 	num = ft_itoa(index);
 	if (!base || !num)
-	{
-		free(base);
-		free(num);
-		return (NULL);
-	}
+		return (free(base), free(num), NULL);
 	res = ft_strjoin(base, num);
 	free(base);
 	free(num);
@@ -34,8 +39,7 @@ static char	*heredoc_tmpname(int index, t_msh *sh)
 	if (!new_node)
 		return (res);
 	new_node->path = res;
-	new_node->next = sh->heredoc_tmpfiles;
-	sh->heredoc_tmpfiles = new_node;
+	add_heredoc_tmpfile(new_node, sh);
 	return (res);
 }
 
@@ -59,13 +63,11 @@ static void	write_heredoc_content(const char *delim, int fd, t_msh *sh)
 			free(line);
 			break ;
 		}
-		printf("write_heredoc_content: %s\n", line);
 		line = handle_expansion(line, sh);
 		ft_putendl_fd(line, fd);
 		free(line);
 	}
 }
-
 
 static int	run_heredoc_child(const char *delim, int fd, t_msh *sh)
 {
@@ -74,7 +76,7 @@ static int	run_heredoc_child(const char *delim, int fd, t_msh *sh)
 	clean_fds();
 	free_cmd(sh->cmds);
 	free_env_array(sh->env);
-	free_minishell(sh);
+	free_hc_minishell(sh);
 	exit(0);
 }
 

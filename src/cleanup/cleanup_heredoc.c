@@ -6,7 +6,7 @@
 /*   By: jopedro- <jopedro-@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 12:10:29 by jopedro-          #+#    #+#             */
-/*   Updated: 2025/06/12 23:25:45 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/06/25 14:17:00 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,17 +27,19 @@ void	free_hc_tokens(t_token *token)
 	}
 }
 
-void    free_heredoc_tmpfiles(t_hdoc_tmpfile *lst)
+void	free_heredoc_tmpfiles(t_hdoc_tmpfile *lst)
 {
-    t_hdoc_tmpfile *tmp;
+	t_hdoc_tmpfile	*tmp;
 
-    while (lst)
-    {
-        tmp = lst->next;
-        free(lst->path);
-        free(lst);
-        lst = tmp;
-    }
+	while (lst && lst->prev)
+		lst = lst->prev;
+	while (lst)
+	{
+		tmp = lst->next;
+		free(lst->path);
+		free(lst);
+		lst = tmp;
+	}
 }
 
 void	free_hc_minishell(t_msh *sh)
@@ -48,6 +50,9 @@ void	free_hc_minishell(t_msh *sh)
 		free(sh->user);
 	if (sh->hostname)
 		free(sh->hostname);
+	if (sh->tokens)
+		free_token_list(sh->tokens);
 	if (sh->heredoc_tmpfiles)
 		free_heredoc_tmpfiles(sh->heredoc_tmpfiles);
 }
+

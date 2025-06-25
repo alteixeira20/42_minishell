@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 03:40:27 by paalexan          #+#    #+#             */
-/*   Updated: 2025/06/12 23:12:27 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/06/16 16:33:11 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ static void	try_exec_binary(t_cmd *cmd, t_msh *sh)
 	perror(full_path);
 	code = get_exec_error_code(full_path);
 	free(full_path);
-	free_cmd(cmd);
+	free_cmd(sh->cmds);
 	free_env_array(sh->env);
 	free_minishell(sh);
 	exit(code);

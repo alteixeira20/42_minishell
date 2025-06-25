@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 00:44:36 by paalexan          #+#    #+#             */
-/*   Updated: 2025/06/12 23:10:59 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/06/16 16:59:04 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ void	token_add_back(t_token **list, t_token *new_token)
 	{
 		*list = new_token;
 		new_token->prev = NULL;
+		new_token->next = NULL;
 		return ;
 	}
 	temp = *list;
@@ -83,4 +84,5 @@ void	token_add_back(t_token **list, t_token *new_token)
 		temp = temp->next;
 	temp->next = new_token;
 	new_token->prev = temp;
+	new_token->next = NULL;
 }
