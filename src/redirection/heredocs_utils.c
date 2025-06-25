@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 18:12:05 by paalexan          #+#    #+#             */
-/*   Updated: 2025/06/25 17:17:54 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/06/25 18:22:13 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,11 +69,12 @@ static void	write_heredoc_content(const char *delim, int fd, t_msh *sh)
 	}
 }
 
-static int	run_heredoc_child(const char *delim, int fd, t_msh *sh)
+static int	run_heredoc_child(const char *delim, int fd, t_msh *sh, t_cmd *cmds)
 {
 	setup_heredoc_signals();
 	write_heredoc_content(delim, fd, sh);
-	clean_fds();
+	close(fd);
+	free_cmd(cmds);
 	free_env_array(sh->env);
 	free_hc_minishell(sh);
 	exit(0);
@@ -90,7 +91,7 @@ static char	*handle_heredoc_status(int status, char *filename)
 	return (filename);
 }
 
-char	*write_heredoc_to_tmp(const char *delim, int index, t_msh *sh)
+char	*write_heredoc_to_tmp(const char *delim, int index, t_msh *sh, t_cmd *cmds)
 {
 	char			*filename;
 	int				fd;
@@ -109,7 +110,7 @@ char	*write_heredoc_to_tmp(const char *delim, int index, t_msh *sh)
 	}
 	pid = fork();
 	if (pid == 0)
-		run_heredoc_child(delim, fd, sh);
+		run_heredoc_child(delim, fd, sh, cmds);
 	close(fd);
 	waitpid(pid, &status, 0);
 	return (handle_heredoc_status(status, filename));
