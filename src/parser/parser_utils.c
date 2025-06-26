@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 04:36:27 by paalexan          #+#    #+#             */
-/*   Updated: 2025/06/26 16:01:14 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/06/26 16:29:23 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,9 +120,6 @@ int	handle_all(const char *str, int *i, t_msh *sh, char **res)
 		handle_dollar(str, &(*i), sh, &(*res));
 		return (3);
 	}
-	else
-	{
-		ft_str_append_char(&(*res), str[(*i)++]);
-		return (4);
-	}
+	ft_str_append_char(&(*res), str[(*i)++]);
+	return (4);
 }
