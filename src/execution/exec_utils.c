@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 19:24:08 by paalexan          #+#    #+#             */
-/*   Updated: 2025/06/16 15:26:22 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/06/26 16:57:17 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,4 +64,22 @@ char	*get_cmd_path(char *cmd, char **env)
 	paths = ft_split(path_env, ':');
 	free (path_env);
 	return (search_path_in_env(cmd, paths));
+}
+
+int	has_valid_cmd(t_cmd *cmd)
+{
+	if (!cmd || !cmd->argv)
+		return (FAILURE);
+	while (cmd)
+	{
+		if (cmd->argv && cmd->argv[0] && cmd->is_valid)
+			return (SUCCESS);
+		if (cmd->argv && cmd->argv[0] && cmd->argv[0][0] == '\0')
+		{
+			ft_putstr_fd("Command '' not found\n", STDERR_FILENO);
+			return (FAILURE);
+		}
+		cmd = cmd->next;
+	}
+	return (FAILURE);
 }

@@ -6,67 +6,29 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 03:40:27 by paalexan          #+#    #+#             */
-/*   Updated: 2025/06/26 15:21:48 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/06/26 16:55:50 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-static int	get_exec_error_code(char *path)
+static void	exec_builtin_cmd(t_cmd *cmd, t_msh *sh)
 {
-	struct stat	st;
+	int	status;
 
-	if (stat(path, &st) != 0)
-	{
-		if (errno == ENOENT || errno == ENOTDIR)
-			return (127);
-		return (126);
-	}
-	if (S_ISDIR(st.st_mode))
-		return (126);
-	if (access(path, X_OK) != 0)
-		return (126);
-	return (1);
-}
-
-static void	handle_cmd_error(t_cmd *cmd, t_msh *sh)
-{
-	int		code;
-	char	*path;
-
-	path = NULL;
-	if (ft_strchr(cmd->argv[0], '/'))
-		path = ft_strdup(cmd->argv[0]);
-	else
-		path = get_cmd_path(cmd->argv[0], sh->env);
-	if (path)
-	{
-		perror(cmd->argv[0]);
-		code = get_exec_error_code(path);
-		free(path);
-	}
-	else
-	{
-		free(sh->pids);
-		ft_putstr_fd(cmd->argv[0], STDERR_FILENO);
-		ft_putstr_fd(": command not found\n", STDERR_FILENO);
-		code = 127;
-	}
+	reset_child_signals();
+	status = run_builtin(cmd, sh);
 	free_cmd(cmd);
 	free_env_array(sh->env);
-	free_hc_minishell(sh);
-	exit(code);
+	free_minishell(sh);
+	free(sh->pids);
+	exit(status);
 }
 
-static void	try_exec_binary(t_cmd *cmd, t_msh *sh)
+static void	exit_if_directory(t_cmd *cmd, t_msh *sh, char *full_path)
 {
-	char		*full_path;
 	struct stat	st;
-	int			code;
 
-	full_path = get_cmd_path(cmd->argv[0], sh->env);
-	if (!full_path)
-		handle_cmd_error(cmd, sh);
 	if (stat(full_path, &st) == 0 && S_ISDIR(st.st_mode))
 	{
 		ft_putstr_fd("minishell: ", STDERR_FILENO);
@@ -79,6 +41,17 @@ static void	try_exec_binary(t_cmd *cmd, t_msh *sh)
 		free_hc_minishell(sh);
 		exit(126);
 	}
+}
+
+static void	try_exec_binary(t_cmd *cmd, t_msh *sh)
+{
+	char	*full_path;
+	int		code;
+
+	full_path = get_cmd_path(cmd->argv[0], sh->env);
+	if (!full_path)
+		handle_cmd_error(cmd, sh);
+	exit_if_directory(cmd, sh, full_path);
 	if (!cmd->is_valid)
 		handle_cmd_error(cmd, sh);
 	reset_child_signals();
@@ -92,55 +65,23 @@ static void	try_exec_binary(t_cmd *cmd, t_msh *sh)
 	exit(code);
 }
 
-static void	handle_redirection_failure(t_cmd *cmd)
-{
-	if (cmd->redirect_failed && cmd->redirect_failed_path)
-	{
-		usleep(1000);
-		print_redirect_error(cmd);
-	}
-	exit(1);
-}
-
 void	exec_child(t_cmd *cmd, int in_fd, int pipe_fd[2], t_msh *sh)
 {
-	int	status;
-
 	if (setup_redirections(cmd, sh, in_fd, pipe_fd) == FAILURE)
-		handle_redirection_failure(cmd);
-	if (!cmd->argv || !cmd->argv[0])
 	{
-		if (!cmd->next)
+		if (cmd->redirect_failed && cmd->redirect_failed_path)
 		{
-			free_cmd(cmd);
-			free_env_array(sh->env);
-			free_minishell(sh);
-			ft_putstr_fd(": command not found\n", STDERR_FILENO);
-			exit(127);
+			usleep(1000);
+			print_redirect_error(cmd);
 		}
-		free_cmd(cmd);
-		free_env_array(sh->env);
-		free_minishell(sh);
-		exit(0);
+		exit(1);
 	}
+	if (!cmd->argv || !cmd->argv[0])
+		exec_empty_or_null_cmd(cmd, sh);
 	if (cmd->argv[0][0] == '\0' || !cmd->is_valid)
-	{
-		free_cmd(cmd);
-		free_env_array(sh->env);
-		free_minishell(sh);
-		ft_putstr_fd(": command not found\n", STDERR_FILENO);
-		exit(127);
-	}
+		exec_invalid_cmd(cmd, sh);
 	if (cmd->is_builtin)
-	{
-		reset_child_signals();
-		status = run_builtin(cmd, sh);
-		free_cmd(cmd);
-		free_env_array(sh->env);
-		free_minishell(sh);
-		free(sh->pids);
-		exit(status);
-	}
+		exec_builtin_cmd(cmd, sh);
 	try_exec_binary(cmd, sh);
 	exit(127);
 }

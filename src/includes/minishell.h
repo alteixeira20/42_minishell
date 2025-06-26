@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 16:54:50 by paalexan          #+#    #+#             */
-/*   Updated: 2025/06/26 16:22:20 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/06/26 16:53:49 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -234,6 +234,8 @@ int			wait_all_children(pid_t *pids, int count);
 /* ************************************************************************** */
 
 void		exec_child(t_cmd *cmds, int in_fd, int pipe_fd[2], t_msh *sh);
+void		exec_empty_or_null_cmd(t_cmd *cmd, t_msh *sh);
+void		exec_invalid_cmd(t_cmd *cmd, t_msh *sh);
 
 /* ************************************************************************** */
 /*                                  BUILTINS                                  */
@@ -258,6 +260,7 @@ int			cmd_export(t_cmd *cmd, t_msh *sh);
 /*                            COMMAND CONSTRUCTION                            */
 /* ************************************************************************** */
 
+int			has_valid_cmd(t_cmd *cmd);
 t_cmd		*cmd_new(void);
 t_cmd		*cmd_from_tokens(t_token *tokens, t_msh *sh);
 char		*get_cmd_path(char *cmd, char **env);
@@ -310,6 +313,9 @@ char		**copy_env_array(char **env);
 /* ************************************************************************** */
 
 int			exit_error(char *msg, int status);
+void		handle_cmd_error(t_cmd *cmd, t_msh *sh);
+void		handle_redirection_failure(t_cmd *cmd);
+int			get_exec_error_code(char *path);
 void		print_heredoc_warning(const char *delim);
 void		print_redirect_error(t_cmd *cmds);
 void		print_syntax_error(const char *token, bool print);

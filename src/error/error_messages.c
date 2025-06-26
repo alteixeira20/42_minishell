@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.c                                            :+:      :+:    :+:   */
+/*   error_messages.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 17:19:32 by paalexan          #+#    #+#             */
-/*   Updated: 2025/06/26 16:22:32 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/06/26 16:47:06 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,9 +55,4 @@ void	print_syntax_error_eof(bool print)
 		ft_putendl_fd("minishell: syntax error: unexpected end of file", STDERR_FILENO);
 }
 
-int	exit_error(char *msg, int status)
-{
-	ft_putstr_fd(msg, STDERR_FILENO);
-	g_exit = status;
-	return (FAILURE);
-}
+
