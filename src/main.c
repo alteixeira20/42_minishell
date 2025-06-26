@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 02:04:50 by paalexan          #+#    #+#             */
-/*   Updated: 2025/06/26 19:05:26 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/06/26 19:12:04 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,7 @@ int	g_exit = 0;
 static void	child_sigint_handler(int sig)
 {
 	(void)sig;
-	rl_replace_line("", 0);
 	write(STDOUT_FILENO, "\n", 1);
-	rl_on_new_line();
 	g_exit = 130;
 }
 
