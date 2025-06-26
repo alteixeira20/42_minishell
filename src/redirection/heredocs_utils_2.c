@@ -6,7 +6,7 @@
 /*   By: jopedro- <jopedro-@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 15:59:00 by jopedro-          #+#    #+#             */
-/*   Updated: 2025/06/16 15:06:28 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/06/26 17:10:52 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,4 +41,15 @@ char	*handle_expansion(char *line, t_msh *sh)
 		return (ft_strdup(line));
 	else
 		return (expand_heredoc_line(line, sh));
+}
+
+char	*handle_heredoc_status(int status, char *filename)
+{
+	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
+	{
+		unlink(filename);
+		g_exit = 130;
+		return (NULL);
+	}
+	return (filename);
 }

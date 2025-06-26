@@ -6,7 +6,7 @@
 #    By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/03 02:10:25 by paalexan          #+#    #+#              #
-#    Updated: 2025/06/26 16:53:18 by paalexan         ###   ########.fr        #
+#    Updated: 2025/06/26 17:01:42 by paalexan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -104,6 +104,7 @@ SRC				+= $(ERROR_DIR)/error_utils.c
 SRC				+= $(CLEANUP_DIR)/cleanup_general.c
 SRC				+= $(CLEANUP_DIR)/cleanup_cmd.c
 SRC				+= $(CLEANUP_DIR)/cleanup_heredoc.c
+SRC				+= $(CLEANUP_DIR)/cleanup_utils.c
 
 # **************************************************************************** #
 #                                   Targets                                    #

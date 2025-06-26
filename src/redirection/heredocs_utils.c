@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 18:12:05 by paalexan          #+#    #+#             */
-/*   Updated: 2025/06/25 18:22:13 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/06/26 17:11:57 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,8 @@ static void	write_heredoc_content(const char *delim, int fd, t_msh *sh)
 	}
 }
 
-static int	run_heredoc_child(const char *delim, int fd, t_msh *sh, t_cmd *cmds)
+static int	run_heredoc_child(const char *delim, int fd,
+							t_msh *sh, t_cmd *cmds)
 {
 	setup_heredoc_signals();
 	write_heredoc_content(delim, fd, sh);
@@ -80,18 +81,8 @@ static int	run_heredoc_child(const char *delim, int fd, t_msh *sh, t_cmd *cmds)
 	exit(0);
 }
 
-static char	*handle_heredoc_status(int status, char *filename)
-{
-	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
-	{
-		unlink(filename);
-		g_exit = 130;
-		return (NULL);
-	}
-	return (filename);
-}
-
-char	*write_heredoc_to_tmp(const char *delim, int index, t_msh *sh, t_cmd *cmds)
+char	*write_heredoc_to_tmp(const char *delim, int index,
+							t_msh *sh, t_cmd *cmds)
 {
 	char			*filename;
 	int				fd;

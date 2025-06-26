@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 17:19:32 by paalexan          #+#    #+#             */
-/*   Updated: 2025/06/26 16:47:06 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/06/26 17:09:34 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,18 +41,16 @@ void	print_syntax_error(const char *token, bool print)
 {
 	if (print)
 	{
-		ft_putstr_fd("minishell: syntax error near unexpected token `", STDERR_FILENO);
+		ft_putstr_fd("minishell: ", STDERR_FILENO);
+		ft_putstr_fd("syntax error near unexpected token `", STDERR_FILENO);
 		ft_putstr_fd((char *)token, STDERR_FILENO);
 		ft_putendl_fd("'", STDERR_FILENO);
 	}
 	g_exit = 2;
 }
 
-
 void	print_syntax_error_eof(bool print)
 {
 	if (print)
-		ft_putendl_fd("minishell: syntax error: unexpected end of file", STDERR_FILENO);
+		ft_putendl_fd("minishell: syntax error: unexpected eof", STDERR_FILENO);
 }
-
-

@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 16:54:50 by paalexan          #+#    #+#             */
-/*   Updated: 2025/06/26 16:53:49 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/06/26 17:11:16 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -297,6 +297,7 @@ int			check_output_permission(t_cmd *cmd, t_redirect *redir);
 // HEREDOC UTIL
 char		*write_heredoc_to_tmp(const char *delim, int index, t_msh *sh, t_cmd *cmd);
 char		*handle_expansion(char *line, t_msh *sh);
+char		*handle_heredoc_status(int status, char *filename);
 
 /* ************************************************************************** */
 /*                                ENVIRONMENT                                 */
@@ -336,6 +337,7 @@ void		free_hc_minishell(t_msh *sh);
 void		free_hc_tokens(t_token *token);
 void		free_heredoc_tmpfiles(t_hdoc_tmpfile *tmp);
 void		free_final_minishell(t_msh *sh);
+void		clean_all(t_msh *sh, t_cmd *cmd);
 
 /* ************************************************************************** */
 /*                                   UTILS                                    */
