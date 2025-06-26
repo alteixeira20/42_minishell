@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 16:54:50 by paalexan          #+#    #+#             */
-/*   Updated: 2025/06/25 18:54:53 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/06/26 16:14:40 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,6 +172,8 @@ int			init_sh(t_msh *sh, char **env);
 char		**init_env(char **env);
 t_token		*init_token(void);
 t_msh		*get_shell(void);
+char		*get_hostname(void);
+void		get_shlvl(t_msh *sh);
 
 /* ************************************************************************** */
 /*                                  SIGNALS                                   */
