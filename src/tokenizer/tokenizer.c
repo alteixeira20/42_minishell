@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 18:37:47 by paalexan          #+#    #+#             */
-/*   Updated: 2025/06/26 15:50:25 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/06/26 16:36:37 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,34 +34,29 @@ static int	split_expanded_token(t_token *tok, t_cmd *cmd)
 	return (SUCCESS);
 }
 
-static int	handle_word_token(t_token **tokens, t_cmd **cur, bool *cmd_started)
+int	handle_word_token(t_token **tokens, t_cmd **cur, bool *cmd_started)
 {
 	t_token	*tok;
 
 	tok = *tokens;
-	if ((*cur)->argc == 0
-		&& tok->value
-		&& ft_strchr(tok->value, ' ') != NULL
-		&& tok->quoted == false)
+	if ((*cur)->argc == 0 && tok->value
+		&& ft_strchr(tok->value, ' ') && !tok->quoted)
 	{
 		if (split_expanded_token(tok, *cur) == FAILURE)
 			return (FAILURE);
-		if (!(*cmd_started))
+		if (!*cmd_started)
 			*cmd_started = true;
 	}
 	else if (tok->value)
 	{
 		if (add_arg(*cur, tok->value) == FAILURE)
 			return (FAILURE);
-		if (!(*cmd_started) && tok->value[0] != '\0')
+		if (!*cmd_started && tok->value[0] != '\0')
 			*cmd_started = true;
 	}
 	if ((!tok->value || tok->value[0] == '\0')
-		&& !tok->quoted
-		&& !tok->expanded_empty)
-	{
+		&& !tok->quoted && !tok->expanded_empty)
 		(*cur)->is_valid = false;
-	}
 	*tokens = tok->next;
 	return (SUCCESS);
 }
