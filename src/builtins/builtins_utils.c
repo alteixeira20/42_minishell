@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 02:39:09 by paalexan          #+#    #+#             */
-/*   Updated: 2025/06/26 15:01:28 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/06/26 15:48:06 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static int	tokens_loop(t_token **tok, t_cmd *cmd, t_msh *sh, bool *cmd_started)
 {
 	while (*tok && (*tok)->type != TOKEN_PIPE)
 	{
-		if ((*tok)->type == TOKEN_WORD && (*tok)->expanded_empty)
+		if ((*tok)->type == TOKEN_WORD && (*tok)->expanded_empty && (*tok)->quoted == false)
 		{
 			*tok = (*tok)->next;
 			continue ;

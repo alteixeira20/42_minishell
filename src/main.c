@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/03 02:04:50 by paalexan          #+#    #+#             */
+/*   Updated: 2025/06/26 15:55:11 by paalexan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "includes/minishell.h"
 
 int	g_exit = 0;
@@ -20,12 +32,11 @@ static int	handle_input_line(t_msh *sh, char *line)
 	if (*line)
 		add_history(line);
 	tokens = parse_input(line, sh);
-	if ((g_exit == 130 || g_exit == 1) && (!tokens || !tokens->value))
+	if ((g_exit == 130 || g_exit == 1 || g_exit == 2) && (!tokens || !tokens->value))
 	{
 		if (tokens)
 			free_token_list(tokens);
 		free(line);
-		g_exit = 1;
 		return (1);
 	}
 	if (check_cmd_syntax(tokens, true) != SYNTAX_OK)
