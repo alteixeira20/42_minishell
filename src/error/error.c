@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 17:19:32 by paalexan          #+#    #+#             */
-/*   Updated: 2025/05/23 18:08:31 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/06/26 16:22:32 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ void	print_syntax_error(const char *token, bool print)
 		ft_putstr_fd((char *)token, STDERR_FILENO);
 		ft_putendl_fd("'", STDERR_FILENO);
 	}
+	g_exit = 2;
 }
 
 
