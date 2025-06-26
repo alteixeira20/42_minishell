@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 02:39:09 by paalexan          #+#    #+#             */
-/*   Updated: 2025/06/16 16:56:28 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/06/26 15:01:28 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,6 @@ static t_cmd	*init_command_skip_empty(t_token **tokens)
 	while (*tokens && (*tokens)->type == TOKEN_WORD
 		&& (*tokens)->expanded_empty)
 		*tokens = (*tokens)->next;
-	if (!*tokens || (*tokens)->type == TOKEN_PIPE)
-	{
-		free_one_cmd(cmd);
-		return (NULL);
-	}
 	return (cmd);
 }
 

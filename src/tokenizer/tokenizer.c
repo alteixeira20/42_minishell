@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 18:37:47 by paalexan          #+#    #+#             */
-/*   Updated: 2025/06/16 16:09:03 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/06/26 15:05:15 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,12 +40,9 @@ static int	handle_word_token(t_token **tokens, t_cmd **cur, bool *cmd_started)
 
 	tok = *tokens;
 	if (!(*cmd_started))
-	{
-		if ((!tok->value || tok->value[0] == '\0')
-			&& tok->expanded_empty == false)
-			(*cur)->is_valid = false;
 		*cmd_started = true;
-	}
+	if ((!tok->value || tok->value[0] == '\0') && !tok->expanded_empty)
+		(*cur)->is_valid = false;
 	if ((*cur)->argc == 0
 		&& tok->value
 		&& ft_strchr(tok->value, ' ') != NULL
@@ -79,7 +76,7 @@ static int	handle_redirect_token(t_token *tokens, t_cmd *cmd, t_msh *sh)
 			return (FAILURE);
 		tokens = tokens->next;
 	}
-	return (0);
+	return (SUCCESS);
 }
 
 static int	process_redirects(t_token **tokens, t_cmd *cmd, t_msh *sh)

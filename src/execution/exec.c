@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 18:31:43 by paalexan          #+#    #+#             */
-/*   Updated: 2025/06/25 19:08:50 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/06/26 13:28:05 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,11 +89,6 @@ int	exec_ast(t_token *tokens, t_msh *sh)
 	cmds = cmd_from_tokens(tokens, sh);
 	if (!cmds)
 	{
-		if (sh->cmds)
-		{
-			free_cmd(sh->cmds);
-			sh->cmds = NULL;
-		}
 		g_exit = 0;
 		return (SUCCESS);
 	}

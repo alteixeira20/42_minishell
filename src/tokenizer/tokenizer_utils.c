@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 01:07:31 by paalexan          #+#    #+#             */
-/*   Updated: 2025/06/25 19:22:49 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/06/26 14:09:17 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,11 +42,26 @@ int	is_special_char(char c)
 
 char	*extract_special_char(const char *str, int *i)
 {
-	int	start;
+	int		start;
+	char	c;
+	int		count;
 
+	if (!str || !i || !str[*i])
+		return (NULL);
 	start = *i;
-	while (str[*i] == str[start])
+	c = str[*i];
+	count = 0;
+	if (c != '<' && c != '>' && c != '|')
+		return (NULL);
+	while (str[*i] && str[*i] == c)
+	{
 		(*i)++;
+		count++;
+	}
+	if ((c == '<' || c == '>') && count > 2)
+		return (NULL);
+	if (c == '|' && count > 1)
+		return (NULL);
 	return (ft_substr(str, start, *i - start));
 }
 

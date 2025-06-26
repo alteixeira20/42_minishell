@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 03:40:27 by paalexan          #+#    #+#             */
-/*   Updated: 2025/06/25 18:44:20 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/06/26 15:21:48 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ static void	try_exec_binary(t_cmd *cmd, t_msh *sh)
 	perror(full_path);
 	code = get_exec_error_code(full_path);
 	free(full_path);
-	free_cmd(sh->cmds);
+	free_cmd(cmd);
 	free_env_array(sh->env);
 	free_minishell(sh);
 	exit(code);
@@ -104,6 +104,8 @@ static void	handle_redirection_failure(t_cmd *cmd)
 
 void	exec_child(t_cmd *cmd, int in_fd, int pipe_fd[2], t_msh *sh)
 {
+	int	status;
+
 	if (setup_redirections(cmd, sh, in_fd, pipe_fd) == FAILURE)
 		handle_redirection_failure(cmd);
 	if (!cmd->argv || !cmd->argv[0])
@@ -132,7 +134,12 @@ void	exec_child(t_cmd *cmd, int in_fd, int pipe_fd[2], t_msh *sh)
 	if (cmd->is_builtin)
 	{
 		reset_child_signals();
-		exit(run_builtin(cmd, sh));
+		status = run_builtin(cmd, sh);
+		free_cmd(cmd);
+		free_env_array(sh->env);
+		free_minishell(sh);
+		free(sh->pids);
+		exit(status);
 	}
 	try_exec_binary(cmd, sh);
 	exit(127);

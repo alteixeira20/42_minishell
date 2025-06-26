@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 01:01:14 by paalexan          #+#    #+#             */
-/*   Updated: 2025/06/25 19:25:13 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/06/26 13:54:52 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,11 @@ t_token	*parse_input(const char *line, t_msh *sh)
 	split = split_input(clean_line);
 	free(clean_line);
 	if (!split)
+	{
+		ft_putendl_fd("syntax error near unexpected token `newline'", STDERR_FILENO);
+		g_exit = 2;
 		return (NULL);
+	}
 	if (fill_tokens(split, &tokens, sh) == FAILURE)
 	{
 		free_split(split);

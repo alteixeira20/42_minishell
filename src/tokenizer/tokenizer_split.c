@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 01:28:43 by paalexan          #+#    #+#             */
-/*   Updated: 2025/04/30 02:30:21 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/06/26 13:45:32 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,12 +62,37 @@ static char	*get_next_token(const char *str, int *i)
 	return (extract_word(str, i));
 }
 
+int	split_input_loop(const char *str, char **result, int *i, int *count)
+{
+	char	*tmp;
+	char	*token;
+
+	while (str[*i])
+	{
+		while (ft_isspace(str[*i]))
+			(*i)++;
+		if (!str[*i])
+			break ;
+		tmp = get_next_token(str, i);
+		if (!tmp)
+			return (FAILURE);
+		token = unescape_token(tmp);
+		free(tmp);
+		if (!token)
+			return (FAILURE);
+		result[(*count)++] = token;
+	}
+	if (str[*i])
+		return (FAILURE);
+	return (SUCCESS);
+}
+
+
 char	**split_input(const char *str)
 {
 	char	**result;
 	int		i;
 	int		count;
-	char	*tmp;
 
 	if (!str)
 		return (NULL);
@@ -76,15 +101,12 @@ char	**split_input(const char *str)
 		return (NULL);
 	i = 0;
 	count = 0;
-	while (str[i])
+	if (split_input_loop(str, result, &i, &count) == FAILURE)
 	{
-		while (ft_isspace(str[i]))
-			i++;
-		if (!str[i])
-			break ;
-		tmp = get_next_token(str, &i);
-		result[count++] = unescape_token(tmp);
-		free(tmp);
+		while (--count >= 0)
+			free(result[count]);
+		free(result);
+		return (NULL);
 	}
 	result[count] = NULL;
 	return (result);

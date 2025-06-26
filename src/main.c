@@ -1,37 +1,8 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/03 02:04:50 by paalexan          #+#    #+#             */
-/*   Updated: 2025/06/25 18:55:46 by paalexan         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "includes/minishell.h"
 
 int	g_exit = 0;
 
-static char	*read_continuation_loop(char *line, t_msh *sh)
-{
-	t_token		*tokens;
-	t_syntax	status;
-
-	tokens = parse_input(line, sh);
-	status = check_cmd_syntax(tokens, true);
-	if (status != SYNTAX_OK)
-	{
-		free_token_list(tokens);
-		free(line);
-		return (ft_strdup(""));
-	}
-	free_token_list(tokens);
-	return (line);
-}
-
-static char	*read_multiline_input(t_msh *sh)
+static char	*read_input(t_msh *sh)
 {
 	char	*line;
 	char	*prompt;
@@ -39,9 +10,6 @@ static char	*read_multiline_input(t_msh *sh)
 	prompt = build_prompt(sh);
 	line = readline(prompt);
 	free(prompt);
-	if (!line)
-		return (NULL);
-	line = read_continuation_loop(line, sh);
 	return (line);
 }
 
@@ -69,7 +37,7 @@ static int	handle_input_line(t_msh *sh, char *line)
 	}
 	sh->tokens = tokens;
 	g_exit = exec_ast(tokens, sh);
-	free_token_list(sh->tokens);
+	free_token_list(tokens);
 	free(line);
 	return (1);
 }
@@ -81,7 +49,7 @@ int	loop(t_msh *sh)
 	while (1)
 	{
 		set_interactive_signals();
-		line = read_multiline_input(sh);
+		line = read_input(sh);
 		if (!line)
 			break ;
 		if (!handle_input_line(sh, line))
