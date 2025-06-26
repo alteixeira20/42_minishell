@@ -6,13 +6,22 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 02:04:50 by paalexan          #+#    #+#             */
-/*   Updated: 2025/06/26 16:05:27 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/06/26 19:05:26 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/minishell.h"
 
 int	g_exit = 0;
+
+static void	child_sigint_handler(int sig)
+{
+	(void)sig;
+	rl_replace_line("", 0);
+	write(STDOUT_FILENO, "\n", 1);
+	rl_on_new_line();
+	g_exit = 130;
+}
 
 static char	*read_input(t_msh *sh)
 {
@@ -22,6 +31,7 @@ static char	*read_input(t_msh *sh)
 	prompt = build_prompt(sh);
 	line = readline(prompt);
 	free(prompt);
+	signal(SIGINT, child_sigint_handler);
 	return (line);
 }
 

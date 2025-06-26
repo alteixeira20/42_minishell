@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 17:12:52 by paalexan          #+#    #+#             */
-/*   Updated: 2025/05/23 17:38:21 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/06/26 19:05:08 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 static void	ctrl_c_handler(int sig)
 {
 	(void)sig;
-	write(STDOUT_FILENO, "\n", 1);
 	rl_replace_line("", 0);
+	write(STDOUT_FILENO, "\n", 1);
 	rl_on_new_line();
 	rl_redisplay();
 	g_exit = 130;
