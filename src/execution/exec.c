@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 18:31:43 by paalexan          #+#    #+#             */
-/*   Updated: 2025/06/26 13:28:05 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/06/26 15:59:30 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,6 @@ int	exec_ast(t_token *tokens, t_msh *sh)
 	t_cmd	*cmds;
 	int		in_fd;
 	int		status;
-
 
 	status = 0;
 	sh->error_printed = false;

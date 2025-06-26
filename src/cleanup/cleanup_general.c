@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 17:31:36 by paalexan          #+#    #+#             */
-/*   Updated: 2025/06/26 14:14:20 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/06/26 16:02:35 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,32 +35,6 @@ void	clean_fds(void)
 		close(fd);
 		fd++;
 	}
-}
-
-const char	*token_type_str(t_token_type type)
-{
-	if (type == TOKEN_WORD)
-		return "WORD";
-	if (type == TOKEN_PIPE)
-		return "PIPE";
-	if (type == TOKEN_REDIRECT_IN)
-		return "REDIRECT_IN";
-	if (type == TOKEN_REDIRECT_OUT)
-		return "REDIRECT_OUT";
-	if (type == TOKEN_APPEND)
-		return "APPEND";
-	if (type == TOKEN_HEREDOC)
-		return "HEREDOC";
-	return "UNKNOWN";
-}
-
-void	print_token(const t_token *token, int i)
-{
-	printf("[%d] Type: %s | Value: '%s'%s\n",
-		i,
-		token_type_str(token->type),
-		token->value ? token->value : "(null)",
-		token->expanded_empty ? " | (was expanded to empty)" : "");
 }
 
 void	free_token_list(t_token *token)
@@ -103,4 +77,3 @@ void	free_minishell(t_msh *sh)
 		free_token_list(sh->tokens);
 	rl_clear_history();
 }
-

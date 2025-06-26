@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 01:28:43 by paalexan          #+#    #+#             */
-/*   Updated: 2025/06/26 13:45:32 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/06/26 15:58:55 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,6 @@ int	split_input_loop(const char *str, char **result, int *i, int *count)
 		return (FAILURE);
 	return (SUCCESS);
 }
-
 
 char	**split_input(const char *str)
 {

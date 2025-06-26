@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 22:39:18 by paalexan          #+#    #+#             */
-/*   Updated: 2025/06/26 15:46:08 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/06/26 16:00:06 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,9 @@
 
 static int	count_commands(t_cmd *cmd)
 {
-	int	count = 0;
+	int	count;
+
+	count = 0;
 	while (cmd)
 	{
 		count++;
