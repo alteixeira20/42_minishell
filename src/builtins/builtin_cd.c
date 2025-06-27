@@ -82,8 +82,17 @@ static int	handle_cd_error(char *oldpwd, char *target, t_msh *sh)
 
 	home = extract_var("HOME", sh->env);
 	ft_putstr_fd("minishell: cd: ", STDERR_FILENO);
+	g_exit = 2;
 	if (target)
-		perror(target);
+		if (target[0] == '-')
+		{
+			ft_putendl_fd("invalid option", STDERR_FILENO);
+			g_exit = 2;
+		}
+		else
+		{
+			perror(target);
+		}
 	else
 	{
 		if (home)
@@ -93,8 +102,8 @@ static int	handle_cd_error(char *oldpwd, char *target, t_msh *sh)
 	}
 	free(oldpwd);
 	free(target);
-	g_exit = 1;
-	return (FAILURE);
+	free(home);
+	return (g_exit);
 }
 
 int	cmd_cd(t_cmd *cmd, t_msh *sh)
