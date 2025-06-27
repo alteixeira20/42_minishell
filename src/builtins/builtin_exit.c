@@ -94,13 +94,13 @@ int	cmd_exit(t_cmd *cmd, t_msh *sh)
 		i++;
 	if (cmd->argv[i])
 	{
-		if (handle_too_many_args(cmd, i) == FAILURE)
-			return (FAILURE);
 		if (handle_not_numeric(cmd->argv[i], &code))
 		{
 			clean_all(sh, cmd);
 			exit(2);
 		}
+		if (handle_too_many_args(cmd, i) == FAILURE)
+			return (FAILURE);
 		code = ft_atol(cmd->argv[i]);
 		exit_code = (unsigned char)code;
 		clean_all(sh, cmd);

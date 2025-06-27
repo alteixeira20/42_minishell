@@ -1,0 +1,392 @@
+# ========================
+# Echo Command & Quoting
+# ========================
+echo Hello World 42
+echo "hello    world"
+echo 'Hello World'
+echo 'Hello World' # shouldn't be printed
+echo Hello World # shouldn't be printed
+echo "hello "'world'
+echo >
+echo hi >
+echo hi >>
+echo hi <
+echo hi <<
+echo $HOME
+echo "$HOME"
+echo '$HOME'
+echo "$7asdfsasdf"
+echo "Hello $USER"
+echo '$USER "$HOME"'
+echo "$USER $HOME"
+echo "user is $USER and home is $HOME"
+echo $USER!
+echo ""$USER""
+echo "hello | world"
+echo $
+echo "$"
+echo "aspas ->'"
+echo " | $"
+echo <missing <"./test_files/infile" <missing
+echo <123 <456 hi
+echo | ""
+echo <"./test_files/infile" <missing <"./test_files/infile"
+
+# ========================
+# Redirection with files
+# ========================
+echo before > tmp_test.txt
+ls tmp_test.txt
+cat < tmp_test.txt
+echo another >> tmp_test.txt
+cat < tmp_test.txt
+rm tmp_test.txt
+
+# Redirection edge cases
+echo first > file > file2
+cat < file2
+rm file file2
+
+echo one>space.txt
+echo two >>space.txt
+cat <space.txt
+chmod 000 space.txt
+cat space.txt
+chmod 644 space.txt
+./space.txt
+rm space.txt
+
+cd tester/
+ls -l
+cat <"./test_files/small_file" | echo 42
+cat <"./test_files/big_file" | echo 42
+
+# ========================
+# Environment
+# ========================
+export
+export VAR=42
+echo $VAR
+env
+env | grep VAR
+env | sort | grep -v SHLVL | grep -v ^_
+export PATH=/tmp
+echo $PATH
+
+# ========================
+# Builtins & Commands
+# ========================
+ls
+ls -la
+/bin/ls
+/bin/echo hello from bin
+/bin/cat /etc/passwd | head -n 2
+ls | wc
+ls >./outfiles/outfile01 >>./test_files/invalid_permission >>./outfiles/outfile02
+touch is_file
+cd is_file
+rm is_file
+mkdir -p is_folder
+cd is_folder
+cd ..
+ls | grep is_folder
+chmod 000 is_folder
+cd is_folder
+chmod 777 is_folder
+rm -rf is_folder
+cd doesntexit
+
+# ========================
+# Pipes & Execution
+# ========================
+echo hello | cat
+echo one | echo two | echo three
+echo piped | grep pipe
+echo part1 | cat | wc
+env | sort | grep -v SHLVL | grep -v ^_
+export PIPETEST=42 | env | grep PIPETEST
+cat export | grep PIPETEST
+cat <"./tester/test_files/small_file" | grep 42
+cat <"./tester/test_files/big_file" | grep oi
+yes | echo Hi
+
+# ========================
+# Invalid Input & Syntax
+# ========================
+wrongcmd
+/bin/doesnotexist
+ls >
+|
+./test_files
+$EMPTY
+$EMPTY echo hi
+pwd 42
+pwd hi
+export A-
+export HELLO-=123
+export =
+export 123
+
+# ========================
+# Permissions
+# ========================
+cat /etc/shadow
+
+# ========================
+# Exit Behavior
+# ========================
+exit 42
+echo still running
+
+# ========================
+# New tests
+# ========================
+
+# ========================
+# BUILTINS SIMPLE
+# ========================
+echo
+echo -n
+echo -nnnnn
+echo This is a test
+echo -n This is a test
+echo -nnnn This is a test
+echo This is a test -nnnn
+echo $?
+"echo ola"
+ 'echo ola'
+echo '$USER'
+echo "$USER"
+echo "'$USER'"
+echo '"$USER"'
+echo ' ' $USER ' '
+echo ola           ola
+echo "ola""ola"
+echo ola"$USER"
+echo "''"$USER            "oi            aaaa'"
+echo "''"$USER"oi            aaaa'"
+echo "''"$USER"            oi            aaaa'"
+echo 5\\n4\\n3\\n | sort
+echo "oi" 'oi' "'$USER'"
+echo "oi" 'oi' "'$NOENV'"
+cd -l
+cd -oi
+cd oi
+cd +oi
+cd -
+cd
+cd .
+cd.
+cd . ls
+cd ~
+cd invalid
+cd $invalid
+cd (after unsetting HOME)
+cd $HOME (after unsetting HOME)
+cd HOME (after unsetting HOME)
+cd "                   "
+export =
+export novalue
+export _
+export __
+export=zzzzzz
+export te$st=jabuticada
+export VAR1=caja 42 VAR2=caju
+export
+export var="echo ola", $var
+env
+env PATH
+env (perform after unsetting all variables)
+exit
+exit 300
+exit -300
+exit +300
+exit 2 3
+exit abc
+exit 99999999999999999999999
+exit 12abc 123
+exit 123  678
+exit | exit
+exit 2> out
+exit > out
+pwd
+pwd args
+unset
+unset invalid
+unset HOME
+unset USER
+unset -n HOME
+unset bla bla OLDPWD
+unset USER OLDPWD
+unset weird*%chars
+unset ALL VARIABLES
+
+# ========================
+# QUOTES & EXPANDER
+# ========================
+echo "Hello World"
+echo "'Hello World'"
+"echo Hello World"
+echo Hello World'
+echo "
+"e"'c'''h"o" Hello
+export USER=graviola LAST='quote'
+echo '$HOME e $CASA e $USER'
+echo ''$HOME e $CASA e $USER''
+echo ''$HOME e '$CASA' e $USER''
+echo "cama'
+echo "$HOME | echo '$USER'
+echo "coxinha" | wc
+echo "$HOME | echo '$USER'"
+echo ""banana | echo graviola""
+echo "pitomba' | echo 'manga rosa"
+echo "cat lol.c | cat > lol.c"
+echo '$USER'
+echo 42' '42
+echo a'b'c'd'e'f'g'h'i'j'k'l'm'n'o'p'q'r's't'
+echo $USER'$USER'
+echo '$USER'"$USER"
+echo "'$USER'"
+echo '"$USER"'
+echo "$U"S"ER"
+echo "$"USER
+echo $"USER"
+echo $invalid
+echo $/,,
+echo "'$''$'"
+echo hi $'' $""
+cat ""
+cat ''
+"/bin/ls"
+""ls""
+"'"ls"'"
+""ls -l""
+"pw"""d
+"ls' | 'wc"
+"ls" | 'wc"
+ls '-l'
+ls ' -l'
+ls '-l '
+ls | grep "'oi | wc -l
+ls | grep "'"oi | wc -l
+ls | grep "oi" | wc -l
+export ZZ"Y=aaa"bb
+unset EMA"IL"
+cd ""
+cd $invalid
+""""
+cat "" "" ""
+cat $invalid $invalid
+
+# ========================
+# EXPANSION
+# ========================
+echo $USER
+echo $
+echo $$
+export VAR=$USER
+export us$er=blabla
+ls > zzz$USER.txt
+ls > zzz$USERzzz.txt
+ls > zzz"$USER"zzz.txt
+ls >> z"zz$USER"zzz.txt
+ls >> z'zz$USER'zzz.txt
+ls $jhrgsdhgbd
+ls $oi/bin
+ls | $invalid | echo ok
+$""
+$''
+$"USER"
+$'USER'
+$user
+$PWD
+$$USER
+$$$USER
+
+# ========================
+# PIPES
+# ========================
+"ls" | 'wc'
+unset USER | env | grep USER
+unset OLDPWD | ls
+echo USER | export USER=farinha
+cat /dev/urandom | head -c 100
+| ls
+|
+ls | wc
+cd | ls
+echo oi | ls
+echo oi | cat
+ls | echo oi
+ls | pwd 
+pwd | cd
+cd | pwd
+ls | $invalid | echo ok
+sort | ls
+cat | ls
+cat | cat | cat | ls
+ sort | sort | sort | ls
+"" | "" | ""
+$invalid | $invalid | $invalid
+
+# ========================
+# REDIRECTS
+# ========================
+echo hello > outfile
+echo hello > "              "
+ls ">" ola
+> ''
+< ''
+>> ''
+< inacessible_file | cat -e > output
+<
+>
+> outfile
+< existingfile
+< Makefile > testfile2
+< nonexisting_file
+ls >out>>out2>out3
+ls | grep > out oi | wc -l
+cat < Makefile >> out
+cat < new_file >> new_file
+<infile grep i >grep | <grep wc
+> $invalid
+< $invalid
+>> $invalid
+sort > text
+cat < text 
+ls >| out
+ls >|
+cat -e < file
+< file cat -e
+cat < file -e
+<Makefile cat>outfile -e | << EOF sort | >> file2 wc
+echo < Makefile < missing < Makefile
+>$invalid ls
+
+# ========================
+# COMMANDS
+# ========================
+/dev/urandom
+$invalid
+$invalid $invalid
+./
+/.
+///////
+/
+././././././
+/././././.
+..
+""""
+./ls
+./echo
+ls #oi -la
+./minishell
+sleep 3 | sleep 3 | echo ok
+ping 8.8.8.8
+cat /bin/ls
+./bin/lsg | wc
+"" | ls
+ls [ -l
+ls -l [
+

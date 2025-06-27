@@ -15,12 +15,24 @@
 static void	update_pwd(char *oldpwd, t_msh *sh)
 {
 	char	*newpwd;
+	char	*check_oldpwd;
+	char	*pwd;
 
+	check_oldpwd = extract_var("OLDPWD", sh->env);
+	pwd = extract_var("PWD", sh->env);
 	newpwd = getcwd(NULL, 0);
 	if (newpwd)
 	{
-		set_var("OLDPWD", oldpwd, &sh->env);
-		set_var("PWD", newpwd, &sh->env);
+		if (check_oldpwd)
+		{
+			set_var("OLDPWD", oldpwd, &sh->env);
+			free(check_oldpwd);
+		}
+		if (pwd)
+		{
+			set_var("PWD", newpwd, &sh->env);
+			free(pwd);
+		}
 		free(newpwd);
 	}
 }
@@ -64,13 +76,21 @@ static char	*get_target_dir(t_cmd *cmd, t_msh *sh)
 	return (dir);
 }
 
-static int	handle_cd_error(char *oldpwd, char *target)
+static int	handle_cd_error(char *oldpwd, char *target, t_msh *sh)
 {
+	char	*home;
+
+	home = extract_var("HOME", sh->env);
 	ft_putstr_fd("minishell: cd: ", STDERR_FILENO);
 	if (target)
 		perror(target);
 	else
-		ft_putendl_fd("target path is NULL", STDERR_FILENO);
+	{
+		if (home)
+			ft_putendl_fd("target path is NULL", STDERR_FILENO);
+		else
+			ft_putendl_fd("HOME not set", STDERR_FILENO);	
+	}
 	free(oldpwd);
 	free(target);
 	g_exit = 1;
@@ -93,7 +113,7 @@ int	cmd_cd(t_cmd *cmd, t_msh *sh)
 		oldpwd = ft_strdup("");
 	target = get_target_dir(cmd, sh);
 	if (!target || chdir(target) == -1)
-		return (handle_cd_error(oldpwd, target));
+		return (handle_cd_error(oldpwd, target, sh));
 	update_pwd(oldpwd, sh);
 	free(oldpwd);
 	free(target);
