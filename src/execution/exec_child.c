@@ -33,7 +33,6 @@ static void	exit_if_directory(t_cmd *cmd, t_msh *sh, char *full_path)
 	{
 		ft_putstr_fd("minishell: ", STDERR_FILENO);
 		ft_putstr_fd(full_path, STDERR_FILENO);
-		ft_putendl_fd(": Is a directory", STDERR_FILENO);
 		free(full_path);
 		free(sh->pids);
 		free_cmd(cmd);
@@ -60,6 +59,7 @@ static void	try_exec_binary(t_cmd *cmd, t_msh *sh)
 	code = get_exec_error_code(full_path);
 	free(full_path);
 	free_cmd(cmd);
+	free(sh->pids);
 	free_env_array(sh->env);
 	free_minishell(sh);
 	exit(code);
