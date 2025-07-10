@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 16:12:15 by paalexan          #+#    #+#             */
-/*   Updated: 2025/05/12 19:01:29 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/07/10 18:11:54 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,36 +74,6 @@ static char	*get_target_dir(t_cmd *cmd, t_msh *sh)
 	else
 		dir = handle_special_targets(cmd->argv[1], sh);
 	return (dir);
-}
-
-static int	handle_cd_error(char *oldpwd, char *target, t_msh *sh)
-{
-	char	*home;
-
-	home = extract_var("HOME", sh->env);
-	ft_putstr_fd("minishell: cd: ", STDERR_FILENO);
-	g_exit = 2;
-	if (target)
-		if (target[0] == '-')
-		{
-			ft_putendl_fd("invalid option", STDERR_FILENO);
-			g_exit = 2;
-		}
-		else
-		{
-			perror(target);
-		}
-	else
-	{
-		if (home)
-			ft_putendl_fd("target path is NULL", STDERR_FILENO);
-		else
-			ft_putendl_fd("HOME not set", STDERR_FILENO);	
-	}
-	free(oldpwd);
-	free(target);
-	free(home);
-	return (g_exit);
 }
 
 int	cmd_cd(t_cmd *cmd, t_msh *sh)

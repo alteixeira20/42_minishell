@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 17:19:32 by paalexan          #+#    #+#             */
-/*   Updated: 2025/06/26 17:09:34 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/07/10 18:10:57 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,4 +53,11 @@ void	print_syntax_error_eof(bool print)
 {
 	if (print)
 		ft_putendl_fd("minishell: syntax error: unexpected eof", STDERR_FILENO);
+}
+
+int	exit_error(char *msg, int status)
+{
+	ft_putstr_fd(msg, STDERR_FILENO);
+	g_exit = status;
+	return (FAILURE);
 }
