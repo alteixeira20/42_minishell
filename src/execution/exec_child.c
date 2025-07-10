@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 03:40:27 by paalexan          #+#    #+#             */
-/*   Updated: 2025/06/26 16:55:50 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/07/10 18:01:42 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@ static void	exit_if_directory(t_cmd *cmd, t_msh *sh, char *full_path)
 
 	if (stat(full_path, &st) == 0 && S_ISDIR(st.st_mode))
 	{
-		ft_putstr_fd("minishell: ", STDERR_FILENO);
 		ft_putstr_fd(full_path, STDERR_FILENO);
+		ft_putstr_fd(": Is a directory\n", STDERR_FILENO);
 		free(full_path);
 		free(sh->pids);
 		free_cmd(cmd);

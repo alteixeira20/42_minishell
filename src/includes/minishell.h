@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 16:54:50 by paalexan          #+#    #+#             */
-/*   Updated: 2025/06/26 19:08:40 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/07/10 17:55:30 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,6 +183,7 @@ void		surpress_par_sig(struct sigaction *o_int, struct sigaction *o_quit);
 void		restore_par_sig(struct sigaction *o_int, struct sigaction *o_quit);
 void		setup_heredoc_signals(void);
 void		reset_child_signals(void);
+void		ctrl_c_handler(int sig);
 
 /* ************************************************************************** */
 /*                                   PARSER                                   */

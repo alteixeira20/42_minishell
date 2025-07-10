@@ -6,13 +6,13 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 17:12:52 by paalexan          #+#    #+#             */
-/*   Updated: 2025/06/26 19:05:08 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/07/10 17:55:33 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-static void	ctrl_c_handler(int sig)
+void	ctrl_c_handler(int sig)
 {
 	(void)sig;
 	rl_replace_line("", 0);

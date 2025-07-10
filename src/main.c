@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 02:04:50 by paalexan          #+#    #+#             */
-/*   Updated: 2025/06/26 19:12:04 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/07/10 17:59:19 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,12 @@ static char	*read_input(t_msh *sh)
 	char	*prompt;
 
 	prompt = build_prompt(sh);
+	signal(SIGINT, ctrl_c_handler);
+	signal(SIGQUIT, SIG_IGN);
 	line = readline(prompt);
 	free(prompt);
 	signal(SIGINT, child_sigint_handler);
+	signal(SIGQUIT, SIG_DFL);
 	return (line);
 }
 
