@@ -1,7 +1,10 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/C-00599C?style=for-the-badge&logo=c&logoColor=white" alt="C">
-  <img src="https://img.shields.io/badge/GNU%20Make-0277BD?style=for-the-badge&logo=gnu&logoColor=white" alt="GNU Make">
-  <img src="https://img.shields.io/badge/GNU%20Readline-4E9A06?style=for-the-badge&logo=gnu-bash&logoColor=white" alt="GNU Readline">
+  <img src="https://img.shields.io/badge/C-00599C?style=for-the-badge&logo=c&logoColor=white" alt="C badge">
+  <img src="https://img.shields.io/badge/Readline-6E4C7C?style=for-the-badge&logo=gnu&logoColor=white" alt="Readline badge">
+  <img src="https://img.shields.io/badge/Make-427819?style=for-the-badge&logo=cmake&logoColor=white" alt="Make badge">
+  <img src="https://img.shields.io/badge/Shell-4EAA25?style=for-the-badge&logo=gnu-bash&logoColor=white" alt="Shell badge">
+  <img src="https://img.shields.io/badge/Valgrind-773344?style=for-the-badge&logo=gnu&logoColor=white" alt="Valgrind badge">
+  <img src="https://img.shields.io/badge/GDB-800000?style=for-the-badge&logo=gnu&logoColor=white" alt="GDB badge">
 </p>
 
 <h1 align="center">MiniShell</h1>
@@ -20,6 +23,7 @@
 11. [Internal Architecture](#internal-architecture)
 12. [Tester Workflow](#tester-workflow)
 13. [Results & Reporting](#results--reporting)
+14. [Credits & Collaboration](#credits--collaboration)
 
 ## At a Glance
 > **Highlights:** What evaluators can expect in the first five minutes.
@@ -27,6 +31,7 @@
 - Builtins (`echo`, `cd`, `pwd`, `export`, `unset`, `env`, `exit`) run in-place or in child processes depending on pipeline context.
 - Parser defends against malformed syntax early, matching Minishell subject edge-cases (`|`, dangling redirects, empty tokens).
 - Custom tester automates Bash parity and Valgrind sweeps so every defense starts with a reproducible baseline.
+- Co-built by Paula Alexandra (`paalexan`) and João Pedro (`jopedro-`) with clear ownership per subsystem so knowledge transfers quickly at evaluation time.
 
 ## About
 > **Highlights:** Why this shell feels reliable in daily use.
@@ -65,11 +70,17 @@
 - `tester/Makefile` orchestrates runs against `test_cases_auto.txt`, stores Bash and Minishell outputs, and produces human-friendly diffs.
 - Shell scripts (`run_minishell.sh`, `run_bash.sh`) normalise prompts, colours, and SHLVL so comparisons stay meaningful across machines.
 - `run_valgrind.sh` applies readline suppressions automatically, marking tests green only when leak summaries are clean.
+- Full walkthroughs, edge-case notes, and extension tips live in the [tester README](tester/README.md).
 
 ```sh
-make -C tester              # run automated suite and generate diff_summary.txt
-make -C tester valgrind     # optional leak run across the same command list
+cd tester
+make              # run automated suite and generate diff_summary.txt
+make valgrind     # optional leak run across the same command list
 ```
+
+<p align="center">
+  <img src="docs/images/running_tester.gif" width="85%" alt="Automated tester running side-by-side with bash">
+</p>
 
 <details>
   <summary>Tester pipeline internals</summary>
@@ -105,9 +116,10 @@ make -C tester valgrind     # optional leak run across the same command list
 - `make clean` and `make fclean` sweep objects, binary, suppression file, and even `libft/` so you can benchmark fresh checkouts.
 
 ```sh
-make            # build minishell (libft fetched if absent)
-make re         # full rebuild
-make norm       # run norminette with coloured status output
+sudo apt install libreadline-dev  # If not installed already
+make                              # build minishell (libft fetched if absent)
+make re                           # full rebuild
+make norm                         # run norminette with coloured status output
 ```
 
 ## Usage Guidelines
@@ -141,11 +153,14 @@ minishell> exit
 
 | Stage | Key files | Notes |
 | ----- | --------- | ----- |
-| Tokenization | `src/tokenizer/tokenizer_split.c`, `tokenizer_utils.c` | Splits input while tracking quotes and escapes. |
-| Expansion | `src/parser/parser_expansion.c`, `tokenizer_lst.c` | Applies `$` rules, marks empty expansions, and preserves quote metadata. |
-| Command graph | `src/builtins/builtins_utils.c`, `execution/exec_cmd.c` | Builds a doubly linked list of `t_cmd` nodes with redirects and argv. |
-| Execution | `src/execution/exec_pipes.c`, `exec_child.c` | Routes builtins to parent or forks, wires pipes, waits on children. |
-| Cleanup | `src/cleanup/cleanup_cmd.c`, `cleanup_utils.c` | Frees argv, redirects, env clones, and heredoc tempfiles. |
+| Tokenization | `src/tokenizer/tokenizer_split.c`, `tokenizer_utils.c` | `split_input`, `get_next_segment`, and `unescape_token` turn raw lines into typed `t_token` nodes ready for expansion. |
+| Expansion | `src/parser/parser_expansion.c`, `tokenizer_lst.c` | `expand_token`, `handle_all`, and `handle_dollar` apply env lookups while preserving quote flags for later decisions. |
+| Command graph | `src/builtins/builtins_utils.c`, `execution/exec_cmd.c` | `build_cmd_list`, `process_token`, and `cmd_from_tokens` consolidate tokens into `t_cmd` nodes with redirect chains. |
+| Execution | `src/execution/exec_pipes.c`, `exec_child.c` | `exec_pipeline`, `run_single_cmd`, and `exec_child` coordinate pipes, builtins, forks, and exit propagation. |
+| Cleanup | `src/cleanup/cleanup_cmd.c`, `cleanup_utils.c` | `clean_all`, `free_cmd`, and `free_hc_minishell` release argv, env copies, and heredoc tmpfiles to finish cleanly. |
+
+- Control keeps looping through `main` → `loop` until EOF; each iteration builds tokens, compiles commands, feeds them to `exec_pipeline`, and updates `g_exit` for the next prompt.
+- Redirection helpers (`process_redirect`, `setup_redirections`, `apply_single_redirect`) sit between parsing and execution so every child inherits pre-vetted descriptors.
 
 <details>
   <summary>Redirection specifics</summary>
@@ -246,3 +261,10 @@ make -C tester run     # alias: only regenerate minishell/bash outputs
     <li>Capture Bash behaviour with `tester/scripts/run_bash.sh` to confirm whether the subject expects the deviation.</li>
   </ul>
 </details>
+
+## Credits & Collaboration
+> **Highlights:** Two minds, one shell.
+- Paulo Alexandre (`paalexan`) drove the parsing, execution, and error-handling layers, making sure every `t_cmd` is battle-tested before it forks.
+- João Pedro (`jopedro-`) focused on environment management, cleanup strategy, and user-facing polish, locking down memory hygiene and prompt comfort.
+- Pair-programming sessions aligned architecture decisions; we reviewed each module before merging so any 42 evaluation can call on either of us for clarifications.
+- Special thanks to our peers who stress-tested the tester farm and uncovered early heredoc quirks.
