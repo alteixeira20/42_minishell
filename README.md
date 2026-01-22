@@ -5,7 +5,7 @@
   <img src="https://img.shields.io/badge/Shell-4EAA25?style=for-the-badge&logo=gnu-bash&logoColor=white" alt="Shell badge">
   <img src="https://img.shields.io/badge/Valgrind-773344?style=for-the-badge&logo=gnu&logoColor=white" alt="Valgrind badge">
   <img src="https://img.shields.io/badge/GDB-800000?style=for-the-badge&logo=gnu&logoColor=white" alt="GDB badge">
-</p>++
+</p>
 
 <h1 align="center">MiniShell</h1>
 <p align="center">A strict-norm Bash replica with predictable tooling for 42 evaluations.</p>
